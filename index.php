@@ -1,9 +1,15 @@
 <?php
-session_start();
-if(!isset($_SESSION["login"])) {
-    header("Location: login.php");
-    exit;
-}
+
+    require_once "functions.php";
+
+    session_start();
+    if(!isset($_SESSION["login"])) {
+        header("Location: login.php");
+        exit;
+    }
+
+    $username = $_SESSION["username"];
+    $userdata = GetUserData($username);
 ?>
 
 <!DOCTYPE html>
@@ -12,10 +18,10 @@ if(!isset($_SESSION["login"])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Assigner</title>
 </head>
 <body>
-    <h1>Halo Semua</h1>
+    <h1>Halo, <?= $userdata["username"]?></h1>
     <form action="logout.php" method="post">
         <button type="submit" name="logout" onclick="return confirm('Confirm Logout');">Logout</button>
     </form>

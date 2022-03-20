@@ -3,7 +3,7 @@
     require_once 'functions.php'; 
 
     if(isset($_POST["signup-button"])){
-        if(validate($_POST) === 1) {
+        if(ValidateRegister($_POST) === 1) {
             echo "<script>alert('User baru berhasil Ditambahkan!');</script>";
         }
         else {

@@ -7,7 +7,14 @@ if ($connectionID -> connect_errno) {
     exit();
 } 
 
-function validate($input) {
+function GetUserData($username){
+    global $connectionID;
+    $result = mysqli_query($connectionID, "SELECT * FROM accounts WHERE username = '$username'");
+    $userdata = mysqli_fetch_assoc($result);
+    return $userdata;
+}
+
+function ValidateRegister($input) {
     global $connectionID;
     $username = $input["input-username"];
     $password = mysqli_real_escape_string($connectionID,$input["input-password"]);

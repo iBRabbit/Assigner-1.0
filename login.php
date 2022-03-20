@@ -20,6 +20,8 @@ if (isset($_POST["login-button"])) {
         var_dump($row);
         if(password_verify($password, $row["password"])) {
             $_SESSION["login"] = true;
+            $_SESSION["username"] = $username;
+            $_SESSION["uid"] = $uid;
             $check = true;
             echo "<script>alert('username dan password sesuai!')</script>";
             header("Location: index.php");
@@ -99,7 +101,7 @@ if (isset($_POST["login-button"])) {
         <h1>Assigner Login</h1>
         <div class="form-box">
             <form action="" method = "post" class = "form-login">
-                <input type="text" name = "input-username" placeholder = "Username" required>
+                <input type="text" name = "input-username" placeholder = "Username" required >
                 <input type="password" name = "input-password" placeholder = "Password" required>
                 <button type="submit" name="login-button">Login</button>
             </form>

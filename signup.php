@@ -1,14 +1,14 @@
 <?php 
-
+    session_start();
     require_once 'functions.php'; 
 
     if(isset($_POST["signup-button"])){
-        $str = "INSERT INTO accounts VALUES ('NULL','" . 
-                $_POST["input-username"] . 
-                "','" .  
-                $_POST["input-password"] . 
-                "')";
-        $connectionID -> query($str);
+        if(validate($_POST) === 1) {
+            echo "<script>alert('User baru berhasil Ditambahkan!');</script>";
+        }
+        else {
+            echo mysqli_error($connectionID);
+        }
     }
 
 ?>
@@ -78,10 +78,13 @@
     <div class="signup-box">
         <h1>Assigner Signup</h1>
         <div class="form-box">
-            <form action="signup.php" method = "post" class = "form-signup" name = "register-account">
-                <input type="text" name = "input-username" placeholder = "Username">
-                <input type="text" name = "input-password" placeholder = "Password">
+            <form action="" method = "post" class = "form-signup" name = "register-account">
+                <input type="text" name = "input-username" placeholder = "Username" required>
+                <input type="password" name = "input-password" placeholder = "Password" required>
                 <button type="submit" name = "signup-button">Register</button>
+            </form>
+            <form action="login.php" class = "form-login">
+                <button type="submit" name = "login-button">Back Login</button>
             </form>
 
         </div>

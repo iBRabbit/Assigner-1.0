@@ -1,3 +1,11 @@
+<?php
+session_start();
+if(!isset($_SESSION["login"])) {
+    header("Location: login.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,8 +15,10 @@
     <title>Document</title>
 </head>
 <body>
-    
-    
+    <h1>Halo Semua</h1>
+    <form action="logout.php" method="post">
+        <button type="submit" name="logout" onclick="return confirm('Confirm Logout');">Logout</button>
+    </form>
 
 </body>
 </html>

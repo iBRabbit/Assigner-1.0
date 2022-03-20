@@ -7,6 +7,6 @@ if ($connectionID -> connect_errno) {
     exit();
 } 
 
-function validate
+// function validate
 
 ?>

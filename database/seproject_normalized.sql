@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 21, 2022 at 09:46 AM
+-- Generation Time: Mar 21, 2022 at 02:23 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
@@ -50,18 +50,19 @@ INSERT INTO `accounts` (`accountID`, `username`, `password`) VALUES
 
 CREATE TABLE `accounts_groups` (
   `accountID` int(12) NOT NULL,
-  `groupID` int(12) NOT NULL
+  `groupID` int(12) NOT NULL,
+  `positionID` int(12) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `accounts_groups`
 --
 
-INSERT INTO `accounts_groups` (`accountID`, `groupID`) VALUES
-(0, 1),
-(0, 3),
-(1, 3),
-(2, 1);
+INSERT INTO `accounts_groups` (`accountID`, `groupID`, `positionID`) VALUES
+(0, 1, 1),
+(1, 3, 1),
+(0, 5, 2),
+(2, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -76,19 +77,20 @@ CREATE TABLE `assignments` (
   `assignmentDescription` varchar(255) NOT NULL,
   `assignmentCreated` date NOT NULL,
   `assignmentDeadline` date NOT NULL,
-  `assignedTo` int(12) DEFAULT 0
+  `assignedTo` int(12) DEFAULT 0,
+  `assignmentStatus` int(12) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `assignments`
 --
 
-INSERT INTO `assignments` (`assignmentID`, `groupID`, `assignmentTitle`, `assignmentDescription`, `assignmentCreated`, `assignmentDeadline`, `assignedTo`) VALUES
-(1, 1, 'Kerjakan Soal SE', '1. LALALA\r\n2. BBB\r\n3. DDD', '2022-03-21', '2022-03-24', 0),
-(2, 1, 'Kerjakan Soal Kalkulus', 'yeyeyeye', '2022-03-21', '2022-03-24', 1),
-(3, 1, 'Kerjakan soal PDE', 'yeyeyeye', '2022-03-21', '2022-03-23', 1),
-(4, 3, 'Kerjakan soal Real Analysis', 'yeyeyeye', '2022-03-21', '2022-03-24', 0),
-(5, 3, 'Kerjakan soal Modern Algebra', 'wawawaw', '2022-03-21', '2022-03-26', 1);
+INSERT INTO `assignments` (`assignmentID`, `groupID`, `assignmentTitle`, `assignmentDescription`, `assignmentCreated`, `assignmentDeadline`, `assignedTo`, `assignmentStatus`) VALUES
+(1, 1, 'Kerjakan Soal SE', '1. LALALA\r\n2. BBB\r\n3. DDD', '2022-03-21', '2022-03-24', 0, 0),
+(2, 1, 'Kerjakan Soal Kalkulus', 'yeyeyeye', '2022-03-21', '2022-03-24', 1, 0),
+(3, 1, 'Kerjakan soal PDE', 'yeyeyeye', '2022-03-21', '2022-03-23', 1, 0),
+(4, 3, 'Kerjakan soal Real Analysis', 'yeyeyeye', '2022-03-21', '2022-03-24', 0, 0),
+(5, 3, 'Kerjakan soal Modern Algebra', 'wawawaw', '2022-03-21', '2022-03-26', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -115,6 +117,19 @@ INSERT INTO `groups` (`groupID`, `groupOwner`, `groupName`, `groupDetail`) VALUE
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `notificationID` int(11) NOT NULL,
+  `accountID` int(11) NOT NULL,
+  `notificationTitle` varchar(255) NOT NULL,
+  `notificationType` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `positions`
 --
 
@@ -124,6 +139,18 @@ CREATE TABLE `positions` (
   `positionName` varchar(255) NOT NULL,
   `positionValue` int(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `positions`
+--
+
+INSERT INTO `positions` (`positionID`, `groupID`, `positionName`, `positionValue`) VALUES
+(1, 1, 'Owner', 1),
+(2, 1, 'Wakil Owner', 2),
+(3, 3, 'Owner', 1),
+(4, 3, 'Wakil Ketua', 2),
+(5, 5, 'Owner', 1),
+(6, 5, 'Wakil ketua', 2);
 
 --
 -- Indexes for dumped tables
@@ -141,7 +168,8 @@ ALTER TABLE `accounts`
 ALTER TABLE `accounts_groups`
   ADD PRIMARY KEY (`accountID`,`groupID`),
   ADD KEY `accountID` (`accountID`),
-  ADD KEY `groupID` (`groupID`);
+  ADD KEY `groupID` (`groupID`),
+  ADD KEY `positionID` (`positionID`);
 
 --
 -- Indexes for table `assignments`
@@ -155,6 +183,13 @@ ALTER TABLE `assignments`
 --
 ALTER TABLE `groups`
   ADD PRIMARY KEY (`groupID`);
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`notificationID`),
+  ADD KEY `accountID` (`accountID`);
 
 --
 -- Indexes for table `positions`
@@ -186,10 +221,16 @@ ALTER TABLE `groups`
   MODIFY `groupID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `notificationID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `positions`
 --
 ALTER TABLE `positions`
-  MODIFY `positionID` int(12) NOT NULL AUTO_INCREMENT;
+  MODIFY `positionID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
@@ -200,13 +241,20 @@ ALTER TABLE `positions`
 --
 ALTER TABLE `accounts_groups`
   ADD CONSTRAINT `accounts_groups_ibfk_1` FOREIGN KEY (`accountID`) REFERENCES `accounts` (`accountID`),
-  ADD CONSTRAINT `accounts_groups_ibfk_2` FOREIGN KEY (`groupID`) REFERENCES `groups` (`groupID`);
+  ADD CONSTRAINT `accounts_groups_ibfk_2` FOREIGN KEY (`groupID`) REFERENCES `groups` (`groupID`),
+  ADD CONSTRAINT `accounts_groups_ibfk_3` FOREIGN KEY (`positionID`) REFERENCES `positions` (`positionID`);
 
 --
 -- Constraints for table `assignments`
 --
 ALTER TABLE `assignments`
   ADD CONSTRAINT `assignments_ibfk_1` FOREIGN KEY (`groupID`) REFERENCES `groups` (`groupID`);
+
+--
+-- Constraints for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`accountID`) REFERENCES `accounts` (`accountID`);
 
 --
 -- Constraints for table `positions`

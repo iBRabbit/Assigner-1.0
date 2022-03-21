@@ -17,7 +17,7 @@ if (isset($_POST["login-button"])) {
 
     if(mysqli_num_rows($result) === 1) {
         $row = mysqli_fetch_assoc($result);
-        var_dump($row);
+        $uid = $row["accountID"];
         if(password_verify($password, $row["password"])) {
             $_SESSION["login"] = true;
             $_SESSION["username"] = $username;
@@ -28,11 +28,11 @@ if (isset($_POST["login-button"])) {
             exit;
         }
         else {
-            echo "<script>alert('1username / password tidak sesuai!')</script>";
+            echo "<script>alert('username / password tidak sesuai!')</script>";
         }
     }
     else {
-        echo "<script>alert('2username / password tidak sesuai!')</script>";
+        echo "<script>alert('username / password tidak sesuai!')</script>";
     }
 }
 

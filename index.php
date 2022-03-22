@@ -2,12 +2,7 @@
 
     require_once "functions.php";
 
-    session_start();
-    if(!isset($_SESSION["login"])) {
-        header("Location: login.php");
-        exit;
-    }
-
+    StartLoginSession();
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
 ?>
@@ -36,6 +31,8 @@
             align-items : center;
             padding-inline : 2vw;
             border-bottom: 1px solid black;
+            background-color: #F14A16;
+            color:#3A3845;
         }
 
         .header-right {
@@ -47,6 +44,25 @@
 
         .header-right a, .header-right form{
             padding-inline:1vw;
+            color:white;
+        }
+
+        .footer {
+            border-top : 1px solid black;
+            text-align : center;
+            align-items : center;
+        }
+
+        .header form > button {
+            background-color:#35589A;
+            border-radius:10px;
+            border:0px solid black;
+            padding:5px;
+            color:white;
+        }
+        
+        .header form > button:hover {
+            background-color:darkred;
         }
 
         a {
@@ -69,7 +85,7 @@
             display : flex;
             flex-direction: row;
             justify-content : space-around;
-            height : 60vh;
+            height : 70vh;
             margin-inline: 10vw;
             margin-block : 10vh;
         }
@@ -102,7 +118,10 @@
             border-top : 1px solid black;
             text-align : center;
             align-items : center;
+            background-color : #041562;
+            color : white;
         }
+
 
     </style>
 
@@ -116,7 +135,7 @@
         <div class="header-right">   
             <a href="index.php">Home</a>
             <a href="">My Profile</a>
-            <a href="groups.php">My groups</a>
+            <a href="mygroup.php">My groups</a>
             <a href="">Notifications</a>
             <form action="logout.php" method="post">
                 <button type="submit" name="logout" onclick="return confirm('Confirm Logout');">Logout</button>

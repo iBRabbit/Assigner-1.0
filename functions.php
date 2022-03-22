@@ -7,6 +7,14 @@ if ($connectionID -> connect_errno) {
     exit();
 } 
 
+function StartLoginSession(){
+    session_start();
+    if(!isset($_SESSION["login"])) {
+        header("Location: login.php");
+        exit;
+    }
+}
+
 function GetUsernameByID($uid){
     global $connectionID;
     $result = mysqli_query($connectionID, "SELECT * FROM accounts WHERE accountID = $uid");

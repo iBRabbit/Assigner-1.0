@@ -115,8 +115,8 @@
 
         <div class="header-right">   
             <a href="index.php">Home</a>
-            <a href="groups.php">My Profile</a>
-            <a href="">My groups</a>
+            <a href="">My Profile</a>
+            <a href="groups.php">My groups</a>
             <a href="">Notifications</a>
             <form action="logout.php" method="post">
                 <button type="submit" name="logout" onclick="return confirm('Confirm Logout');">Logout</button>

@@ -38,81 +38,84 @@ if (isset($_POST["login-button"])) {
 
 ?>
 
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style/bodystyle.css">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Boostrap Icons  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <!-- My CSS -->
     <style>
+    body {
+        display: flex;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
 
-        body{
-            display : flex;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            
-        }
-    
-        .login-box {
-            display : flex;
-            flex-direction: column;
-            align-items : center;
-            margin-block : auto;
-            width:25%;
-            /* height:30vh; */
-            margin: auto;
-            margin-top: 10%;
-            border-radius: 20px;
-            border: 1px solid black;
-        }
+    }
 
-        .form-login , .form-signup{
-            display : flex;
-            flex-direction: column;
-            align-items : center;
-            justify-content : center;
-        }
+    #login-card {
+        border-radius: 30px;
+    }
 
-        .form-box{
-            margin: auto;
-            text-align: center;
-            margin-block: 3vh;
-        }
+    .container {
+        height: 30rem;
+    }
 
-        .form-login input ,.form-login button, .form-signup button{
-            display : flex;
-            flex-direction: column;
-            align-items : center;
-            margin-block : 1vh;
-        }
-
+    .login-box {
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        margin-top: 10%;
+    }
     </style>
 
-
-    <title>asdsadas</title>
+    <title>Assigner</title>
 </head>
+
 <body>
-    
+
+    <!-- Login Card -->
+
     <div class="login-box">
-        <h1>Assigner Login</h1>
-        <div class="form-box">
-            <form action="" method = "post" class = "form-login">
-                <input type="text" name = "input-username" placeholder = "Username" required >
-                <input type="password" name = "input-password" placeholder = "Password" required>
-                <button type="submit" name="login-button">Login</button>
-            </form>
+        <div class="container">
+            <div class="row">
+                <div class="card text-center" id="login-card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h4 class="card-title fw-bold">Login</h4>
+                        <p class="card-text">Login or Register to Assigner!</p>
 
-            <form action="signup.php" class = "form-signup">
-                <button type="submit" name = "signup-button">Sign Up</button>
-            </form>
-
+                        <form action="" method="post" ">
+                            <input type=" text" name="input-username" placeholder="Username"
+                            class="form-control mt-3 mb-3" required>
+                            <input type="password" name="input-password" placeholder="Password"
+                                class="form-control mt-3 mb-3" required>
+                            <button type="submit" name="login-button" class="btn btn-primary mb-3">Login</button>
+                        </form>
+                        <form action="signup.php" class="form-signup">
+                            <button type="submit" name="signup-button" class="btn btn-outline-success">Sign Up</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
 
+    <!-- End of Login card -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
+
 </body>
+
 </html>

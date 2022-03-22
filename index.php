@@ -87,7 +87,8 @@
             justify-content : space-around;
             height : 70vh;
             margin-inline: 10vw;
-            margin-block : 10vh;
+            margin-bottom : 10vh;
+            margin-top : 3vh;
         }
 
         .content h3 {
@@ -122,6 +123,20 @@
             color : white;
         }
 
+        .add-group-button{
+            display : flex;
+            flex-direction: row;
+            
+            margin-inline :10vw;
+            margin-top : 5vw;
+
+           
+        }
+
+        .add-group-button a {
+            border-radius : 10px;
+            background-color : blue;
+        }
 
     </style>
 
@@ -143,9 +158,13 @@
         </div>
     </div>
 
+    <a href="" class="add-group-button">Add Group</a>
+
     <div class="content">
+        
         <div class="content-left">
-            <h3>My Groups</h3>
+         
+            <h3>My Groups</h3>            
 
             <div class="content-left-groups">
                 <table>

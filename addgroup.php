@@ -93,27 +93,36 @@
                 WHERE TABLE_SCHEMA = \"seproject\"
                 AND TABLE_NAME = \"groups\"");
                 
-                $autoIncrementVal = mysqli_fetch_assoc($result);
-                
-                $myQuery = 
-                "INSERT INTO `groups` (`groupID`, `groupOwner`, `groupName`, `groupDetail`) VALUES (NULL, '" .
-                $userdata["accountID"] . "', '" . $_POST["group-name"] . "', '" . $_POST["group-description"] . "');";
-                mysqli_query($connectionID, $myQuery);
-           
-                
-                $myQuery = 
-                "INSERT INTO `accounts_groups` (`accountID`, `groupID`, `positionID`) VALUES ('".$userdata["accountID"] . "' , '" .$autoIncrementVal["AI"] .  "' , '1');";
-                mysqli_query($connectionID, $myQuery);
-                
-                $myQuery = 
-                "INSERT INTO `positions` (`positionID`, `groupID`, `positionName`, `positionValue`) VALUES (NULL, " . $autoIncrementVal["AI"] . 
-                ", 'Owner', '1');";
-                mysqli_query($connectionID, $myQuery    );
 
-                echo 
-                "<div class=\"alert alert-success\" role=\"alert\" id=\"success-message\">
-                Successfully created a group!
-                </div>";
+                if(strlen($_POST["group-name"]) < 5){
+                    echo "
+                    <div class=\"alert alert-danger\" role=\"alert\">
+                    Your group name is less than 5 characters.
+                    </div>";
+                } else {
+                    $autoIncrementVal = mysqli_fetch_assoc($result);
+                
+                    $myQuery = 
+                    "INSERT INTO `groups` (`groupID`, `groupOwner`, `groupName`, `groupDetail`) VALUES (NULL, '" .
+                    $userdata["accountID"] . "', '" . $_POST["group-name"] . "', '" . $_POST["group-description"] . "');";
+                    mysqli_query($connectionID, $myQuery);
+               
+                    
+                    $myQuery = 
+                    "INSERT INTO `accounts_groups` (`accountID`, `groupID`, `positionID`) VALUES ('".$userdata["accountID"] . "' , '" .$autoIncrementVal["AI"] .  "' , '1');";
+                    mysqli_query($connectionID, $myQuery);
+                    
+                    $myQuery = 
+                    "INSERT INTO `positions` (`positionID`, `groupID`, `positionName`, `positionValue`) VALUES (NULL, " . $autoIncrementVal["AI"] . 
+                    ", 'Owner', '1');";
+                    mysqli_query($connectionID, $myQuery );
+    
+                    echo 
+                    "<div class=\"alert alert-success\" role=\"alert\" id=\"success-message\">
+                    Successfully created a group!
+                    </div>";               
+                }
+
             }   
         
         ?>

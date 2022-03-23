@@ -8,33 +8,7 @@ if (isset($_SESSION["login"])) {
     exit;
 }
 
-if (isset($_POST["login-button"])) {
-    $check = false;
-    $username = $_POST["input-username"];
-    $password = $_POST["input-password"];
 
-    $result = mysqli_query($connectionID, "SELECT * FROM accounts WHERE username = '$username'");
-
-    if(mysqli_num_rows($result) === 1) {
-        $row = mysqli_fetch_assoc($result);
-        $uid = $row["accountID"];
-        if(password_verify($password, $row["password"])) {
-            $_SESSION["login"] = true;
-            $_SESSION["username"] = $username;
-            $_SESSION["uid"] = $uid;
-            $check = true;
-            echo "<script>alert('username dan password sesuai!')</script>";
-            header("Location: index.php");
-            exit;
-        }
-        else {
-            echo "<script>alert('username / password tidak sesuai!')</script>";
-        }
-    }
-    else {
-        echo "<script>alert('username / password tidak sesuai!')</script>";
-    }
-}
 
 ?>
 
@@ -93,11 +67,60 @@ if (isset($_POST["login-button"])) {
                         <h4 class="card-title fw-bold">Login</h4>
                         <p class="card-text">Login or Register to Assigner!</p>
 
+                        <?php 
+                            if (isset($_POST["login-button"])) {
+                                $check = false;
+                                $username = $_POST["input-username"];
+                                $password = $_POST["input-password"];
+                            
+                                $result = mysqli_query($connectionID, "SELECT * FROM accounts WHERE username = '$username'");
+                            
+                                if(mysqli_num_rows($result) === 1) {
+                                    $row = mysqli_fetch_assoc($result);
+                                    $uid = $row["accountID"];
+                                    if(password_verify($password, $row["password"])) {
+                                        $_SESSION["login"] = true;
+                                        $_SESSION["username"] = $username;
+                                        $_SESSION["uid"] = $uid;
+                                        $check = true;
+                                        echo " <div class=\"alert alert-danger\" role=\"alert\">
+                                        Your username or password is incorrect.
+                                        </div>";
+                                        header("Location: index.php");
+                                        exit;
+                                    }
+                                    else {
+                                        echo " <div class=\"alert alert-danger\" role=\"alert\">
+                                        Your username or password is incorrect.
+                                        </div>";
+                                    }
+                                }
+                                else {
+                                    echo " <div class=\"alert alert-danger\" role=\"alert\">
+                                    Your username or password is incorrect.
+                                    </div>";
+                                }
+                            }
+                        
+                        ?>
+
+
                         <form action="" method="post" ">
-                            <input type=" text" name="input-username" placeholder="Username"
-                            class="form-control mt-3 mb-3" required>
-                            <input type="password" name="input-password" placeholder="Password"
-                                class="form-control mt-3 mb-3" required>
+                            <!-- <input type=" text" name="input-username" placeholder="Username"
+                            class="form-control mt-3 mb-3" required> -->
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">@</span>
+                                <input type="text" class="form-control" placeholder="Username" aria-label="Username"
+                                    aria-describedby="basic-addon1" name="input-username" required>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"> #</span>
+                                <input type="text" class="form-control" placeholder="Password" aria-label="Password"
+                                    aria-describedby="basic-addon1" name="input-password" required>
+                            </div>
+
                             <button type="submit" name="login-button" class="btn btn-primary mb-3">Login</button>
                         </form>
                         <form action="signup.php" class="form-signup">

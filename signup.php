@@ -13,83 +13,100 @@
 
 ?>
 
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style/bodystyle.css">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Boostrap Icons  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <!-- My CSS -->
     <style>
+    body {
+        display: flex;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
 
-        body{
-            display : flex;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            
-        }
-       
-        .signup-box {
-            display : flex;
-            flex-direction: column;
-            align-items : center;
-            margin-block : auto;
-            text-align : center;
-            width:30%;
-            margin: auto;
-            margin-top: 10%;
-            border-radius: 20px;
-            border: 1px solid black;
-        }
+    }
 
-        .form-signup{
-            display : flex;
-            flex-direction: column;
-            align-items : center;
-            justify-content : center;
-            
-        }
+    #signup-card {
+        border-radius: 30px;
+    }
 
-        .form-box{
-            margin: auto;
-            text-align: center;
-            margin-block: 3vh;
-            
-        }
+    .container {
+        height: 30rem;
+    }
 
-        .form-signup input ,.form-signup button, .form-signup button{
-            display : flex;
-            flex-direction: column;
-            align-items : center;
-            margin-block : 1vh;
-            margin-inline:3vw;
-        }
-
+    .signup-box {
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        margin-top: 10%;
+    }
     </style>
 
-
-    <title>asdsadas</title>
+    <title>Assigner</title>
 </head>
-<body>
-    
-    <div class="signup-box">
-        <h1>Assigner Signup</h1>
-        <div class="form-box">
-            <form action="" method = "post" class = "form-signup" name = "register-account">
-                <input type="text" name = "input-username" placeholder = "Username" required>
-                <input type="password" name = "input-password" placeholder = "Password" required>
-                <button type="submit" name = "signup-button">Register</button>
-            </form>
-            <form action="login.php" class = "form-login">
-                <button type="submit" name = "login-button">Back Login</button>
-            </form>
 
+<body>
+
+    <!-- signup Card -->
+
+    <div class="signup-box">
+        <div class="container">
+            <div class="row">
+                <div class="card text-center" id="signup-card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h4 class="card-title fw-bold">Signup</h4>
+                        <p class="card-text">Enjoy our features at Assigner!</p>
+
+                        <form action="" method="post" name="register-account">
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">@</span>
+                                <input type="text" class="form-control" placeholder="Username" aria-label="Username"
+                                    aria-describedby="basic-addon1" name="input-username" required>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"> #</span>
+                                <input type="text" class="form-control" placeholder="Password" aria-label="Password"
+                                    aria-describedby="basic-addon1" name="input-password" required>
+                            </div>
+
+                            <form action="">
+                                <button type="submit" name="signup-button" class="btn btn-success mb-3">Join
+                                    Now</button>
+                            </form>
+
+                        </form>
+
+                        <form action="login.php">
+                            <button type="submit" name="login-button" class="btn btn-outline-primary">Back
+                                Login</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
 
+    <!-- End of signup card -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
+
 </body>
+
 </html>

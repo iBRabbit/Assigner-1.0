@@ -106,8 +106,7 @@
                     "INSERT INTO `groups` (`groupID`, `groupOwner`, `groupName`, `groupDetail`) VALUES (NULL, '" .
                     $userdata["accountID"] . "', '" . $_POST["group-name"] . "', '" . $_POST["group-description"] . "');";
                     mysqli_query($connectionID, $myQuery);
-               
-                    
+
                     $myQuery = 
                     "INSERT INTO `accounts_groups` (`accountID`, `groupID`, `positionID`) VALUES ('".$userdata["accountID"] . "' , '" .$autoIncrementVal["AI"] .  "' , '1');";
                     mysqli_query($connectionID, $myQuery);

@@ -82,8 +82,19 @@
                                     aria-describedby="basic-addon1" name="input-password" required>
                             </div>
 
+                            <div class="row g-3">
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="First name"
+                                        aria-label="First name" name="input-firstname">
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Last name"
+                                        aria-label="Last name" name="input-lastname">
+                                </div>
+                            </div>
+
                             <form action="">
-                                <button type="submit" name="signup-button" class="btn btn-success mb-3">Join
+                                <button type="submit" name="signup-button" class="btn btn-success mt-3 mb-3">Join
                                     Now</button>
                             </form>
 

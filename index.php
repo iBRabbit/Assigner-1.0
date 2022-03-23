@@ -87,7 +87,7 @@
             <div class="row text-center">
                 <div class="col">
                     <h4 class="fw-bolder">My groups</h4>
-                    <table class="table">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -152,7 +152,7 @@
                 </div>
                 <div class="col">
                     <h4 class="fw-bolder">Upcoming Assignments</h4>
-                    <table class="table">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -163,24 +163,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <td>aaa</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td colspan="2">Larry the Bird</td>
-                                <td>@twitter</td>
-                            </tr> -->
+
 
                             <?php 
                                 $myQuery =  
@@ -212,8 +195,7 @@
                                     if($row["assignmentStatus"] == 0) 
                                         echo "<td class=\"text-danger\">" . GetStatusNameByID($row["assignmentStatus"]) . "</td>";
                                     if($row["assignmentStatus"] > 0) 
-                                        echo "<td class=\"text-warning\">" . GetStatusNameByID($row["assignmentStatus"]) . "</td>";   
-                                                                           
+                                        echo "<td class=\"text-warning\">" . GetStatusNameByID($row["assignmentStatus"]) . "</td>";                                            
                                     echo "</tr>";
                                 }
                         ?>

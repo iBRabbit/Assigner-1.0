@@ -99,7 +99,21 @@
             <div class="row">
                 <div class="col">
                     <table class="table">
-                        <h3>Group Assignments</h3>
+
+                        <div class="assignment-header">
+                            <div class="container p-0">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="m-auto">Group Assignments</h3>
+                                    </div>
+                                    <div class="col p-0">
+                                        <a href="#" class="btn btn-primary">Add Assignment</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                         <thead>
                             <tr>
                                 <th scope="col">#</th>

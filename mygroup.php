@@ -129,7 +129,12 @@ $rows = query(
                                     WHERE ag.accountID = '$user' AND ag.groupID = '$groupid'");
                                     ?>
                                     <td><?= $posName[0]["positionName"] ?></td>
-                                    <td><button type="button" class="btn btn-primary">Edit</button></td>
+                                    <td>
+                                        <form action="group.php" method="post">
+                                        <input type="hidden" name="input-groupid" value="<?= $groupid?>"></input>
+                                        <button type="submit" class="btn btn-primary">Select</button>
+                                        </form>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

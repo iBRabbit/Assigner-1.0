@@ -2,14 +2,7 @@
     session_start();
     require_once 'functions.php'; 
 
-    if(isset($_POST["signup-button"])){
-        if(ValidateRegister($_POST) === 1) {
-            echo "<script>alert('User baru berhasil Ditambahkan!');</script>";
-        }
-        else {
-            echo mysqli_error($connectionID);
-        }
-    }
+
 
 ?>
 
@@ -67,6 +60,19 @@
                     <div class="card-body">
                         <h4 class="card-title fw-bold">Signup</h4>
                         <p class="card-text">Enjoy our features at Assigner!</p>
+
+                        <?php 
+                            if(isset($_POST["signup-button"])){
+                                if(ValidateRegister($_POST) === 1) {
+                                    echo "<div class=\"alert alert-success\" role=\"alert\">
+                                        Akun anda berhasil didaftarkan!
+                                    </div>";
+                                }
+                                else {
+                                    echo mysqli_error($connectionID);
+                                }
+                            }
+                        ?>
 
                         <form action="" method="post" name="register-account">
 

@@ -25,11 +25,11 @@ function GetUsernameByID($uid){
 }
 
 function GetStatusNameByID($statusID){
-    if($statusID == 0) return "Not Complete";
-    if($statusID == 1) return "25% Complete";
-    if($statusID == 2) return "50% Complete";
-    if($statusID == 3) return "75% Complete";
-    if($statusID == 4) return "100% Complete";
+    if($statusID == 0) return 0;
+    if($statusID == 1) return 25;
+    if($statusID == 2) return 50;
+    if($statusID == 3) return 75;
+    if($statusID == 4) return 100;
 
     return NULL;
 }

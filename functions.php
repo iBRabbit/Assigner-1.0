@@ -45,6 +45,8 @@ function ValidateRegister($input) {
     global $connectionID;
     $username = $input["input-username"];
     $password = mysqli_real_escape_string($connectionID,$input["input-password"]);
+    $firstname = mysqli_real_escape_string($connectionID,$input["input-firstname"]);
+    $lastname = mysqli_real_escape_string($connectionID,$input["input-lastname"]);
 
     $check = mysqli_query($connectionID, "SELECT username FROM accounts WHERE username = '$username'");
     if(mysqli_fetch_assoc($check)) {
@@ -53,7 +55,7 @@ function ValidateRegister($input) {
     }
 
     $password = password_hash($password, PASSWORD_DEFAULT);
-    $str = "INSERT INTO accounts VALUES ('NULL', '$username','$password')";
+    $str = "INSERT INTO accounts VALUES ('NULL', '$username','$password', '$firstname', '$lastname')";
     mysqli_query($connectionID,$str);
     return 1;
 }

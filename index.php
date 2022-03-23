@@ -7,7 +7,7 @@
     $userdata = GetUserData($username);
 
     $accountID = $userdata["accountID"];
-    $groups = query("
+    $groups = Query("
         SELECT 
             g.groupName,
             g.groupID
@@ -18,7 +18,7 @@
     );
     $groupIterator = 0;
 
-    $assignments = query(    
+    $assignments = Query(    
     "SELECT DISTINCT
     asg.assignmentTitle,
     asg.assignmentDeadline,
@@ -134,20 +134,19 @@
                                 FROM accounts_groups 
                                 WHERE groupID =" . $groupData["groupID"];
                                 
-                                $tmpQuery = query($myQuery);
+                                $tmpQuery = Query($myQuery);
                                 $groupMembers = $tmpQuery[0]["members"];
                                 
                                 $myQuery = "
                                 SELECT
-                                    positionName,
-                                    ag.groupID  
+                                    * 
                                 FROM positions pos
                                 JOIN accounts_groups ag
                                 ON ag.groupID = pos.groupID
                                 WHERE ag.accountID = ". $userdata["accountID"] . " AND ag.groupID = " . $groupData["groupID"];
                                 ;
 
-                                $positions = query($myQuery);
+                                $positions = Query($myQuery);
                             ?>
 
                             <tr>

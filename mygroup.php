@@ -6,7 +6,7 @@ StartLoginSession();
 $username = $_SESSION["username"];
 $userdata = GetUserData($username);
 $user = $userdata["accountID"];
-$rows = query(
+$rows = Query(
     "SELECT g.groupName, g.groupID
     FROM groups g
     JOIN accounts_groups ag
@@ -117,13 +117,13 @@ $rows = query(
                                 <td><?= $row["groupName"] ?></td>
                                 <?php 
                                     $groupid = $row["groupID"];
-                                    $groupMembers = query("
+                                    $groupMembers = Query("
                                     SELECT COUNT(*) as `members`
                                     FROM accounts_groups 
                                     WHERE groupID ='$groupid'");
                                     ?>
                                 <td><?= $groupMembers[0]["members"]; ?></td>
-                                <?php $posName = query("
+                                <?php $posName = Query("
                                     SELECT positionName, ag.groupID  
                                     FROM positions pos
                                     JOIN accounts_groups ag

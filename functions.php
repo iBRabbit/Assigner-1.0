@@ -60,7 +60,7 @@ function ValidateRegister($input) {
     return 1;
 }
 
-function query($query){
+function Query($query){
     global $connectionID;
     $result = mysqli_query($connectionID, $query);
     $rows = [];
@@ -68,4 +68,33 @@ function query($query){
         $rows[] = $row;
     }
     return $rows;
+}
+
+function IsGroupOwner($groupid, $userid){
+    global $connectionID;
+
+    $posdata = Query(
+        "SELECT
+        * 
+        FROM positions pos
+        JOIN accounts_groups ag
+        ON ag.groupID = pos.groupID
+        WHERE ag.accountID = $userid AND ag.groupID = $groupid
+    ");
+    
+    if($posdata[0]["positionValue"] == 1)
+        return true;
+
+    return false;
+}
+
+function GetGroupOwnerID($groupid){
+    global $connectionID;
+
+    // lom selesai
+
+    // $result = Query("
+    //     SELECT * FROM positions 
+    // ");
+
 }

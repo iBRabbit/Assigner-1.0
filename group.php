@@ -1,9 +1,14 @@
 <?php
     require_once "functions.php";
     StartLoginSession();
+    
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
-    $groupid = $_POST["input-groupid"];    
+    
+    $userid = $userdata["accountID"];
+    $groupid = $_POST["input-groupid"];
+    
+    $groupdata = Query("SELECT * FROM groups WHERE groupID = $groupid");
 ?>
 
 
@@ -30,6 +35,12 @@
 
     #assignment-list {
         width: 50%;
+    }
+
+    #add-asg-btn {
+        display: flex;
+        justify-content: flex-end;
+        /* margin: 1rem; */
     }
     </style>
 
@@ -84,11 +95,11 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
-                            Group Name
+                            <?= $groupdata[0]["groupName"] ?>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">Nama Ketua</h5>
-                            <p class="card-text">Description
+                            <p class="card-text"> <?= $groupdata[0]["groupDetail"] ?>
                             </p>
                             <a href="#" class="btn btn-primary">Edit Group [If Ketua]</a>
                         </div>
@@ -98,15 +109,14 @@
 
             <div class="row">
                 <div class="col">
-                    <table class="table">
-
+                    <table class="table ">
                         <div class="assignment-header">
-                            <div class="container p-0">
-                                <div class="row">
+                            <div class="container p-0 ">
+                                <div class="row align-items-center">
                                     <div class="col">
-                                        <h3 class="m-auto">Group Assignments</h3>
+                                        <h3 class="">Group Assignments</h3>
                                     </div>
-                                    <div class="col p-0">
+                                    <div class="col " id="add-asg-btn">
                                         <a href="#" class="btn btn-primary">Add Assignment</a>
                                     </div>
                                 </div>
@@ -144,8 +154,8 @@
                     </table>
                 </div>
                 <div class="col">
-                    <h3>Member List</h3>
-                    <table class="table">
+                    <table class="table ">
+                        <h3 class="">Member List</h3>
                         <thead>
                             <tr>
                                 <th scope="col">#</th>

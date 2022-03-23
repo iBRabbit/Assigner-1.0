@@ -135,7 +135,7 @@
                                             ag.groupID  
                                         FROM positions pos
                                         JOIN accounts_groups ag
-                                        ON ag.positionID = pos.positionID
+                                        ON ag.groupID = pos.groupID
                                         WHERE ag.accountID = ". $userdata["accountID"] . " AND ag.groupID = " . $row["groupID"];
                                         ;
                                     

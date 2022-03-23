@@ -103,8 +103,12 @@
                 
                 $myQuery = 
                 "INSERT INTO `accounts_groups` (`accountID`, `groupID`, `positionID`) VALUES ('".$userdata["accountID"] . "' , '" .$autoIncrementVal["AI"] .  "' , '1');";
-                var_dump($myQuery);
                 mysqli_query($connectionID, $myQuery);
+                
+                $myQuery = 
+                "INSERT INTO `positions` (`positionID`, `groupID`, `positionName`, `positionValue`) VALUES (NULL, " . $autoIncrementVal["AI"] . 
+                ", 'Owner', '1');";
+                mysqli_query($connectionID, $myQuery    );
 
                 echo 
                 "<div class=\"alert alert-success\" role=\"alert\" id=\"success-message\">

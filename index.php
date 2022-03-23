@@ -26,7 +26,7 @@
     <style>
     .content {
         margin-top: 10vh;
-        height: 26rem;
+        /* height: 26rem; */
     }
     </style>
 
@@ -128,7 +128,6 @@
                                     
                                     echo  "<td>" . $groupMembers["members"] . "</td>";
                                     
-                                    // TODO : Ada error query di sini... //
                                     $myQuery = "
                                         SELECT
                                             positionName,
@@ -139,10 +138,9 @@
                                         WHERE ag.accountID = ". $userdata["accountID"] . " AND ag.groupID = " . $row["groupID"];
                                         ;
                                     
-                                    // var_dump($myQuery);
                                     $resultrow = mysqli_query($connectionID, $myQuery);
                                     $posName = mysqli_fetch_assoc($resultrow);                                
-                                    // sampai sini //
+                                    
                                     echo  "<td>" . $posName["positionName"] . "</td>";
                                     echo "</tr>";
                                 }

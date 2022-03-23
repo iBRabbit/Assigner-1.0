@@ -25,7 +25,11 @@
     <!-- My CSS -->
     <style>
     .content {
-        height: 26rem;
+        margin-top: 10vh;
+    }
+
+    #content-container {
+        width: 60%;
     }
     </style>
 
@@ -74,43 +78,91 @@
     <!-- End of Navbar -->
 
     <!-- Contents -->
-    <div class="content pt-4">
-
-        <div class=" card m-auto" style="width: 18rem;">
-
-            <div class="card-header">
-                My Groups
+    <div class="content">
+        <div class="container" id="content-container">
+            <div class="row mb-4">
+                <div class="col">
+                    <a href="addgroup.php" class="btn btn-primary"><i class="bi bi-people-fill"></i>
+                        Add Group
+                    </a>
+                </div>
             </div>
 
-            <ul class="list-group list-group-flush">
+            <div class="row text-center">
+                <div class="col">
+                    <h4 class="fw-bolder">My groups</h4>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Members</th>
+                                <th scope="col">Position</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                                $myQuery = 
+                                "
+                                SELECT 
+                                    g.groupName,
+                                    g.groupID
+                                FROM groups g
+                                JOIN accounts_groups ag
+                                ON g.groupID = ag.groupID
+                                WHERE ag.accountID =" . $userdata["accountID"];
 
-                <?php 
-                
-                $myQuery = 
-                "
-                SELECT 
-                    g.groupName,
-                    g.groupID
-                FROM groups g
-                JOIN accounts_groups ag
-                ON g.groupID = ag.groupID
-                WHERE ag.accountID =" . $userdata["accountID"];
+                                $result = mysqli_query($connectionID, $myQuery);
+                                $iterator = 0;
 
-                $result = mysqli_query($connectionID, $myQuery);                
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    $iterator++;
+                                    echo "<tr>";
+                                    echo "<th scope=\"row\">" . $iterator . "</th>";
+                                    echo "<td>" . $row["groupName"] . "</td>";
 
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<li class=\"list-group-item\">" . $row["groupName"] . "</li>";
-                }
+                                    $myQuery = "
+                                        SELECT 
+                                            COUNT(*) as `members`
+                                        FROM accounts_groups 
+                                        WHERE groupID =" . $row["groupID"];
 
-            ?>
-            </ul>
+                                    $resultrow = mysqli_query($connectionID, $myQuery);
+                                    $groupMembers = mysqli_fetch_assoc($resultrow);
+                                    
+                                    echo  "<td>" . $groupMembers["members"] . "</td>";
+                                    
+                                    $myQuery = "
+                                        SELECT
+                                            positionName,
+                                            ag.groupID  
+                                        FROM positions pos
+                                        JOIN accounts_groups ag
+                                        ON ag.groupID = pos.groupID
+                                        WHERE ag.accountID = ". $userdata["accountID"] . " AND ag.groupID = " . $row["groupID"];
+                                        ;
+                                    
+                                    $resultrow = mysqli_query($connectionID, $myQuery);
+                                    $posName = mysqli_fetch_assoc($resultrow);                                
+                                    
+                                    echo  "<td>" . $posName["positionName"] . "</td>";
+
+                                    echo "<td><button type=\"button\" class=\"btn btn-primary\">Edit</button></td>";
+                                    
+                                    echo "</tr>";
+                                }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+    </div>
+    <!-- End of contents -->
 
-
-
-    <!-- End of Contents -->
-
+    <!-- End of contents -->
     <!-- Footer -->
 
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">

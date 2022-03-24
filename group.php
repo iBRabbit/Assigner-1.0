@@ -27,13 +27,14 @@
     
 
     $memberList = Query(
-        "SELECT DISTINCT acc.firstname, acc.lastname, acc.username, pos.positionName
-        FROM accounts acc
-        JOIN accounts_groups accGrp
-        ON acc.accountID = accGrp.accountID
+        "SELECT * FROM accounts_groups ag
+        JOIN accounts ac
+        ON ac.accountID = ag.accountID
         JOIN positions pos
-        ON pos.positionID = accGrp.positionID
-        WHERE accGrp.groupID = '$groupid'");
+        ON pos.positionID = ag.positionID
+        WHERE ag.groupID = $groupid
+    ");
+    
 ?>
 
 
@@ -86,10 +87,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php">Home</a>
+                        <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="mygroup.php">Groups</a>
+                        <a class="nav-link" href="mygroup.php">Groups</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"> Assignments</a>
@@ -98,18 +99,33 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Notifications</a>
                     </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <?= GetUserFullName($accountID) ?>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+
+                            <li><a class="dropdown-item" href="#">My Profile</a></li>
+                            <li>
+                                <a class="dropdown-item " href="#">
+                                    <form action="logout.php" class="margin-right:5rem" ethod=" post">
+                                        <div class="d-grid gap-2">
+                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                name="logout">Logout</button>
+                                        </div>
+                                    </form>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                 </ul>
 
-                <form action="logout.php" class="margin-right:5rem" ethod=" post">
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end ps-5  ">
-                        <button type="submit" class="btn btn-danger btn-sm" name="logout">Logout</button>
-                    </div>
-
-                </form>
             </div>
         </div>
     </nav>
-
     <!-- End of Navbar -->
 
     <!-- Contents -->
@@ -119,7 +135,9 @@
             <div class="row mb-4">
                 <div class="col">
                     <div class="card">
-                        <div class="card-header">Group</div>
+                        <div class="card-header">
+                            <?= "A Group Leaded by : " . GetUsernameByID(GetGroupOwnerID($groupid)) ?>
+                        </div>
                         <div class="card-body">
                             <h5 class="card-title"><?= $rows["groupName"]; ?></h5>
                             <p class="card-text">
@@ -127,9 +145,11 @@
                                 <br>
                                 <?= $rows["groupDetail"]; ?>
                             </p>
-                            <?php if($rows["groupOwner"] == $accountID):?>
-                            <a href="editGroup.php" class="btn btn-primary">Edit Group</a>
-                            <?php endif; ?>
+                            <?php 
+                                if(IsGroupOwner($accountID, $groupid))
+                                    echo "<a href=\"#\" class=\"btn btn-primary\">Edit Group</a>"
+                            ?>
+
                         </div>
                     </div>
                 </div>
@@ -145,7 +165,8 @@
                                         <h3 class="">Group Assignments</h3>
                                     </div>
                                     <div class="col " id="add-asg-btn">
-                                        <a href="#" class="btn btn-primary">Add Assignment</a>
+                                        <a href="#" class="btn btn-success"><i class="bi bi-plus-circle-fill"></i> │ Add
+                                            Assignment</a>
                                     </div>
                                 </div>
                             </div>
@@ -192,12 +213,17 @@
                 </div>
                 <div class="col">
                     <table class="table ">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <h3 class="">Member List</h3>
-                            </div>
-                            <div class="col " id="add-memlist-btn">
-                                <a href="#" class="btn btn-primary">Add Member List</a>
+                        <div class="assignment-header">
+                            <div class="container p-0 ">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h3 class="">Member List</h3>
+                                    </div>
+                                    <div class="col " id="add-asg-btn">
+                                        <a href="#" class="btn btn-success"><i class="bi bi-plus-circle-fill"></i> │ Add
+                                            Member</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <thead>
@@ -211,7 +237,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                        <?php $i=1?>
+                            <?php $i=1?>
                             <?php foreach($memberList as $member):?>
                             <tr>
                                 <th scope="row"><?= $i;?></th>

@@ -5,13 +5,13 @@ require_once "functions.php";
 StartLoginSession();
 $username = $_SESSION["username"];
 $userdata = GetUserData($username);
-$user = $userdata["accountID"];
+$accountID = $userdata["accountID"];
 $rows = Query(
     "SELECT g.groupName, g.groupID
     FROM groups g
     JOIN accounts_groups ag
     ON g.groupID = ag.groupID
-    WHERE ag.accountID = '$user'");
+    WHERE ag.accountID = '$accountID'");
 ?>
 
 
@@ -47,6 +47,7 @@ $rows = Query(
 
 
     <!-- Navbar -->
+    <!-- Navbar -->
     <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <span class="navbar-brand mb-0 h1">Assigner</span>
@@ -57,10 +58,10 @@ $rows = Query(
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php">Home</a>
+                        <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="mygroup.php">Groups</a>
+                        <a class="nav-link" href="mygroup.php">Groups</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"> Assignments</a>
@@ -70,14 +71,29 @@ $rows = Query(
                         <a class="nav-link" href="#">Notifications</a>
                     </li>
 
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <?= GetUserFullName($accountID) ?>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+
+                            <li><a class="dropdown-item" href="#">My Profile</a></li>
+                            <li>
+                                <a class="dropdown-item " href="#">
+                                    <form action="logout.php" class="margin-right:5rem" ethod=" post">
+                                        <div class="d-grid gap-2">
+                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                name="logout">Logout</button>
+                                        </div>
+                                    </form>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                 </ul>
 
-                <form action="logout.php" class="margin-right:5rem" ethod=" post">
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end ps-5  ">
-                        <button type="submit" class="btn btn-danger btn-sm" name="logout">Logout</button>
-                    </div>
-
-                </form>
             </div>
         </div>
     </nav>
@@ -123,13 +139,15 @@ $rows = Query(
                                     WHERE groupID ='$groupid'");
                                     ?>
                                 <td><?= $groupMembers[0]["members"]; ?></td>
-                                <?php $posName = Query("
-                                    SELECT positionName, ag.groupID  
-                                    FROM positions pos
-                                    JOIN accounts_groups ag
-                                    ON ag.groupID = pos.groupID
-                                    WHERE ag.accountID = '$user' AND ag.groupID = '$groupid'");
-                                    ?>
+
+                                <?php 
+                                $posName = Query("
+                                SELECT * from accounts_groups ag
+                                JOIN positions p
+                                ON p.positionID = ag.positionID
+                                WHERE ag.groupID = $groupid  AND ag.accountID = $accountID");
+                                ?>
+
                                 <td><?= $posName[0]["positionName"] ?></td>
                                 <td>
                                     <form action="group.php" method="post">

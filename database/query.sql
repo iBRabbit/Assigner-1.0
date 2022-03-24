@@ -1,5 +1,7 @@
 use seproject
 
+-- Buat coret coret doang --
+
 SELECT * FROM groups;
 
 SELECT * FROM accounts_groups;
@@ -21,7 +23,7 @@ WHERE ag.accountID = 2;
 SELECT * from accounts_groups ag
 JOIN positions p
 ON p.positionID = ag.positionID
-WHERE ag.groupID = 5 AND ag.accountID = 0
+WHERE ag.groupID = 27 AND ag.accountID = 2
 
 SELECT
 * 
@@ -29,3 +31,17 @@ FROM positions pos
 JOIN accounts_groups ag
 ON ag.groupID = pos.groupID
 WHERE ag.accountID = 2
+
+SELECT ag.accountID FROM accounts_groups ag
+JOIN positions pos
+ON ag.positionID = pos.positionID
+WHERE ag.groupID = 5 AND pos.positionValue = 1;
+
+SELECT * FROM accounts_groups ag
+JOIN accounts ac
+ON ac.accountID = ag.accountID
+JOIN positions pos
+ON pos.positionID = ag.positionID
+WHERE ag.groupID = 1
+
+INSERT INTO `accounts_groups` (`accountID`, `groupID`, `positionID`) VALUES ('2' , '34' , '23');

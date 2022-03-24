@@ -77,14 +77,30 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Notifications</a>
                     </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <?= GetUserFullName($accountID) ?>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+
+                            <li><a class="dropdown-item" href="#">My Profile</a></li>
+                            <li>
+                                <a class="dropdown-item " href="#">
+                                    <form action="logout.php" class="margin-right:5rem" ethod=" post">
+                                        <div class="d-grid gap-2">
+                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                name="logout">Logout</button>
+                                        </div>
+                                    </form>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                 </ul>
 
-                <form action="logout.php" class="margin-right:5rem" ethod=" post">
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end ps-5  ">
-                        <button type="submit" class="btn btn-danger btn-sm" name="logout">Logout</button>
-                    </div>
-
-                </form>
             </div>
         </div>
     </nav>
@@ -94,6 +110,15 @@
     <!-- Contents -->
     <div class="content">
         <div class="container">
+            <div class="row mb-4">
+                <div class="col-sm-1">
+                    <h1 class="fs-1"><i class="bi bi-person-circle"></i></h1>
+                </div>
+                <div class="col d-flex align-items-center ps-0">
+                    <h3 class="fs-3">Hello, <?= GetUserFullName($accountID) ?> </h3>
+                </div>
+            </div>
+
             <div class="row mb-4">
                 <div class="col">
                     <a href="addgroup.php" class="btn btn-primary"><i class="bi bi-people-fill"></i>

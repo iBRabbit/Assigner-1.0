@@ -70,18 +70,17 @@ function Query($query){
     return $rows;
 }
 
-function IsGroupOwner($groupid, $userid){
+function IsGroupOwner($userid, $groupid){
     global $connectionID;
 
     $posdata = Query(
-        "SELECT
-        * 
+        "SELECT *
         FROM positions pos
         JOIN accounts_groups ag
         ON ag.groupID = pos.groupID
         WHERE ag.accountID = $userid AND ag.groupID = $groupid
     ");
-    
+
     if($posdata[0]["positionValue"] == 1)
         return true;
 
@@ -93,12 +92,19 @@ function GetGroupOwnerID($groupid){
 
 
     $result = Query("
-        SELECT * FROM positions p 
-        JOIN groups g 
-        ON g.groupID = p.groupID
-        WHERE g.groupID = $groupid AND positionValue = 1;
+        SELECT ag.accountID as `id` FROM accounts_groups ag
+        JOIN positions pos
+        ON ag.positionID = pos.positionID
+        WHERE ag.groupID = $groupid AND pos.positionValue = 1;
     ");
 
-    // return result[0][""]
+    return $result[0]["id"];
+}
+
+function GetUserFullName($userid) {
+    global $connectionID;
+    $result = mysqli_query($connectionID, "SELECT * FROM accounts WHERE accountID = $userid");
+    $row = mysqli_fetch_assoc($result);
     
+    return (mysqli_num_rows($result) > 0) ? $row["firstname"] . " " . $row["lastname"] : NULL;
 }

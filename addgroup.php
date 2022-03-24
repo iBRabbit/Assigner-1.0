@@ -5,7 +5,7 @@
     StartLoginSession();
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
-
+    $accountID = $userdata["accountID"];
 
 ?>
 
@@ -49,10 +49,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php">Home</a>
+                        <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="mygroup.php">Groups</a>
+                        <a class="nav-link" href="mygroup.php">Groups</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"> Assignments</a>
@@ -61,14 +61,30 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Notifications</a>
                     </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <?= GetUserFullName($accountID) ?>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+
+                            <li><a class="dropdown-item" href="#">My Profile</a></li>
+                            <li>
+                                <a class="dropdown-item " href="#">
+                                    <form action="logout.php" class="margin-right:5rem" ethod=" post">
+                                        <div class="d-grid gap-2">
+                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                name="logout">Logout</button>
+                                        </div>
+                                    </form>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                 </ul>
 
-                <form action="logout.php" class="margin-right:5rem" ethod=" post">
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end ps-5  ">
-                        <button type="submit" class="btn btn-danger btn-sm" name="logout">Logout</button>
-                    </div>
-
-                </form>
             </div>
         </div>
     </nav>
@@ -100,22 +116,34 @@
                     Your group name is less than 5 characters.
                     </div>";
                 } else {
-                    $autoIncrementVal = mysqli_fetch_assoc($result);
+                    $autoIncrementGroupVal = mysqli_fetch_assoc($result);
                 
+                    $result = mysqli_query($connectionID, "SELECT AUTO_INCREMENT as `AI`
+                    FROM information_schema.TABLES
+                    WHERE TABLE_SCHEMA = \"seproject\"
+                    AND TABLE_NAME = \"positions\"");
+                    
+                    $autoIncrementPosVal = mysqli_fetch_assoc($result);
+
                     $myQuery = 
                     "INSERT INTO `groups` (`groupID`, `groupOwner`, `groupName`, `groupDetail`) VALUES (NULL, '" .
                     $userdata["accountID"] . "', '" . $_POST["group-name"] . "', '" . $_POST["group-description"] . "');";
                     mysqli_query($connectionID, $myQuery);
 
                     $myQuery = 
-                    "INSERT INTO `accounts_groups` (`accountID`, `groupID`, `positionID`) VALUES ('".$userdata["accountID"] . "' , '" .$autoIncrementVal["AI"] .  "' , '1');";
-                    mysqli_query($connectionID, $myQuery);
-                    
-                    $myQuery = 
-                    "INSERT INTO `positions` (`positionID`, `groupID`, `positionName`, `positionValue`) VALUES (NULL, " . $autoIncrementVal["AI"] . 
+                    "INSERT INTO `positions` (`positionID`, `groupID`, `positionName`, `positionValue`) VALUES (NULL, " . $autoIncrementGroupVal["AI"] . 
                     ", 'Owner', '1');";
                     mysqli_query($connectionID, $myQuery );
-    
+
+
+                    $myQuery = 
+                    "INSERT INTO `accounts_groups` (`accountID`, `groupID`, `positionID`) VALUES ('".$userdata["accountID"] . "' , '" .$autoIncrementGroupVal["AI"] .  "' , " . $autoIncrementPosVal["AI"] .");";
+                    var_dump($myQuery);
+                    mysqli_query($connectionID, $myQuery);
+                    
+
+                        
+                    
                     echo 
                     "<div class=\"alert alert-success\" role=\"alert\" id=\"success-message\">
                     Successfully created a group!

@@ -25,11 +25,11 @@ function GetUsernameByID($uid){
 }
 
 function GetStatusNameByID($statusID){
-    if($statusID == 0) return "Not Complete";
-    if($statusID == 1) return "25% Complete";
-    if($statusID == 2) return "50% Complete";
-    if($statusID == 3) return "75% Complete";
-    if($statusID == 4) return "100% Complete";
+    if($statusID == 0) return 0;
+    if($statusID == 1) return 25;
+    if($statusID == 2) return 50;
+    if($statusID == 3) return 75;
+    if($statusID == 4) return 100;
 
     return NULL;
 }
@@ -60,7 +60,7 @@ function ValidateRegister($input) {
     return 1;
 }
 
-function query($query){
+function Query($query){
     global $connectionID;
     $result = mysqli_query($connectionID, $query);
     $rows = [];
@@ -68,4 +68,33 @@ function query($query){
         $rows[] = $row;
     }
     return $rows;
+}
+
+function IsGroupOwner($groupid, $userid){
+    global $connectionID;
+
+    $posdata = Query(
+        "SELECT
+        * 
+        FROM positions pos
+        JOIN accounts_groups ag
+        ON ag.groupID = pos.groupID
+        WHERE ag.accountID = $userid AND ag.groupID = $groupid
+    ");
+    
+    if($posdata[0]["positionValue"] == 1)
+        return true;
+
+    return false;
+}
+
+function GetGroupOwnerID($groupid){
+    global $connectionID;
+
+    // lom selesai
+
+    // $result = Query("
+    //     SELECT * FROM positions 
+    // ");
+
 }

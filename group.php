@@ -1,23 +1,24 @@
 <?php
     require_once "functions.php";
     StartLoginSession();
+    
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
     $groupid = $_POST["input-groupid"];
     $user = $userdata["accountID"];
 
-    $rows = query(
+    $rows = Query(
     "SELECT groupName, groupDetail
     FROM groups
     WHERE groupID = '$groupid'");
     $rows = $rows[0];
 
-    $groupAsg = query(
+    $groupAsg = Query(
     "SELECT assignmentTitle, assignmentDescription, assignmentDeadline, assignmentStatus
     FROM assignments
     WHERE groupID = '$groupid'");
 
-    $memberList = query(
+    $memberList = Query(
         "SELECT *
         FROM accounts acc
         JOIN accounts_groups accGrp
@@ -52,6 +53,12 @@
 
     #assignment-list {
         width: 50%;
+    }
+
+    #add-asg-btn {
+        display: flex;
+        justify-content: flex-end;
+        /* margin: 1rem; */
     }
     </style>
 
@@ -106,7 +113,7 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
-                            Group Name
+                            <?= $groupdata[0]["groupName"] ?>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title"><?= $rows["groupName"]; ?></h5>
@@ -123,15 +130,14 @@
 
             <div class="row">
                 <div class="col">
-                    <table class="table">
-
+                    <table class="table ">
                         <div class="assignment-header">
-                            <div class="container p-0">
-                                <div class="row">
+                            <div class="container p-0 ">
+                                <div class="row align-items-center">
                                     <div class="col">
-                                        <h3 class="m-auto">Group Assignments</h3>
+                                        <h3 class="">Group Assignments</h3>
                                     </div>
-                                    <div class="col p-0">
+                                    <div class="col " id="add-asg-btn">
                                         <a href="#" class="btn btn-primary">Add Assignment</a>
                                     </div>
                                 </div>
@@ -164,8 +170,8 @@
                     </table>
                 </div>
                 <div class="col">
-                    <h3>Member List</h3>
-                    <table class="table">
+                    <table class="table ">
+                        <h3 class="">Member List</h3>
                         <thead>
                             <tr>
                                 <th scope="col">#</th>

@@ -5,6 +5,34 @@
     StartLoginSession();
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
+
+    $accountID = $userdata["accountID"];
+    $groups = Query("
+        SELECT 
+            g.groupName,
+            g.groupID
+        FROM groups g
+        JOIN accounts_groups ag
+        ON g.groupID = ag.groupID
+        WHERE ag.accountID = $accountID"
+    );
+    $groupIterator = 0;
+
+    $assignments = Query(    
+    "SELECT DISTINCT
+    asg.assignmentTitle,
+    asg.assignmentDeadline,
+    asg.assignmentCreated,
+    asg.assignmentStatus,
+    asg.assignedTo
+    FROM assignments asg
+    JOIN groups g 
+    ON g.groupID = asg.groupID
+    JOIN accounts_groups ag
+    ON ag.groupID = g.groupID
+    WHERE asg.assignedTo = $accountID");
+    
+    $asgIterator = 0;
 ?>
 
 
@@ -34,7 +62,6 @@
 </head>
 
 <body>
-
 
     <!-- Navbar -->
     <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
@@ -97,52 +124,40 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <?php foreach($groups as $groupData) :?>
+
                             <?php 
-                                $myQuery = 
-                                "
-                                SELECT g.groupName,g.groupID
-                                FROM groups g
+                                $groupIterator++;
+                                $myQuery = "
+                                SELECT 
+                                    COUNT(*) as `members`
+                                FROM accounts_groups 
+                                WHERE groupID =" . $groupData["groupID"];
+                                
+                                $tmpQuery = Query($myQuery);
+                                $groupMembers = $tmpQuery[0]["members"];
+                                
+                                $myQuery = "
+                                SELECT
+                                    * 
+                                FROM positions pos
                                 JOIN accounts_groups ag
-                                ON g.groupID = ag.groupID
-                                WHERE ag.accountID =" . $userdata["accountID"];
+                                ON ag.groupID = pos.groupID
+                                WHERE ag.accountID = ". $userdata["accountID"] . " AND ag.groupID = " . $groupData["groupID"];
+                                ;
 
-                                $result = mysqli_query($connectionID, $myQuery);
-                                $iterator = 0;
-
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    $iterator++;
-                                    echo "<tr>";
-                                    echo "<th scope=\"row\">" . $iterator . "</th>";
-                                    echo "<td>" . $row["groupName"] . "</td>";
-
-                                    $myQuery = "
-                                        SELECT 
-                                            COUNT(*) as `members`
-                                        FROM accounts_groups 
-                                        WHERE groupID =" . $row["groupID"];
-
-                                    $resultrow = mysqli_query($connectionID, $myQuery);
-                                    $groupMembers = mysqli_fetch_assoc($resultrow);
-                                    
-                                    echo  "<td>" . $groupMembers["members"] . "</td>";
-                                    
-                                    $myQuery = "
-                                        SELECT
-                                            positionName,
-                                            ag.groupID  
-                                        FROM positions pos
-                                        JOIN accounts_groups ag
-                                        ON ag.groupID = pos.groupID
-                                        WHERE ag.accountID = ". $userdata["accountID"] . " AND ag.groupID = " . $row["groupID"];
-                                        ;
-                                    
-                                    $resultrow = mysqli_query($connectionID, $myQuery);
-                                    $posName = mysqli_fetch_assoc($resultrow);                                
-                                    
-                                    echo  "<td>" . $posName["positionName"] . "</td>";
-                                    echo "</tr>";
-                                }
+                                $positions = Query($myQuery);
                             ?>
+
+                            <tr>
+                                <th scope="row"><?= $groupIterator ?></th>
+
+                                <td scope="row"><?= $groupData["groupName"]; ?></td>
+                                <td scope="row"><?= $groupMembers?></td>
+                                <td scope="row"><?= $positions[0]["positionName"] ?></td>
+                            </tr>
+
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
@@ -155,46 +170,33 @@
                                 <th scope="col">Title</th>
                                 <th scope="col">Created on</th>
                                 <th scope="col">Deadline</th>
-                                <th scope="col">Status</th>
+                                <th scope="col">Progress</th>
                             </tr>
                         </thead>
                         <tbody>
+                            <?php foreach($assignments as $asgData) :?>
+                            <?php $asgIterator++; 
+                            
+                                                                    
+                            $tmpProcessStr = "width: " . GetStatusNameByID($asgData["assignmentStatus"]). "%";                           
+                                        
+                            ?>
+                            <tr>
+                                <th><?= $asgIterator ?></th>
+                                <td><?= $asgData["assignmentTitle"] ?></td>
+                                <td><?= $asgData["assignmentCreated"] ?></td>
+                                <td><?= $asgData["assignmentDeadline"] ?></td>
 
-
-                            <?php 
-                                $myQuery =  
-                                "
-                                    SELECT DISTINCT
-                                        asg.assignmentTitle,
-                                        asg.assignmentDeadline,
-                                        asg.assignmentCreated,
-                                        asg.assignmentStatus,
-                                        asg.assignedTo
-                                    FROM assignments asg
-                                    JOIN groups g 
-                                    ON g.groupID = asg.groupID
-                                    JOIN accounts_groups ag
-                                    ON ag.groupID = g.groupID
-                                    WHERE asg.assignedTo = " . $userdata["accountID"];
-                                
-
-                                $result = mysqli_query($connectionID, $myQuery);
-                                $iterator = 0;
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    $iterator++;
-                                    echo "<tr>";
-                                    echo "<th scope=\"row\">" . $iterator . "</th>";
-                                    echo "<td>" . $row["assignmentTitle"] . "</td>";
-                                    echo "<td>" . $row["assignmentCreated"] . "</td>";
-                                    echo "<td>" . $row["assignmentDeadline"] . "</td>";
-                                    
-                                    if($row["assignmentStatus"] == 0) 
-                                        echo "<td class=\"text-danger\">" . GetStatusNameByID($row["assignmentStatus"]) . "</td>";
-                                    if($row["assignmentStatus"] > 0) 
-                                        echo "<td class=\"text-warning\">" . GetStatusNameByID($row["assignmentStatus"]) . "</td>";                                            
-                                    echo "</tr>";
-                                }
-                        ?>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar"
+                                            style="<?= $tmpProcessStr; ?>" aria-valuenow="0" aria-valuemin="0"
+                                            aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
 
                         </tbody>
                     </table>
@@ -203,7 +205,7 @@
         </div>
     </div>
     <!-- End of contents -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+    <svg xmlns=" http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
         <path fill="#212529" fill-opacity="1"
             d="M0,128L34.3,133.3C68.6,139,137,149,206,176C274.3,203,343,245,411,234.7C480,224,549,160,617,149.3C685.7,139,754,181,823,186.7C891.4,192,960,160,1029,160C1097.1,160,1166,192,1234,197.3C1302.9,203,1371,181,1406,170.7L1440,160L1440,320L1405.7,320C1371.4,320,1303,320,1234,320C1165.7,320,1097,320,1029,320C960,320,891,320,823,320C754.3,320,686,320,617,320C548.6,320,480,320,411,320C342.9,320,274,320,206,320C137.1,320,69,320,34,320L0,320Z"
             data-darkreader-inline-fill="" style="--darkreader-inline-fill:#007acc;"></path>

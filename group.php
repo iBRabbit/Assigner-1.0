@@ -147,6 +147,7 @@
 
                         <thead>
                             <tr>
+                                <!-- title, create, deadline, progress -->
                                 <th scope="col">#</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Description</th>
@@ -174,6 +175,7 @@
                         <h3 class="">Member List</h3>
                         <thead>
                             <tr>
+                                <!-- name, username, position -->
                                 <th scope="col">#</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Position</th>

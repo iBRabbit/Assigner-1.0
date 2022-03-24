@@ -28,8 +28,6 @@
     FROM assignments asg
     JOIN groups g 
     ON g.groupID = asg.groupID
-    JOIN accounts_groups ag
-    ON ag.groupID = g.groupID
     WHERE asg.assignedTo = $accountID");
     
     $asgIterator = 0;

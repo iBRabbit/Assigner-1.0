@@ -5,7 +5,7 @@
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
     $groupid = $_POST["input-groupid"];
-    $user = $userdata["accountID"];
+    $accountID = $userdata["accountID"];
 
     $rows = Query(
     "SELECT groupName, groupDetail
@@ -13,10 +13,18 @@
     WHERE groupID = '$groupid'");
     $rows = $rows[0];
 
-    $groupAsg = Query(
-    "SELECT assignmentTitle, assignmentDescription, assignmentDeadline, assignmentStatus
-    FROM assignments
-    WHERE groupID = '$groupid'");
+    $assignments = Query(    
+    "SELECT DISTINCT
+    asg.assignmentTitle,
+    asg.assignmentDeadline,
+    asg.assignmentCreated,
+    asg.assignmentStatus,
+    asg.assignedTo
+    FROM assignments asg
+    JOIN groups g 
+    ON g.groupID = asg.groupID
+    WHERE asg.groupID = '$groupid'");
+    
 
     $memberList = Query(
         "SELECT *
@@ -147,26 +155,39 @@
 
                         <thead>
                             <tr>
-                                <!-- title, create, deadline, progress -->
                                 <th scope="col">#</th>
                                 <th scope="col">Title</th>
-                                <th scope="col">Description</th>
+                                <th scope="col">Created on</th>
                                 <th scope="col">Deadline</th>
-                                <th scope="col">Status</th>
+                                <th scope="col">Progress</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $i=1?>
-                            <?php foreach($groupAsg as $asg):?>
+                            <?php $asgIterator = 0; ?>
+                            <?php foreach($assignments as $asgData) :?>
+                            <?php $asgIterator++;
+                            
+                                                                    
+                            $tmpProcessStr = "width: " . GetStatusNameByID($asgData["assignmentStatus"]). "%";                           
+                                        
+                            ?>
                             <tr>
-                                <th scope="row"><?= $i;?></th>
-                                <td><?= $asg["assignmentTitle"];?></td>
-                                <td><?= $asg["assignmentDescription"];?></td>
-                                <td><?= $asg["assignmentDeadline"];?></td>
-                                <td><?= $asg["assignmentStatus"];?></td>
+                                <th><?= $asgIterator ?></th>
+                                <td><?= $asgData["assignmentTitle"] ?></td>
+                                <td><?= $asgData["assignmentCreated"] ?></td>
+                                <td><?= $asgData["assignmentDeadline"] ?></td>
+
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar"
+                                            style="<?= $tmpProcessStr; ?>" aria-valuenow="0" aria-valuemin="0"
+                                            aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
-                            <?php $i++;?>
-                            <?php endforeach;?>
+                            <?php endforeach; ?>
+
                         </tbody>
                     </table>
                 </div>

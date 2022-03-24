@@ -45,3 +45,9 @@ ON pos.positionID = ag.positionID
 WHERE ag.groupID = 1
 
 INSERT INTO `accounts_groups` (`accountID`, `groupID`, `positionID`) VALUES ('2' , '34' , '23');
+
+SELECT *
+FROM positions pos
+JOIN accounts_groups ag
+ON ag.positionID = pos.positionID
+WHERE ag.accountID = 2 AND ag.groupID = 3

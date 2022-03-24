@@ -1,6 +1,6 @@
 <?php
 
-require_once "functions.php";
+require_once "../functions.php";
 
 StartLoginSession();
 $username = $_SESSION["username"];
@@ -58,7 +58,7 @@ $rows = Query(
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                        <a class="nav-link active" aria-current="page" href="../index.php">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="mygroup.php">Groups</a>
@@ -81,7 +81,7 @@ $rows = Query(
                             <li><a class="dropdown-item" href="#">My Profile</a></li>
                             <li>
                                 <a class="dropdown-item " href="#">
-                                    <form action="logout.php" class="margin-right:5rem" ethod=" post">
+                                    <form action="../logout.php" class="margin-right:5rem" ethod=" post">
                                         <div class="d-grid gap-2">
                                             <button type="submit" class="btn btn-danger btn-sm"
                                                 name="logout">Logout</button>
@@ -105,8 +105,8 @@ $rows = Query(
         <div class="container" id="content-container">
             <div class="row mb-4">
                 <div class="col">
-                    <a href="addgroup.php" class="btn btn-primary"><i class="bi bi-people-fill"></i>
-                        Add Group
+                    <a href="addgroup.php" class="btn btn-success"><i class="bi bi-people-fill"></i>
+                        │ Add Group
                     </a>
                 </div>
             </div>
@@ -152,7 +152,8 @@ $rows = Query(
                                 <td>
                                     <form action="group.php" method="post">
                                         <input type="hidden" name="input-groupid" value="<?= $groupid?>"></input>
-                                        <button type="submit" class="btn btn-primary">Select</button>
+                                        <button type="submit" class="btn btn-primary"><i
+                                                class="bi bi-arrow-right-square"></i></button>
                                     </form>
                                 </td>
                             </tr>

@@ -68,7 +68,7 @@
                         <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="mygroup.php">Groups</a>
+                        <a class="nav-link" href="group/mygroup.php">Groups</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"> Assignments</a>
@@ -121,8 +121,8 @@
 
             <div class="row mb-4">
                 <div class="col">
-                    <a href="addgroup.php" class="btn btn-primary"><i class="bi bi-people-fill"></i>
-                        Add Group
+                    <a href="group/addgroup.php" class="btn btn-success"><i class="bi bi-people-fill"></i>
+                        │ Add Group
                     </a>
                 </div>
             </div>
@@ -201,7 +201,7 @@
 
                                 <td>
                                     <div class="progress">
-                                        <div class="progress-bar bg-success" role="progressbar"
+                                        <div class="progress-bar bg-primary" role="progressbar"
                                             style="<?= $tmpProcessStr; ?>" aria-valuenow="0" aria-valuemin="0"
                                             aria-valuemax="100">
                                         </div>

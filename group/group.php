@@ -1,5 +1,5 @@
 <?php
-    require_once "functions.php";
+    require_once "../functions.php";
     StartLoginSession();
     
     $username = $_SESSION["username"];
@@ -13,28 +13,8 @@
     WHERE groupID = '$groupid'");
     $rows = $rows[0];
 
-    $assignments = Query(    
-    "SELECT DISTINCT
-    asg.assignmentTitle,
-    asg.assignmentDeadline,
-    asg.assignmentCreated,
-    asg.assignmentStatus,
-    asg.assignedTo
-    FROM assignments asg
-    JOIN groups g 
-    ON g.groupID = asg.groupID
-    WHERE asg.groupID = '$groupid'");
-    
-
-    $memberList = Query(
-        "SELECT * FROM accounts_groups ag
-        JOIN accounts ac
-        ON ac.accountID = ag.accountID
-        JOIN positions pos
-        ON pos.positionID = ag.positionID
-        WHERE ag.groupID = $groupid
-    ");
-    
+    $assignments = GetAssignmentListByGroupID($groupid);
+    $memberList = GetMemberListByGroupID($groupid);
 ?>
 
 
@@ -63,7 +43,8 @@
         width: 50%;
     }
 
-    #add-asg-btn, #add-memlist-btn {
+    #add-asg-btn,
+    #add-memlist-btn {
         display: flex;
         justify-content: flex-end;
         /* margin: 1rem; */
@@ -87,7 +68,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                        <a class="nav-link active" aria-current="page" href="../index.php">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="mygroup.php">Groups</a>
@@ -110,7 +91,7 @@
                             <li><a class="dropdown-item" href="#">My Profile</a></li>
                             <li>
                                 <a class="dropdown-item " href="#">
-                                    <form action="logout.php" class="margin-right:5rem" ethod=" post">
+                                    <form action="../logout.php" class="margin-right:5rem" ethod=" post">
                                         <div class="d-grid gap-2">
                                             <button type="submit" class="btn btn-danger btn-sm"
                                                 name="logout">Logout</button>
@@ -136,7 +117,7 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
-                            <?= "A Group Leaded by : " . GetUsernameByID(GetGroupOwnerID($groupid)) ?>
+                            <?= "A Group Owned by  " . GetUserFullName(GetGroupOwnerID($groupid)) ?>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title"><?= $rows["groupName"]; ?></h5>
@@ -147,7 +128,7 @@
                             </p>
                             <?php 
                                 if(IsGroupOwner($accountID, $groupid))
-                                    echo "<a href=\"#\" class=\"btn btn-primary\">Edit Group</a>"
+                                    echo "<a href=\"#\" class=\"btn btn-primary\"><i class=\"bi bi-pencil-square\"></i> │ Edit Group</a>"
                             ?>
 
                         </div>
@@ -165,8 +146,13 @@
                                         <h3 class="">Group Assignments</h3>
                                     </div>
                                     <div class="col " id="add-asg-btn">
-                                        <a href="#" class="btn btn-success"><i class="bi bi-plus-circle-fill"></i> │ Add
-                                            Assignment</a>
+                                        <form action="../assignment/addassignment.php" method="post">
+                                            <input type="hidden" name="input-groupid" value="<?= $groupid?>"></input>
+                                            <button type="submit" class="btn btn-success"><i
+                                                    class="bi bi-plus-circle-fill"></i> │ Add
+                                                Assignment</button>
+                                        </form>
+
                                     </div>
                                 </div>
                             </div>
@@ -233,10 +219,13 @@
                                 <th scope="col">Name</th>
                                 <th scope="col">Username</th>
                                 <th scope="col">Position</th>
-                                <th scope="col">Action</th>
+                                <th scope="col-2" colspan="2" class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
+                            <!-- Button Eye nantinya akan ngasih liat isi profil dari user tersebut -->
+                            <!-- Nanti di dalamnya bakal ada edit position juga -->
+                            <!-- Design nyusul -->
                             <?php $i=1?>
                             <?php foreach($memberList as $member):?>
                             <tr>
@@ -245,10 +234,12 @@
                                 <td>@<?= $member["username"];?></td>
                                 <td><?= $member["positionName"];?></td>
                                 <td>
-                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button class="btn btn-primary" type="button">Edit</button>
-                                    <button class="btn btn-primary" type="button">Delete</button>
-                                </div>
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button class="btn btn-primary" type="button"><i
+                                                class="bi bi-eye-fill"></i></button>
+                                        <button class="btn btn-danger" type="button"><i
+                                                class="bi bi-trash3-fill"></i></button>
+                                    </div>
                                 </td>
                             </tr>
                             <?php $i++;?>

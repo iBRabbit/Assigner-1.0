@@ -24,6 +24,13 @@ function GetUsernameByID($uid){
     return (mysqli_num_rows($result) > 0) ? $row["username"] : NULL;
 }
 
+function GetGroupNameByID($gid) {
+    global $connectionID;
+    $result = mysqli_query($connectionID, "SELECT * FROM groups WHERE groupID = $gid");
+    $row = mysqli_fetch_assoc($result);
+    return (mysqli_num_rows($result) > 0) ? $row["groupName"] : NULL;
+}
+
 function GetStatusNameByID($statusID){
     if($statusID == 0) return 0;
     if($statusID == 1) return 25;
@@ -77,9 +84,8 @@ function IsGroupOwner($userid, $groupid){
         "SELECT *
         FROM positions pos
         JOIN accounts_groups ag
-        ON ag.groupID = pos.groupID
-        WHERE ag.accountID = $userid AND ag.groupID = $groupid
-    ");
+        ON ag.positionID = pos.positionID
+        WHERE ag.accountID = $userid AND ag.groupID = $groupid");
 
     if($posdata[0]["positionValue"] == 1)
         return true;
@@ -107,4 +113,30 @@ function GetUserFullName($userid) {
     $row = mysqli_fetch_assoc($result);
     
     return (mysqli_num_rows($result) > 0) ? $row["firstname"] . " " . $row["lastname"] : NULL;
+}
+
+function GetAssignmentListByGroupID($gid) {
+    $assignments = Query(    
+        "SELECT
+        *
+        FROM assignments asg
+        JOIN groups g 
+        ON g.groupID = asg.groupID
+        WHERE asg.groupID = '$gid'");
+    
+    return $assignments;
+}
+
+function GetMemberListByGroupID($gid) {
+    
+    $memberList = Query(
+        "SELECT * FROM accounts_groups ag
+        JOIN accounts ac
+        ON ac.accountID = ag.accountID
+        JOIN positions pos
+        ON pos.positionID = ag.positionID
+        WHERE ag.groupID = $gid
+    ");
+    
+    return $memberList;
 }

@@ -113,7 +113,7 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
-                            <?= $groupdata[0]["groupName"] ?>
+                            <?= $rows["groupName"] ?>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title"><?= $rows["groupName"]; ?></h5>

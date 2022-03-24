@@ -4,11 +4,29 @@
     
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
-    
-    $userid = $userdata["accountID"];
     $groupid = $_POST["input-groupid"];
-    
-    $groupdata = Query("SELECT * FROM groups WHERE groupID = $groupid");
+    $user = $userdata["accountID"];
+
+    $rows = Query(
+    "SELECT groupName, groupDetail
+    FROM groups
+    WHERE groupID = '$groupid'");
+    $rows = $rows[0];
+
+    $groupAsg = Query(
+    "SELECT assignmentTitle, assignmentDescription, assignmentDeadline, assignmentStatus
+    FROM assignments
+    WHERE groupID = '$groupid'");
+
+    $memberList = Query(
+        "SELECT *
+        FROM accounts acc
+        JOIN accounts_groups accGrp
+        ON acc.accountID = accGrp.accountID
+        JOIN positions pos
+        ON pos.groupID = accGrp.groupID
+        WHERE accGrp.groupID = '$groupid'");
+        // var_dump($memberList);
 ?>
 
 
@@ -95,11 +113,14 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
-                            <?= $groupdata[0]["groupName"] ?>
+                            <?= $rows["groupName"] ?>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Nama Ketua</h5>
-                            <p class="card-text"> <?= $groupdata[0]["groupDetail"] ?>
+                            <h5 class="card-title"><?= $rows["groupName"]; ?></h5>
+                            <p class="card-text">
+                                Description:
+                                <br>
+                                <?= $rows["groupDetail"]; ?>
                             </p>
                             <a href="#" class="btn btn-primary">Edit Group [If Ketua]</a>
                         </div>
@@ -127,29 +148,24 @@
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Deadline</th>
+                                <th scope="col">Status</th>
                             </tr>
                         </thead>
                         <tbody>
+                            <?php $i=1?>
+                            <?php foreach($groupAsg as $asg):?>
                             <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
+                                <th scope="row"><?= $i;?></th>
+                                <td><?= $asg["assignmentTitle"];?></td>
+                                <td><?= $asg["assignmentDescription"];?></td>
+                                <td><?= $asg["assignmentDeadline"];?></td>
+                                <td><?= $asg["assignmentStatus"];?></td>
                             </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td colspan="2">Larry the Bird</td>
-                                <td>@twitter</td>
-                            </tr>
+                            <?php $i++;?>
+                            <?php endforeach;?>
                         </tbody>
                     </table>
                 </div>
@@ -159,29 +175,20 @@
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Position</th>
                             </tr>
                         </thead>
                         <tbody>
+                        <?php $i=1?>
+                            <?php foreach($memberList as $member):?>
                             <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
+                                <th scope="row"><?= $i;?></th>
+                                <td><?= $member["username"];?></td>
+                                <td><?= $member["positionName"];?></td>
                             </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td colspan="2">Larry the Bird</td>
-                                <td>@twitter</td>
-                            </tr>
+                            <?php $i++;?>
+                            <?php endforeach;?>
                         </tbody>
                     </table>
                 </div>

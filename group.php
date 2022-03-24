@@ -8,7 +8,7 @@
     $accountID = $userdata["accountID"];
 
     $rows = Query(
-    "SELECT groupName, groupDetail
+    "SELECT groupName, groupDetail, groupOwner
     FROM groups
     WHERE groupID = '$groupid'");
     $rows = $rows[0];
@@ -27,14 +27,13 @@
     
 
     $memberList = Query(
-        "SELECT *
+        "SELECT DISTINCT acc.firstname, acc.lastname, acc.username, pos.positionName
         FROM accounts acc
         JOIN accounts_groups accGrp
         ON acc.accountID = accGrp.accountID
         JOIN positions pos
-        ON pos.groupID = accGrp.groupID
+        ON pos.positionID = accGrp.positionID
         WHERE accGrp.groupID = '$groupid'");
-        // var_dump($memberList);
 ?>
 
 
@@ -63,7 +62,7 @@
         width: 50%;
     }
 
-    #add-asg-btn {
+    #add-asg-btn, #add-memlist-btn {
         display: flex;
         justify-content: flex-end;
         /* margin: 1rem; */
@@ -120,9 +119,7 @@
             <div class="row mb-4">
                 <div class="col">
                     <div class="card">
-                        <div class="card-header">
-                            <?= $rows["groupName"] ?>
-                        </div>
+                        <div class="card-header">Group</div>
                         <div class="card-body">
                             <h5 class="card-title"><?= $rows["groupName"]; ?></h5>
                             <p class="card-text">
@@ -130,7 +127,9 @@
                                 <br>
                                 <?= $rows["groupDetail"]; ?>
                             </p>
-                            <a href="#" class="btn btn-primary">Edit Group [If Ketua]</a>
+                            <?php if($rows["groupOwner"] == $accountID):?>
+                            <a href="editGroup.php" class="btn btn-primary">Edit Group</a>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -193,13 +192,22 @@
                 </div>
                 <div class="col">
                     <table class="table ">
-                        <h3 class="">Member List</h3>
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="">Member List</h3>
+                            </div>
+                            <div class="col " id="add-memlist-btn">
+                                <a href="#" class="btn btn-primary">Add Member List</a>
+                            </div>
+                        </div>
                         <thead>
                             <tr>
                                 <!-- name, username, position -->
                                 <th scope="col">#</th>
                                 <th scope="col">Name</th>
+                                <th scope="col">Username</th>
                                 <th scope="col">Position</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -207,8 +215,15 @@
                             <?php foreach($memberList as $member):?>
                             <tr>
                                 <th scope="row"><?= $i;?></th>
-                                <td><?= $member["username"];?></td>
+                                <td><?= $member["firstname"] . " " . $member["lastname"];?></td>
+                                <td>@<?= $member["username"];?></td>
                                 <td><?= $member["positionName"];?></td>
+                                <td>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button class="btn btn-primary" type="button">Edit</button>
+                                    <button class="btn btn-primary" type="button">Delete</button>
+                                </div>
+                                </td>
                             </tr>
                             <?php $i++;?>
                             <?php endforeach;?>

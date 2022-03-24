@@ -91,10 +91,14 @@ function IsGroupOwner($groupid, $userid){
 function GetGroupOwnerID($groupid){
     global $connectionID;
 
-    // lom selesai
 
-    // $result = Query("
-    //     SELECT * FROM positions 
-    // ");
+    $result = Query("
+        SELECT * FROM positions p 
+        JOIN groups g 
+        ON g.groupID = p.groupID
+        WHERE g.groupID = $groupid AND positionValue = 1;
+    ");
 
+    // return result[0][""]
+    
 }

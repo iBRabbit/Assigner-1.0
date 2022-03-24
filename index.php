@@ -129,14 +129,10 @@
                                 $groupMembers = $tmpQuery[0]["members"];
                                 
                                 $myQuery = "
-                                SELECT
-                                    * 
-                                FROM positions pos
-                                JOIN accounts_groups ag
-                                ON ag.groupID = pos.groupID
-                                WHERE ag.accountID = ". $userdata["accountID"] . " AND ag.groupID = " . $groupData["groupID"];
-                                ;
-
+                                SELECT * from accounts_groups ag
+                                JOIN positions p
+                                ON p.positionID = ag.positionID
+                                WHERE ag.groupID = " . $groupData["groupID"] . " AND ag.accountID = ". $userdata["accountID"];                             
                                 $positions = Query($myQuery);
                             ?>
 

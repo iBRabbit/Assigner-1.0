@@ -100,9 +100,7 @@
                             <?php 
                                 $myQuery = 
                                 "
-                                SELECT 
-                                    g.groupName,
-                                    g.groupID
+                                SELECT g.groupName,g.groupID
                                 FROM groups g
                                 JOIN accounts_groups ag
                                 ON g.groupID = ag.groupID

@@ -19,16 +19,9 @@
     $groupIterator = 0;
 
     $assignments = Query(    
-    "SELECT DISTINCT
-    asg.assignmentTitle,
-    asg.assignmentDeadline,
-    asg.assignmentCreated,
-    asg.assignmentStatus,
-    asg.assignedTo
-    FROM assignments asg
-    JOIN groups g 
-    ON g.groupID = asg.groupID
-    WHERE asg.assignedTo = $accountID");
+    "SELECT *
+    FROM assignments
+    WHERE assignedTo = $accountID");
     
     $asgIterator = 0;
 ?>

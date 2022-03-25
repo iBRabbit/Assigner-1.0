@@ -4,13 +4,10 @@
     
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
-    $groupid = $_SESSION["groupid"];
+    $groupid = $_POST["input-groupid"];
     $accountID = $userdata["accountID"];
 
     $members = GetMemberListByGroupID($groupid);
-
-
-
 ?>
 
 
@@ -67,7 +64,7 @@
                         <a class="nav-link active" aria-current="page" href="../index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../group/mygroup.php">Groups</a>
+                        <a class="nav-link" href="../mygroup.php">Groups</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"> Assignments</a>
@@ -112,37 +109,17 @@
             <h4 class="mt-4 mb-4">Add Assignment to <?= GetGroupNameByID($groupid) ?></h4>
         </div>
 
-        <div class="row">
-            <?php 
-                if(isset($_POST["add-asg-button"])){
-                    $asgTitle = $_POST["asg-title"];
-                    $asgDetails = $_POST["asg-details"];
-                    $asgDeadline = $_POST["asg-deadline"];
-                    $asgAssignedTo = $_POST["asg-assignedto"];
-                    $today = date("y-m-d");
-                    
-                    mysqli_query($connectionID, "INSERT INTO `assignments` (`assignmentID`, `groupID`, `assignmentTitle`, `assignmentDescription`, `assignmentCreated`, `assignmentDeadline`, `assignedTo`, `assignmentStatus`) VALUES (NULL, $groupid, '$asgTitle', '$asgDetails', '$today', '$asgDeadline', '$asgAssignedTo', '0');");
-                    
-
-                    echo 
-                    "<div class=\"alert alert-success\" role=\"alert\" id=\"success-message\">
-                    Successfully added an assignment!
-                    </div>";  
-                }
-            ?>
-        </div>
-
         <form action="" method="post">
             <div class="row">
 
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-clipboard-check"></i></span>
-                    <input type="text" class="form-control" placeholder="Assignment's Title" name="asg-title">
+                    <input type="text" class="form-control" placeholder="Assignment's Title">
                 </div>
 
                 <div class="input-group mb-3">
                     <span class="input-group-text">Description</span>
-                    <textarea class="form-control" aria-label="With textarea" name="asg-details"></textarea>
+                    <textarea class="form-control" aria-label="With textarea"></textarea>
                 </div>
 
             </div>
@@ -151,21 +128,19 @@
                 <div class="col-md">
                     <div class="form-floating">
                         <input type="date" class="form-control" id="floatingInputGrid" placeholder=""
-                            value="mdo@example.com" name="asg-deadline">
+                            value="mdo@example.com">
                         <label for="floatingInputGrid">Deadline Date</label>
                     </div>
                 </div>
                 <div class="col-md">
                     <div class="form-floating">
-                        <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example"
-                            name="asg-assignedto">
+                        <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example">
                             <option selected>Select Group Member</option>
                             <?php foreach($members as $mem) :?>
 
                             <?php $val = "\"" . $mem["accountID"] . "\"";?>
 
-                            <option value=<?= $val?>><?= GetUserFullName($mem["accountID"]) ?>
-                            </option>
+                            <option value=<?= $val?>><?= GetUserFullName($mem["accountID"]) ?></option>
                             option value=>""</option>";
 
                             <?php endforeach; ?>
@@ -175,7 +150,7 @@
                 </div>
             </div>
 
-            <button type=" submit" class="btn btn-success" name="add-asg-button">Add Assignment</button>
+            <button type=" submit" class="btn btn-success" name="add-button">Add Assignment</button>
 
         </form>
 

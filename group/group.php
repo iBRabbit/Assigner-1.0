@@ -148,6 +148,10 @@
                                     <div class="col " id="add-asg-btn">
                                         <form action="../assignment/addassignment.php" method="post">
                                             <input type="hidden" name="input-groupid" value="<?= $groupid?>"></input>
+
+                                            <?php $_SESSION["groupid"] = $groupid;  ?>
+
+
                                             <button type="submit" class="btn btn-success"><i
                                                     class="bi bi-plus-circle-fill"></i> │ Add
                                                 Assignment</button>

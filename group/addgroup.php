@@ -9,7 +9,6 @@
 
 ?>
 
-
 <!doctype html>
 <html lang="en">
 
@@ -98,8 +97,6 @@
         <div class="row">
             <h4 class="mt-4 mb-4">Add Group</h4>
         </div>
-
-
 
         <?php 
             if(isset($_POST["add-button"])){

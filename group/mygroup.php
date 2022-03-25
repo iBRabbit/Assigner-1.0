@@ -114,7 +114,7 @@ $rows = Query(
             <div class="row text-center">
                 <div class="col">
                     <h4 class="fw-bolder">My groups</h4>
-                    <table class="table table-hover">
+                    <table class="table table-hover align-middle">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -150,11 +150,18 @@ $rows = Query(
 
                                 <td><?= $posName[0]["positionName"] ?></td>
                                 <td>
-                                    <form action="group.php" method="post">
+                                    <!-- <form action="group.php" method="post">
                                         <input type="hidden" name="input-groupid" value="<?= $groupid?>"></input>
-                                        <button type="submit" class="btn btn-primary"><i
+                                        <button type="submit" class="btn btn-primary" value><i
                                                 class="bi bi-arrow-right-square"></i></button>
-                                    </form>
+                                    </form> -->
+
+                                    <a href='group.php?groupid=<?= $groupid?>'>
+                                        <button type="submit" class="btn btn-primary" value><i
+                                                class="bi bi-arrow-right-square"></i>
+                                        </button>
+                                    </a>
+
                                 </td>
                             </tr>
                             <?php endforeach; ?>

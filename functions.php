@@ -6,7 +6,7 @@ if ($connectionID -> connect_errno) {
     echo "Failed to connect to MySQL: " . $connectionID -> connect_error;
     exit();
 } 
-
+// -- SQL Functions -- //
 function StartLoginSession(){
     session_start();
     if(!isset($_SESSION["login"])) {
@@ -15,6 +15,27 @@ function StartLoginSession(){
     }
 }
 
+function Query($query){
+    global $connectionID;
+    $result = mysqli_query($connectionID, $query);
+    $rows = [];
+    while($row = mysqli_fetch_assoc($result)){
+        $rows[] = $row;
+    }
+    return $rows;
+}
+
+// -- SQL Functions -- //
+
+
+// -- User Functions -- //
+
+function GetUserData($username){
+    global $connectionID;
+    $result = mysqli_query($connectionID, "SELECT * FROM accounts WHERE username = '$username'");
+    $userdata = mysqli_fetch_assoc($result);
+    return $userdata;
+}
 
 function GetUsernameByID($uid){
     global $connectionID;
@@ -24,6 +45,32 @@ function GetUsernameByID($uid){
     return (mysqli_num_rows($result) > 0) ? $row["username"] : NULL;
 }
 
+function GetUserFullName($userid) {
+    global $connectionID;
+    $result = mysqli_query($connectionID, "SELECT * FROM accounts WHERE accountID = $userid");
+    $row = mysqli_fetch_assoc($result);
+    
+    return (mysqli_num_rows($result) > 0) ? $row["firstname"] . " " . $row["lastname"] : NULL;
+}
+
+// -- User Functions -- //
+
+// -- Group Functions -- //
+
+function GetGroupDataByUID($uid){
+    $groups = Query("
+    SELECT 
+    *
+    FROM groups g
+    JOIN accounts_groups ag
+    ON g.groupID = ag.groupID
+    WHERE ag.accountID = $uid
+    ");
+
+    return $groups;
+    
+}
+
 function GetGroupNameByID($gid) {
     global $connectionID;
     $result = mysqli_query($connectionID, "SELECT * FROM groups WHERE groupID = $gid");
@@ -31,6 +78,76 @@ function GetGroupNameByID($gid) {
     return (mysqli_num_rows($result) > 0) ? $row["groupName"] : NULL;
 }
 
+function GetMemberListByGroupID($gid) {
+    
+    $memberList = Query(
+        "SELECT * FROM accounts_groups ag
+        JOIN accounts ac
+        ON ac.accountID = ag.accountID
+        JOIN positions pos
+        ON pos.positionID = ag.positionID
+        WHERE ag.groupID = $gid
+    ");
+    
+    return $memberList;
+}
+
+function IsGroupOwner($userid, $groupid){
+    global $connectionID;
+
+    $posdata = Query(
+        "SELECT *
+        FROM positions pos
+        JOIN accounts_groups ag
+        ON ag.positionID = pos.positionID
+        WHERE ag.accountID = $userid AND ag.groupID = $groupid");
+
+    if($posdata[0]["positionValue"] == 1)
+        return true;
+
+    return false;
+}
+
+function IsGroupMember($userid, $groupid){
+    global $connectionID;
+
+    $result = mysqli_query($connectionID, "SELECT *
+    FROM positions pos
+    JOIN accounts_groups ag
+    ON ag.positionID = pos.positionID
+    WHERE ag.accountID = $userid AND ag.groupID = $groupid");
+    $row = mysqli_fetch_assoc($result);
+
+    return (mysqli_num_rows($result) > 0) ? true : false;
+}
+
+function GetGroupOwnerID($groupid){
+    global $connectionID;
+
+    $result = Query("
+        SELECT ag.accountID as `id` FROM accounts_groups ag
+        JOIN positions pos
+        ON ag.positionID = pos.positionID
+        WHERE ag.groupID = $groupid AND pos.positionValue = 1;
+    ");
+
+    return $result[0]["id"];
+}
+
+// -- Group Functions -- //
+
+// -- Assignments Functions -- //
+function GetAssignmentListByGroupID($gid) {
+    $assignments = Query(    
+        "SELECT
+        *
+        FROM assignments asg
+        JOIN groups g 
+        ON g.groupID = asg.groupID
+        WHERE asg.groupID = '$gid'");
+    
+    return $assignments;
+}
 function GetStatusNameByID($statusID){
     if($statusID == 0) return 0;
     if($statusID == 1) return 25;
@@ -41,12 +158,18 @@ function GetStatusNameByID($statusID){
     return NULL;
 }
 
-function GetUserData($username){
+function IsAsgAssignedToID($userid, $asgid){
     global $connectionID;
-    $result = mysqli_query($connectionID, "SELECT * FROM accounts WHERE username = '$username'");
-    $userdata = mysqli_fetch_assoc($result);
-    return $userdata;
+    
+    $result = mysqli_query($connectionID, "SELECT * FROM assignments WHERE assignmentID = $asgid");
+    $row = mysqli_fetch_assoc($result);
+
+    return ($row["assignedTo"] == $userid) ? true : false;
 }
+
+// -- Assignments Functions -- //
+
+// -- Helper / Validator -- //
 
 function ValidateRegister($input) {
     global $connectionID;
@@ -67,76 +190,35 @@ function ValidateRegister($input) {
     return 1;
 }
 
-function Query($query){
-    global $connectionID;
-    $result = mysqli_query($connectionID, $query);
-    $rows = [];
-    while($row = mysqli_fetch_assoc($result)){
-        $rows[] = $row;
+function ValidateGroupLink($userid, $groupid, $header, $owner_only = false){
+    if($owner_only) {
+        if(!IsGroupOwner($userid, $groupid)){
+            $str = "Location:" . $header;
+            header($str);
+            exit;
+        }
     }
-    return $rows;
-}
-
-function IsGroupOwner($userid, $groupid){
-    global $connectionID;
-
-    $posdata = Query(
-        "SELECT *
-        FROM positions pos
-        JOIN accounts_groups ag
-        ON ag.positionID = pos.positionID
-        WHERE ag.accountID = $userid AND ag.groupID = $groupid");
-
-    if($posdata[0]["positionValue"] == 1)
-        return true;
-
-    return false;
-}
-
-function GetGroupOwnerID($groupid){
-    global $connectionID;
-
-
-    $result = Query("
-        SELECT ag.accountID as `id` FROM accounts_groups ag
-        JOIN positions pos
-        ON ag.positionID = pos.positionID
-        WHERE ag.groupID = $groupid AND pos.positionValue = 1;
-    ");
-
-    return $result[0]["id"];
-}
-
-function GetUserFullName($userid) {
-    global $connectionID;
-    $result = mysqli_query($connectionID, "SELECT * FROM accounts WHERE accountID = $userid");
-    $row = mysqli_fetch_assoc($result);
     
-    return (mysqli_num_rows($result) > 0) ? $row["firstname"] . " " . $row["lastname"] : NULL;
+    if(!IsGroupOwner($userid, $groupid) && !IsGroupMember($userid, $groupid)){
+        $str = "Location:" . $header;
+        header($str);
+        exit;
+    }
 }
 
-function GetAssignmentListByGroupID($gid) {
-    $assignments = Query(    
-        "SELECT
-        *
-        FROM assignments asg
-        JOIN groups g 
-        ON g.groupID = asg.groupID
-        WHERE asg.groupID = '$gid'");
+function ValidateAsgLink($userid, $asgid, $header){
     
-    return $assignments;
+    if(!IsAsgAssignedToID($userid, $asgid)){
+        $str = "Location:" . $header;
+        header($str);
+        exit;
+    }
+
 }
 
-function GetMemberListByGroupID($gid) {
-    
-    $memberList = Query(
-        "SELECT * FROM accounts_groups ag
-        JOIN accounts ac
-        ON ac.accountID = ag.accountID
-        JOIN positions pos
-        ON pos.positionID = ag.positionID
-        WHERE ag.groupID = $gid
-    ");
-    
-    return $memberList;
+function ValidateRequiredForm($formdata){
+    return (empty($formdata)) ? true : false;
 }
+
+// -- Helper / Validator -- //
+

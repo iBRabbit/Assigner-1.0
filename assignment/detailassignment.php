@@ -4,12 +4,13 @@
     
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
-    $groupid = $_POST["input-groupid"];
+    $asgid = $_GET["asgid"];
     $accountID = $userdata["accountID"];
-
-    $members = GetMemberListByGroupID($groupid);
+    ValidateAsgLink($accountID, $asgid, "../index.php");
+    
+    $assignments = Query("SELECT * FROM assignments WHERE assignmentID = $asgid");
+    $asgdata = $assignments[0];
 ?>
-
 
 <!doctype html>
 <html lang="en">
@@ -64,7 +65,7 @@
                         <a class="nav-link active" aria-current="page" href="../index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../mygroup.php">Groups</a>
+                        <a class="nav-link" href="../group/mygroup.php">Groups</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"> Assignments</a>
@@ -106,57 +107,42 @@
     <div class="container">
 
         <div class="row">
-            <h4 class="mt-4 mb-4">Add Assignment to <?= GetGroupNameByID($groupid) ?></h4>
+            <h4 class="mt-4 mb-4">Assignment's Detail</h4>
         </div>
 
-        <form action="" method="post">
-            <div class="row">
+        <div class="row">
 
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-clipboard-check"></i></span>
-                    <input type="text" class="form-control" placeholder="Assignment's Title">
-                </div>
+            <div class="card">
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">Title</dt>
+                        <dd class="col-sm-9"><?= $asgdata["assignmentTitle"] ?></dd>
 
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Description</span>
-                    <textarea class="form-control" aria-label="With textarea"></textarea>
-                </div>
+                        <dt class="col-sm-3">Description</dt>
+                        <dd class="col-sm-9">
+                            <p><?= $asgdata["assignmentDescription"] ?></p>
+                        </dd>
 
-            </div>
+                        <dt class="col-sm-3">Created On</dt>
+                        <dd class="col-sm-9">
+                            <?= date_format(date_create($asgdata["assignmentCreated"]),"D, d M Y"); ?></dd>
 
-            <div class="row mb-3">
-                <div class="col-md">
-                    <div class="form-floating">
-                        <input type="date" class="form-control" id="floatingInputGrid" placeholder=""
-                            value="mdo@example.com">
-                        <label for="floatingInputGrid">Deadline Date</label>
-                    </div>
-                </div>
-                <div class="col-md">
-                    <div class="form-floating">
-                        <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example">
-                            <option selected>Select Group Member</option>
-                            <?php foreach($members as $mem) :?>
+                        <dt class="col-sm-3">Deadline</dt>
+                        <dd class="col-sm-9"><?= date_format(date_create($asgdata["assignmentDeadline"]),"D, d M Y"); ?>
+                        </dd>
 
-                            <?php $val = "\"" . $mem["accountID"] . "\"";?>
 
-                            <option value=<?= $val?>><?= GetUserFullName($mem["accountID"]) ?></option>
-                            option value=>""</option>";
+                        <dt class="col-sm-3">Progress</dt>
+                        <dd class="col-sm-9"><?= date_format(date_create($asgdata["assignmentDeadline"]),"D, d M Y"); ?>
+                        </dd>
 
-                            <?php endforeach; ?>
-                        </select>
-                        <label for="floatingSelectGrid">Assigned Member</label>
-                    </div>
+                    </dl>
                 </div>
             </div>
 
-            <button type=" submit" class="btn btn-success" name="add-button">Add Assignment</button>
-
-        </form>
-
+        </div>
     </div>
 
-    </div>
     <!-- End of contents -->
 
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
@@ -177,7 +163,5 @@
     </script>
 
 </body>
-
-<input type="datetime-local" class="form-control" placeholder="Server" aria-label="Server">
 
 </html>

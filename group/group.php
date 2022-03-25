@@ -4,8 +4,10 @@
     
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
-    $groupid = $_POST["input-groupid"];
+    $groupid = $_GET["groupid"];
     $accountID = $userdata["accountID"];
+
+    ValidateGroupLink($accountID, $groupid, "../index.php");
 
     $rows = Query(
     "SELECT groupName, groupDetail, groupOwner
@@ -15,6 +17,14 @@
 
     $assignments = GetAssignmentListByGroupID($groupid);
     $memberList = GetMemberListByGroupID($groupid);
+    
+    if(isset($_POST["delete-asg-btn"])){
+        // var_dump($_POST["delete-asg-btn"]);
+        $asgID = $_POST["delete-asg-btn"];
+        mysqli_query($connectionID, "DELETE FROM assignments WHERE assignmentID = $asgID");
+        header("Refresh:0");
+    }
+        
 ?>
 
 
@@ -138,7 +148,7 @@
 
             <div class="row">
                 <div class="col">
-                    <table class="table ">
+                    <table class="table table align-middle">
                         <div class="assignment-header">
                             <div class="container p-0 ">
                                 <div class="row align-items-center">
@@ -146,17 +156,18 @@
                                         <h3 class="">Group Assignments</h3>
                                     </div>
                                     <div class="col " id="add-asg-btn">
-                                        <form action="../assignment/addassignment.php" method="post">
-                                            <input type="hidden" name="input-groupid" value="<?= $groupid?>"></input>
 
-                                            <?php $_SESSION["groupid"] = $groupid;  ?>
+                                        <a href="../assignment/addassignment.php?groupid=<?=$groupid ?>">
 
+                                            <?php 
+                                                if(IsGroupOwner($accountID, $groupid))
+                                                echo "                                 <button type=\"submit\" class=\"btn btn-success\"><i
+                                                class=\"bi bi-plus-circle-fill\"></i> │ Add
+                                                Assignment
+                                                </button>";
+                                            ?>
 
-                                            <button type="submit" class="btn btn-success"><i
-                                                    class="bi bi-plus-circle-fill"></i> │ Add
-                                                Assignment</button>
-                                        </form>
-
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -167,9 +178,9 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Title</th>
-                                <th scope="col">Created on</th>
                                 <th scope="col">Deadline</th>
                                 <th scope="col">Progress</th>
+                                <th scope="col-2" colspan="2" class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -177,14 +188,13 @@
                             <?php foreach($assignments as $asgData) :?>
                             <?php $asgIterator++;
                             
-                                                                    
+                
                             $tmpProcessStr = "width: " . GetStatusNameByID($asgData["assignmentStatus"]). "%";                           
                                         
                             ?>
                             <tr>
                                 <th><?= $asgIterator ?></th>
                                 <td><?= $asgData["assignmentTitle"] ?></td>
-                                <td><?= $asgData["assignmentCreated"] ?></td>
                                 <td><?= $asgData["assignmentDeadline"] ?></td>
 
                                 <td>
@@ -195,6 +205,25 @@
                                         </div>
                                     </div>
                                 </td>
+
+                                <td>
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button class="btn btn-primary" type="button"><i
+                                                class="bi bi-eye-fill"></i></button>
+
+                                        <?php 
+                                            $asgID = $asgData["assignmentID"];
+                                            if(IsGroupOwner($accountID, $groupid)){
+                                                echo " <form action=\"\" method=\"post\"><button class=\"btn btn-danger\" type=\"submit\" name = \"delete-asg-btn\" value = \"$asgID\"><i
+                                                class=\"bi bi-trash3-fill\"></i></button></form>
+                                            ";
+                                            }
+  
+                                        ?>
+
+                                    </div>
+                                </td>
+
                             </tr>
                             <?php endforeach; ?>
 
@@ -202,17 +231,24 @@
                     </table>
                 </div>
                 <div class="col">
-                    <table class="table ">
+                    <table class="table align-middle">
                         <div class="assignment-header">
                             <div class="container p-0 ">
                                 <div class="row align-items-center">
                                     <div class="col">
                                         <h3 class="">Member List</h3>
                                     </div>
-                                    <div class="col " id="add-asg-btn">
-                                        <a href="#" class="btn btn-success"><i class="bi bi-plus-circle-fill"></i> │ Add
-                                            Member</a>
-                                    </div>
+
+                                    <?php  
+                                        if(IsGroupOwner($accountID, $groupid))
+                                            echo "                                    <div class=\"col\" id=\"add-asg-btn\">
+                                            <a href=\"\" class=\"btn btn-success\"><i class=\"bi bi-plus-circle-fill\"></i> │ Add
+                                                Member</a>
+                                            </div>
+                                            ";
+                                    ?>
+
+
                                 </div>
                             </div>
                         </div>
@@ -241,8 +277,14 @@
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                         <button class="btn btn-primary" type="button"><i
                                                 class="bi bi-eye-fill"></i></button>
-                                        <button class="btn btn-danger" type="button"><i
-                                                class="bi bi-trash3-fill"></i></button>
+
+                                        <?php 
+                                        
+                                        if(IsGroupOwner($accountID, $groupid))
+                                            echo "                                    <button class=\"btn btn-danger\" type=\"button\"><i
+                                            class=\"bi bi-trash3-fill\"></i></button>"
+                                        ?>
+
                                     </div>
                                 </td>
                             </tr>
@@ -277,5 +319,7 @@
     </script>
 
 </body>
+
+</html>
 
 </html>

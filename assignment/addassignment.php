@@ -4,13 +4,10 @@
     
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
-    $groupid = $_SESSION["groupid"];
+    $groupid = $_GET["groupid"];
     $accountID = $userdata["accountID"];
-
+    ValidateGroupLink($accountID, $groupid, "../index.php", true);
     $members = GetMemberListByGroupID($groupid);
-
-
-
 ?>
 
 
@@ -119,15 +116,31 @@
                     $asgDetails = $_POST["asg-details"];
                     $asgDeadline = $_POST["asg-deadline"];
                     $asgAssignedTo = $_POST["asg-assignedto"];
-                    $today = date("y-m-d");
-                    
-                    mysqli_query($connectionID, "INSERT INTO `assignments` (`assignmentID`, `groupID`, `assignmentTitle`, `assignmentDescription`, `assignmentCreated`, `assignmentDeadline`, `assignedTo`, `assignmentStatus`) VALUES (NULL, $groupid, '$asgTitle', '$asgDetails', '$today', '$asgDeadline', '$asgAssignedTo', '0');");
-                    
+                    $today = date("Y-m-d");
+                        
+                    if(empty($asgTitle) || empty($asgDeadline) || $asgAssignedTo == "Select Group Member") {
+                        echo 
+                        "<div class=\"alert alert-danger\" role=\"alert\" id=\"success-message\">
+                        Failed to add an assignment. You have to fill the required form.
+                        </div>";  
+                    } 
+                
 
-                    echo 
-                    "<div class=\"alert alert-success\" role=\"alert\" id=\"success-message\">
-                    Successfully added an assignment!
-                    </div>";  
+                    else if($asgDeadline < $today)
+                        echo 
+                        "<div class=\"alert alert-danger\" role=\"alert\" id=\"success-message\">
+                        Failed to add an assignment. Assignment date must be greater than today.
+                        </div>"; 
+                        
+                    
+                    else {
+                        mysqli_query($connectionID, "INSERT INTO `assignments` (`assignmentID`, `groupID`, `assignmentTitle`, `assignmentDescription`, `assignmentCreated`, `assignmentDeadline`, `assignedTo`, `assignmentStatus`) VALUES (NULL, $groupid, '$asgTitle', '$asgDetails', '$today', '$asgDeadline', '$asgAssignedTo', '0');");
+                    
+                        echo 
+                        "<div class=\"alert alert-success\" role=\"alert\" id=\"success-message\">
+                        Successfully added an assignment!
+                        </div>";  
+                    }
                 }
             ?>
         </div>
@@ -137,7 +150,7 @@
 
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-clipboard-check"></i></span>
-                    <input type="text" class="form-control" placeholder="Assignment's Title" name="asg-title">
+                    <input type="text" class="form-control" placeholder="Assignment's Title (*)" name="asg-title">
                 </div>
 
                 <div class="input-group mb-3">
@@ -152,14 +165,14 @@
                     <div class="form-floating">
                         <input type="date" class="form-control" id="floatingInputGrid" placeholder=""
                             value="mdo@example.com" name="asg-deadline">
-                        <label for="floatingInputGrid">Deadline Date</label>
+                        <label for="floatingInputGrid">Deadline Date (*)</label>
                     </div>
                 </div>
                 <div class="col-md">
                     <div class="form-floating">
                         <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example"
                             name="asg-assignedto">
-                            <option selected>Select Group Member</option>
+                            <option selected>Select Group Member </option>
                             <?php foreach($members as $mem) :?>
 
                             <?php $val = "\"" . $mem["accountID"] . "\"";?>
@@ -170,7 +183,7 @@
 
                             <?php endforeach; ?>
                         </select>
-                        <label for="floatingSelectGrid">Assigned Member</label>
+                        <label for="floatingSelectGrid">Assigned Member (*)</label>
                     </div>
                 </div>
             </div>

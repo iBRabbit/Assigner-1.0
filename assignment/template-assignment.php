@@ -4,11 +4,9 @@
     
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
-    $groupid = $_POST["input-groupid"];
+    $groupid = $_GET["groupid"];
     $accountID = $userdata["accountID"];
-
-
-
+    ValidateLink($accountID, $groupid, "../index.php", true);
 ?>
 
 

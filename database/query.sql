@@ -53,3 +53,13 @@ ON ag.positionID = pos.positionID
 WHERE ag.accountID = 2 AND ag.groupID = 3
 
 INSERT INTO `assignments` (`assignmentID`, `groupID`, `assignmentTitle`, `assignmentDescription`, `assignmentCreated`, `assignmentDeadline`, `assignedTo`, `assignmentStatus`) VALUES (NULL, '1', 'Tugas Video SE', 'SE 1\r\n-> Buat video tentang produk\r\n-> Buat Prototype\r\n-> Selesaikan Wesbite\r\n\r\nSE 2\r\n-> Apa guna app ini?', '2022-03-25', '2022-03-31', '2', '0');
+
+DELETE FROM assignments WHERE assignmentTitle = "";
+
+SELECT * FROM assignments WHERE assignmentID = 23;
+
+describe assignments
+
+SELECT * FROM assignments WHERE assignedTo = 0;
+
+SELECT * FROM assignments WHERE assignmentID = 4;

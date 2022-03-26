@@ -145,7 +145,7 @@ function GetAssignmentListByGroupID($gid) {
         JOIN groups g 
         ON g.groupID = asg.groupID
         WHERE asg.groupID = '$gid'
-        ORDER BY assignmentDeadline ASC, assignmentStatus ASC " 
+        ORDER BY assignmentStatus ASC, assignmentDeadline ASC" 
     );
     
     return $assignments;

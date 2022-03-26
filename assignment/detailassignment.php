@@ -148,18 +148,22 @@
                             </div>
                         </dd>
 
-                        <dt class="col-sm-3">Update Progress</dt>
-                        <dd class="col-sm-9">
-                            <form action="detailassignment.php?<?= "groupid=" . $groupid . "&" ."asgid=" . $asgid?>"
-                                method="post">
-                                <label for="customRange3" class="form-label">Change your progress here</label>
-                                <input type="range" class="form-range" min="0" max="4" step="1" id="customRange3"
-                                    name="update-progress">
-                                <button type=" submit" class="btn btn-success"
-                                    name="update-progress-btn">Update</button>
-                            </form>
-                        </dd>
+                        <?php 
 
+                        if(IsAsgAssignedToID($accountID, $asgid))
+                            echo "
+                            <dt class=\"col-sm-3\">Update Progress</dt>
+                            <dd class=\"col-sm-9\">
+                                <form action=\"detailassignment.php?groupid=$groupid&asgid=$asgid\"
+                            method=\"post\">
+                            <label for=\"customRange3\" class=\"form-label\">Change your progress here</label>
+                            <input type=\"range\" class=\"form-range\" min=\"0\" max=\"4\" step=\"1\" id=\"customRange3\"
+                                name=\"update-progress\">
+                            <button type=\" submit\" class=\"btn btn-success\" name=\"update-progress-btn\">Update</button>
+                            </form>
+                            </dd>";
+
+                        ?>
 
 
                     </dl>

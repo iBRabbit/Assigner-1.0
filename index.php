@@ -14,7 +14,7 @@
     "SELECT *
     FROM assignments
     WHERE assignedTo = $accountID
-    ORDER BY assignmentDeadline ASC, assignmentStatus ASC
+    ORDER BY assignmentStatus ASC, assignmentDeadline ASC
     ");
     
     $asgIterator = 0;

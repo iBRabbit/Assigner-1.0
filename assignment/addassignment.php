@@ -112,8 +112,8 @@
         <div class="row">
             <?php 
                 if(isset($_POST["add-asg-button"])){
-                    $asgTitle = $_POST["asg-title"];
-                    $asgDetails = $_POST["asg-details"];
+                    $asgTitle = mysqli_real_escape_string($connectionID, $_POST["asg-title"]);
+                    $asgDetails = mysqli_real_escape_string($connectionID, $_POST["asg-details"]);
                     $asgDeadline = $_POST["asg-deadline"];
                     $asgAssignedTo = $_POST["asg-assignedto"];
                     $today = date("Y-m-d");

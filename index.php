@@ -14,7 +14,7 @@
     "SELECT *
     FROM assignments
     WHERE assignedTo = $accountID
-    ORDER BY assignmentDeadline
+    ORDER BY assignmentDeadline ASC, assignmentStatus ASC
     ");
     
     $asgIterator = 0;
@@ -92,9 +92,7 @@
                             </li>
                         </ul>
                     </li>
-
                 </ul>
-
             </div>
         </div>
     </nav>
@@ -191,16 +189,14 @@
                         </thead>
                         <tbody>
                             <?php foreach($assignments as $asgData) :?>
-                            <?php $asgIterator++; 
-                            
-                                                                    
-                            $tmpProcessStr = "width: " . GetStatusNameByID($asgData["assignmentStatus"]). "%";                           
-                                        
+                            <?php $asgIterator++;                                                                  
+                                $tmpProcessStr = "width: " . GetStatusNameByID($asgData["assignmentStatus"]). "%";                           
                             ?>
                             <tr>
                                 <?php 
                                     $asgRowGroupID = $asgData["groupID"];
                                     $asgRowID = $asgData["assignmentID"];
+                                    $dataPackage = $asgRowID . "_" . $asgRowGroupID;
                                 ?>
                                 <th><?= $asgIterator ?></th>
                                 <td><?= $asgData["assignmentTitle"] ?></td>
@@ -217,7 +213,8 @@
                                 </td>
 
                                 <td>
-                                    <a href="assignment/detailassignment.php?asgid=<?=$asgRowID?>">
+                                    <a
+                                        href="assignment/detailassignment.php?<?= "groupid=" . $asgRowGroupID . "&" ."asgid=" . $asgRowID?>">
                                         <button class="btn btn-primary" type="button"><i class="bi bi-eye-fill"></i>
                                         </button>
                                     </a>

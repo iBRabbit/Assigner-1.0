@@ -5,11 +5,19 @@
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
     $asgid = $_GET["asgid"];
+    $groupid = $_GET["groupid"];
     $accountID = $userdata["accountID"];
-    ValidateAsgLink($accountID, $asgid, "../index.php");
+    ValidateAsgLink($accountID, $asgid, $groupid, "../index.php");
     
     $assignments = Query("SELECT * FROM assignments WHERE assignmentID = $asgid");
     $asgdata = $assignments[0];
+
+    if(isset($_POST["update-progress-btn"])) {
+        $progress = $_POST["update-progress"];
+        mysqli_query($connectionID, "UPDATE assignments SET assignmentStatus = $progress WHERE assignmentID = $asgid");
+        header("Refresh:0");
+    }
+
 ?>
 
 <!doctype html>
@@ -120,7 +128,7 @@
 
                         <dt class="col-sm-3">Description</dt>
                         <dd class="col-sm-9">
-                            <p><?= $asgdata["assignmentDescription"] ?></p>
+                            <samp><?= $asgdata["assignmentDescription"] ?></samp>
                         </dd>
 
                         <dt class="col-sm-3">Created On</dt>
@@ -130,11 +138,29 @@
                         <dt class="col-sm-3">Deadline</dt>
                         <dd class="col-sm-9"><?= date_format(date_create($asgdata["assignmentDeadline"]),"D, d M Y"); ?>
                         </dd>
-
-
-                        <dt class="col-sm-3">Progress</dt>
-                        <dd class="col-sm-9"><?= date_format(date_create($asgdata["assignmentDeadline"]),"D, d M Y"); ?>
+                        <?php $tmpProcessStr = "width: " . GetStatusNameByID($asgdata["assignmentStatus"]). "%"; ?>
+                        <dt class="col-sm-3">Current Progress</dt>
+                        <dd class="col-sm-9">
+                            <div class="progress">
+                                <div class="progress-bar bg-primary" role="progressbar" style="<?= $tmpProcessStr; ?>"
+                                    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
                         </dd>
+
+                        <dt class="col-sm-3">Update Progress</dt>
+                        <dd class="col-sm-9">
+                            <form action="detailassignment.php?<?= "groupid=" . $groupid . "&" ."asgid=" . $asgid?>"
+                                method="post">
+                                <label for="customRange3" class="form-label">Change your progress here</label>
+                                <input type="range" class="form-range" min="0" max="4" step="1" id="customRange3"
+                                    name="update-progress">
+                                <button type=" submit" class="btn btn-success"
+                                    name="update-progress-btn">Update</button>
+                            </form>
+                        </dd>
+
+
 
                     </dl>
                 </div>

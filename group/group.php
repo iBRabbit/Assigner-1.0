@@ -178,6 +178,7 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Title</th>
+                                <th scope="col">Assigned to</th>
                                 <th scope="col">Deadline</th>
                                 <th scope="col">Progress</th>
                                 <th scope="col-2" colspan="2" class="text-center">Action</th>
@@ -195,6 +196,7 @@
                             <tr>
                                 <th><?= $asgIterator ?></th>
                                 <td><?= $asgData["assignmentTitle"] ?></td>
+                                <td><?= GetUserFullName($asgData["assignedTo"]) ?></td>
                                 <td><?= $asgData["assignmentDeadline"] ?></td>
 
                                 <td>
@@ -207,9 +209,21 @@
                                 </td>
 
                                 <td>
+
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                        <button class="btn btn-primary" type="button"><i
-                                                class="bi bi-eye-fill"></i></button>
+                                        <?php 
+                                        $asgRowID = $asgData["assignmentID"]; 
+                                        $asgRowGroupID = $asgData["groupID"];
+
+                                        if(IsAsgAssignedToID($accountID, $asgRowID) || IsGroupOwner($accountID, $asgRowGroupID))
+                                            echo " <a
+                                            href=\"../assignment/detailassignment.php?groupid=$asgRowGroupID&asgid=$asgRowID\">
+                                        <button class=\"btn btn-primary\" type=\"button\"><i class=\"bi
+                                                bi-eye-fill\"></i>
+                                        </button>
+                                        </a>"
+                                        ?>
+
 
                                         <?php 
                                             $asgID = $asgData["assignmentID"];
@@ -218,7 +232,6 @@
                                                 class=\"bi bi-trash3-fill\"></i></button></form>
                                             ";
                                             }
-  
                                         ?>
 
                                     </div>
@@ -241,7 +254,7 @@
 
                                     <?php  
                                         if(IsGroupOwner($accountID, $groupid))
-                                            echo "                                    <div class=\"col\" id=\"add-asg-btn\">
+                                            echo " <div class=\"col\" id=\"add-asg-btn\">
                                             <a href=\"\" class=\"btn btn-success\"><i class=\"bi bi-plus-circle-fill\"></i> │ Add
                                                 Member</a>
                                             </div>

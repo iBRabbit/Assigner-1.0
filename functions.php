@@ -144,7 +144,9 @@ function GetAssignmentListByGroupID($gid) {
         FROM assignments asg
         JOIN groups g 
         ON g.groupID = asg.groupID
-        WHERE asg.groupID = '$gid'");
+        WHERE asg.groupID = '$gid'
+        ORDER BY assignmentDeadline ASC, assignmentStatus ASC " 
+    );
     
     return $assignments;
 }
@@ -206,9 +208,9 @@ function ValidateGroupLink($userid, $groupid, $header, $owner_only = false){
     }
 }
 
-function ValidateAsgLink($userid, $asgid, $header){
+function ValidateAsgLink($userid, $asgid, $groupid, $header){
     
-    if(!IsAsgAssignedToID($userid, $asgid)){
+    if(!IsAsgAssignedToID($userid, $asgid) && !IsGroupOwner($userid, $groupid)){
         $str = "Location:" . $header;
         header($str);
         exit;
@@ -221,4 +223,3 @@ function ValidateRequiredForm($formdata){
 }
 
 // -- Helper / Validator -- //
-

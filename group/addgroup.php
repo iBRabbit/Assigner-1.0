@@ -137,10 +137,7 @@
                     "INSERT INTO `accounts_groups` (`accountID`, `groupID`, `positionID`) VALUES ('".$userdata["accountID"] . "' , '" .$autoIncrementGroupVal["AI"] .  "' , " . $autoIncrementPosVal["AI"] .");";
                     var_dump($myQuery);
                     mysqli_query($connectionID, $myQuery);
-                    
-
-                        
-                    
+                
                     echo 
                     "<div class=\"alert alert-success\" role=\"alert\" id=\"success-message\">
                     Successfully created a group!

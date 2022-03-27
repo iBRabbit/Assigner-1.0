@@ -169,16 +169,33 @@
                                     </div>
                                     <div class="col " id="add-asg-btn">
 
-                                        <a href="../assignment/addassignment.php?groupid=<?=$groupid ?>">
+                                        <!-- <a href="../assignment/addassignment.php?groupid=<?=$groupid ?>"> -->
 
-                                            <?php if(IsGroupOwner($accountID, $groupid)) : ?>
-                                            <button type="submit" class="btn btn-success"><i class="bi
-                                                    bi-plus-circle-fill"></i> │ Add
-                                                Assignment
+                                        <?php if(IsGroupOwner($accountID, $groupid)) : ?>
+                                        <!-- <button type="submit" class="btn btn-success"><i class="bi
+                                                    bi-plus-circle-fill"></i> │ Add Assignment
+                                            </button> -->
+
+                                        <!-- Example single danger button -->
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-success dropdown-toggle"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi
+                                                    bi-plus-circle-fill"></i> │ Add Assignment
                                             </button>
-                                            <?php endif; ?>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item"
+                                                        href="../assignment/addassignment_single.php?groupid=<?=$groupid ?>">Individual
+                                                        Assignment</a>
+                                                </li>
+                                                <li><a class="dropdown-item"
+                                                        href="../assignment/addassignment_group.php?groupid=<?=$groupid ?>">Group
+                                                        Assignment</a></li>
+                                            </ul>
+                                        </div>
+                                        <?php endif; ?>
 
-                                        </a>
+                                        <!-- </a> -->
                                     </div>
                                 </div>
                             </div>

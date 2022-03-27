@@ -19,12 +19,13 @@
     $memberList = GetMemberListByGroupID($groupid);
     
     if(isset($_POST["delete-asg-btn"])){
-        // var_dump($_POST["delete-asg-btn"]);
+
         $asgID = $_POST["delete-asg-btn"];
         mysqli_query($connectionID, "DELETE FROM assignments WHERE assignmentID = $asgID");
-        header("Refresh:0");
+        Refresh();
     }
-        
+    
+    $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);      
 ?>
 
 
@@ -76,7 +77,21 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto d-flex align-items-center">
+                    <a class="nav-link" href="../notifications/notifications_header.php">
+                        <button type="button" class="btn btn-primary position-relative">
+                            <i class="bi bi-bell-fill"></i>
+                            <!-- Badge -->
+                            <?php if($unopenedNotifsSize > 0) :?>
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <?= $unopenedNotifsSize ?>
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                            <?php endif; ?>
+                            <!-- Badge -->
+                        </button>
+                    </a>
                     <li class="nav-item">
                         <a class="nav-link " aria-current="page" href="../index.php">Home</a>
                     </li>
@@ -85,10 +100,6 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"> Assignments</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Notifications</a>
                     </li>
 
                     <li class="nav-item dropdown">
@@ -255,8 +266,7 @@
                                     <?php  
                                         if(IsGroupOwner($accountID, $groupid))
                                             echo " <div class=\"col\" id=\"add-asg-btn\">
-                                            <a href=\"\" class=\"btn btn-success\"><i class=\"bi bi-plus-circle-fill\"></i> │ Add
-                                                Member</a>
+                                            <a href=\"addgroupmember.php?groupid=$groupid\" class=\"btn btn-success\"><i class=\"bi bi-plus-circle-fill\"></i> │ Add Member</a>
                                             </div>
                                             ";
                                     ?>
@@ -294,7 +304,7 @@
                                         <?php 
                                         
                                         if(IsGroupOwner($accountID, $groupid))
-                                            echo "                                    <button class=\"btn btn-danger\" type=\"button\"><i
+                                            echo " <button class=\"btn btn-danger\" type=\"button\"><i
                                             class=\"bi bi-trash3-fill\"></i></button>"
                                         ?>
 

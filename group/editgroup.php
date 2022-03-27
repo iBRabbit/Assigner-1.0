@@ -4,6 +4,9 @@
     StartLoginSession();
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
+    $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
+        $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
+    
 ?>
 
 
@@ -55,9 +58,7 @@
                         <a class="nav-link" href="#"> Assignments</a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Notifications</a>
-                    </li>
+
                 </ul>
 
                 <form action="../logout.php" class="margin-right:5rem" ethod=" post">

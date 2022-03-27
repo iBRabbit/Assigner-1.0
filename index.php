@@ -9,7 +9,9 @@
     
     $groups = GetGroupDataByUID($accountID);
     $groupIterator = 0;
-
+    
+    $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
+    
     $assignments = Query(    
     "SELECT *
     FROM assignments
@@ -49,7 +51,7 @@
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark ">
         <div class="container">
             <span class="navbar-brand mb-0 h1">Assigner</span>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -57,7 +59,23 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+
+                <ul class="navbar-nav ms-auto d-flex align-items-center">
+                    <a class="nav-link" href="notifications/notifications_header.php">
+                        <button type="button" class="btn btn-primary position-relative">
+                            <i class="bi bi-bell-fill"></i>
+                            <!-- Badge -->
+                            <?php if($unopenedNotifsSize > 0) :?>
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <?= $unopenedNotifsSize ?>
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                            <?php endif; ?>
+                            <!-- Badge -->
+                        </button>
+                    </a>
+
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                     </li>
@@ -69,7 +87,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Notifications</a>
+
                     </li>
 
                     <li class="nav-item dropdown">

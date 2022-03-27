@@ -63,3 +63,30 @@ describe assignments
 SELECT * FROM assignments WHERE assignedTo = 0;
 
 SELECT * FROM assignments WHERE assignmentID = 4;
+
+CREATE TABLE invites (
+    inviteID INT(12) NOT NULL AUTO_INCREMENT,
+    inviteFrom INT(12) NOT NULL,
+    accountID INT(12) NOT NULL,
+
+    CONSTRAINT PK_invites PRIMARY KEY(inviteID),
+    CONSTRAINT FK_Invites FOREIGN KEY (accountID) REFERENCES accounts(accountID)
+)
+
+describe invites
+
+SELECT * FROM invites;
+
+DELETE FROM invites;
+
+SELECT * FROM invites WHERE accountID = 19 AND inviteGroupID = 1; 
+
+ALTER TABLE notifications ADD notificationOpened INT(12) DEFAULT 0;
+
+describe notifications
+
+select * from notifications
+
+SELECT * FROM invites WHERE inviteGroupID = 1 AND accountID = 0;
+
+SELECT * FROM positions WHERE positionID = 24;

@@ -6,7 +6,8 @@
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
     $accountID = $userdata["accountID"];
-
+    $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
+    
 ?>
 
 <!doctype html>
@@ -46,7 +47,21 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto d-flex align-items-center">
+                    <a class="nav-link" href="../notifications/notifications_header.php">
+                        <button type="button" class="btn btn-primary position-relative">
+                            <i class="bi bi-bell-fill"></i>
+                            <!-- Badge -->
+                            <?php if($unopenedNotifsSize > 0) :?>
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <?= $unopenedNotifsSize ?>
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                            <?php endif; ?>
+                            <!-- Badge -->
+                        </button>
+                    </a>
                     <li class="nav-item">
                         <a class="nav-link " aria-current="page" href="../index.php">Home</a>
                     </li>
@@ -55,10 +70,6 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"> Assignments</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Notifications</a>
                     </li>
 
                     <li class="nav-item dropdown">

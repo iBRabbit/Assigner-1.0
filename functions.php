@@ -53,6 +53,17 @@ function GetUserFullName($userid) {
     return (mysqli_num_rows($result) > 0) ? $row["firstname"] . " " . $row["lastname"] : NULL;
 }
 
+// return -1 jika tidak ada, return index jika ada.
+function IsUsernameExists($username) {
+    global $connectionID;
+    
+    $result = mysqli_query($connectionID, "SELECT * FROM accounts WHERE username = '$username'");
+    if(mysqli_num_rows($result) <= 0) return -1;
+    $row = mysqli_fetch_assoc($result);
+
+    return $row["accountID"];
+}
+
 // -- User Functions -- //
 
 // -- Group Functions -- //
@@ -134,6 +145,12 @@ function GetGroupOwnerID($groupid){
     return $result[0]["id"];
 }
 
+function GetAllGroupPositions($gid) {
+    global $connectionID;
+    $result = mysqli_query($connectionID, "SELECT * FROM positions WHERE groupID = $gid");
+    return $result;
+}
+
 // -- Group Functions -- //
 
 // -- Assignments Functions -- //
@@ -170,6 +187,50 @@ function IsAsgAssignedToID($userid, $asgid){
 }
 
 // -- Assignments Functions -- //
+
+// -- Invites Functions -- //
+
+function IsAlreadyInvitedToGroup($userid, $groupid) {
+    global $connectionID;
+
+    $result = mysqli_query($connectionID, "SELECT * FROM invites WHERE accountID = $userid AND inviteGroupID = $groupid;");  
+    
+    return (mysqli_num_rows($result) > 0) ? true : false;    
+}
+
+// -- invite Functions -- //
+
+// -- Notifications Functions -- //
+function GetAllNotifsByUID($uid, $showpartial = 0, $openedonly = 0) {
+    
+    if(!$showpartial) 
+        $result = Query(
+            "SELECT * FROM notifications WHERE accountID = $uid
+        ");
+    else {
+        if(!$openedonly) 
+            $result = Query(
+                "SELECT * FROM notifications WHERE accountID = $uid AND notificationOpened = 0;
+            ");
+        else {
+            $result = Query(
+                "SELECT * FROM notifications WHERE accountID = $uid AND notificationOpened = 1;
+            ");
+        }
+    }
+        
+    
+    return $result;
+}
+
+function GetUnopenedNotifsSize($accountID){
+    global $connectionID;
+    $unopenedNotifs = GetAllNotifsByUID($accountID, true);
+    $unopenedNotifsSize = count($unopenedNotifs);
+    return $unopenedNotifsSize;
+}
+
+// -- Notifications Functions -- //
 
 // -- Helper / Validator -- //
 
@@ -222,4 +283,8 @@ function ValidateRequiredForm($formdata){
     return (empty($formdata)) ? true : false;
 }
 
+function Refresh(){
+    header("Refresh:0");
+}
+// -- Helper / Validator -- //
 // -- Helper / Validator -- //

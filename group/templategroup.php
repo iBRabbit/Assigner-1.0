@@ -6,7 +6,7 @@
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
     $accountID = $userdata["accountID"];
-
+    $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
 ?>
 
 

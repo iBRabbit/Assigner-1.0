@@ -119,10 +119,10 @@
                 
 
                 if(strlen($_POST["group-name"]) < 5){
-                    echo "
-                    <div class=\"alert alert-danger\" role=\"alert\">
+                    echo '
+                    <div class="alert alert-danger" role="alert">
                     Your group name is less than 5 characters.
-                    </div>";
+                    </div>';
                 } else {
                     $autoIncrementGroupVal = mysqli_fetch_assoc($result);
                 
@@ -150,9 +150,9 @@
                     mysqli_query($connectionID, $myQuery);
                 
                     echo 
-                    "<div class=\"alert alert-success\" role=\"alert\" id=\"success-message\">
+                    '<div class="alert alert-success" role="alert" id="success-message">
                     Successfully created a group!
-                    </div>";               
+                    </div>';               
                 }
 
             }   

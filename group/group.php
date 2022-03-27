@@ -147,10 +147,11 @@
                                 <br>
                                 <?= $rows["groupDetail"]; ?>
                             </p>
-                            <?php 
-                                if(IsGroupOwner($accountID, $groupid))
-                                    echo "<a href=\"#\" class=\"btn btn-primary\"><i class=\"bi bi-pencil-square\"></i> │ Edit Group</a>"
-                            ?>
+
+                            <?php if(IsGroupOwner($accountID, $groupid)) : ?>
+                            <a href="#" class="btn btn-primary"><i class="bi bi-pencil-square"></i> │ Edit
+                                Group</a>
+                            <?php endif; ?>
 
                         </div>
                     </div>
@@ -170,13 +171,12 @@
 
                                         <a href="../assignment/addassignment.php?groupid=<?=$groupid ?>">
 
-                                            <?php 
-                                                if(IsGroupOwner($accountID, $groupid))
-                                                echo "                                 <button type=\"submit\" class=\"btn btn-success\"><i
-                                                class=\"bi bi-plus-circle-fill\"></i> │ Add
+                                            <?php if(IsGroupOwner($accountID, $groupid)) : ?>
+                                            <button type="submit" class="btn btn-success"><i class="bi
+                                                    bi-plus-circle-fill"></i> │ Add
                                                 Assignment
-                                                </button>";
-                                            ?>
+                                            </button>
+                                            <?php endif; ?>
 
                                         </a>
                                     </div>
@@ -225,25 +225,24 @@
                                         <?php 
                                         $asgRowID = $asgData["assignmentID"]; 
                                         $asgRowGroupID = $asgData["groupID"];
-
-                                        if(IsAsgAssignedToID($accountID, $asgRowID) || IsGroupOwner($accountID, $asgRowGroupID))
-                                            echo " <a
-                                            href=\"../assignment/detailassignment.php?groupid=$asgRowGroupID&asgid=$asgRowID\">
-                                        <button class=\"btn btn-primary\" type=\"button\"><i class=\"bi
-                                                bi-eye-fill\"></i>
-                                        </button>
-                                        </a>"
                                         ?>
 
 
-                                        <?php 
-                                            $asgID = $asgData["assignmentID"];
-                                            if(IsGroupOwner($accountID, $groupid)){
-                                                echo " <form action=\"\" method=\"post\"><button class=\"btn btn-danger\" type=\"submit\" name = \"delete-asg-btn\" value = \"$asgID\"><i
-                                                class=\"bi bi-trash3-fill\"></i></button></form>
-                                            ";
-                                            }
-                                        ?>
+                                        <?php if(IsAsgAssignedToID($accountID, $asgRowID) || IsGroupOwner($accountID,
+                                        $asgRowGroupID)): ?>
+                                        <a href="../assignment/detailassignment.php?groupid=<?=$asgRowGroupID."
+                                            &asgid=" . $asgRowID?>">
+                                            <button class="btn btn-primary" type="button"><i class="bi bi-eye-fill"></i>
+                                            </button>
+                                        </a>
+
+                                        <?php endif; ?>
+
+                                        <?php if(IsGroupOwner($accountID, $groupid)): ?>
+                                        <form action="" method="post"><button class="btn btn-danger" type="submit"
+                                                name="delete-asg-btn" value="<?=$asgRowID?>"><i
+                                                    class="bi bi-trash3-fill"></i></button></form>
+                                        <?php endif; ?>
 
                                     </div>
                                 </td>
@@ -254,7 +253,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col">
+                <div class=" col">
                     <table class="table align-middle">
                         <div class="assignment-header">
                             <div class="container p-0 ">
@@ -263,13 +262,12 @@
                                         <h3 class="">Member List</h3>
                                     </div>
 
-                                    <?php  
-                                        if(IsGroupOwner($accountID, $groupid))
-                                            echo " <div class=\"col\" id=\"add-asg-btn\">
-                                            <a href=\"addgroupmember.php?groupid=$groupid\" class=\"btn btn-success\"><i class=\"bi bi-plus-circle-fill\"></i> │ Add Member</a>
-                                            </div>
-                                            ";
-                                    ?>
+                                    <?php if(IsGroupOwner($accountID, $groupid)) :?>
+                                    <div class="col" id="add-asg-btn">
+                                        <a href="addgroupmember.php?groupid=<?=$groupid?>" class="btn btn-success"><i
+                                                class="bi bi-plus-circle-fill"></i> │ Add Member</a>
+                                    </div>
+                                    <?php endif; ?>
 
 
                                 </div>
@@ -278,11 +276,12 @@
                         <thead>
                             <tr>
                                 <!-- name, username, position -->
-                                <th scope="col">#</th>
+                                <th scope=" col">#</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Username</th>
                                 <th scope="col">Position</th>
-                                <th scope="col-2" colspan="2" class="text-center">Action</th>
+                                <th scope="col-2" colspan="2" class="text-center">Action
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -293,7 +292,8 @@
                             <?php foreach($memberList as $member):?>
                             <tr>
                                 <th scope="row"><?= $i;?></th>
-                                <td><?= $member["firstname"] . " " . $member["lastname"];?></td>
+                                <td><?= $member["firstname"] . " " . $member["lastname"];?>
+                                </td>
                                 <td>@<?= $member["username"];?></td>
                                 <td><?= $member["positionName"];?></td>
                                 <td>
@@ -301,12 +301,10 @@
                                         <button class="btn btn-primary" type="button"><i
                                                 class="bi bi-eye-fill"></i></button>
 
-                                        <?php 
-                                        
-                                        if(IsGroupOwner($accountID, $groupid))
-                                            echo " <button class=\"btn btn-danger\" type=\"button\"><i
-                                            class=\"bi bi-trash3-fill\"></i></button>"
-                                        ?>
+                                        <?php if(IsGroupOwner($accountID, $groupid)) :?>
+                                        <button class="btn btn-danger" type="button"><i class="bi
+                                                bi-trash3-fill"></i></button>
+                                        <?php endif; ?>
 
                                     </div>
                                 </td>

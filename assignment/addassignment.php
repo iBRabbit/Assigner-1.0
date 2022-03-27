@@ -133,26 +133,26 @@
                         
                     if(empty($asgTitle) || empty($asgDeadline) || $asgAssignedTo == "Select Group Member") {
                         echo 
-                        "<div class=\"alert alert-danger\" role=\"alert\" id=\"success-message\">
+                        '<div class="alert alert-danger" role="alert" id="success-message">
                         Failed to add an assignment. You have to fill the required form.
-                        </div>";  
+                        </div>';  
                     } 
                 
 
                     else if($asgDeadline < $today)
                         echo 
-                        "<div class=\"alert alert-danger\" role=\"alert\" id=\"success-message\">
+                        '<div class="alert alert-danger" role="alert" id="success-message">
                         Failed to add an assignment. Assignment date must be greater than today.
-                        </div>"; 
+                        </div>'; 
                         
                     
                     else {
                         mysqli_query($connectionID, "INSERT INTO `assignments` (`assignmentID`, `groupID`, `assignmentTitle`, `assignmentDescription`, `assignmentCreated`, `assignmentDeadline`, `assignedTo`, `assignmentStatus`) VALUES (NULL, $groupid, '$asgTitle', '$asgDetails', '$today', '$asgDeadline', '$asgAssignedTo', '0');");
                     
                         echo 
-                        "<div class=\"alert alert-success\" role=\"alert\" id=\"success-message\">
+                        '<div class="alert alert-success" role="alert" id="success-message">
                         Successfully added an assignment!
-                        </div>";  
+                        </div>';  
                     }
                 }
             ?>

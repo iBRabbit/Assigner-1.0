@@ -201,7 +201,6 @@
                             </div>
                         </div>
 
-
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -213,23 +212,48 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $asgIterator = 0; ?>
-                            <?php foreach($assignments as $asgData) :?>
-                            <?php $asgIterator++;
-                            
-                
-                            $tmpProcessStr = "width: " . GetStatusNameByID($asgData["assignmentStatus"]). "%";                           
-                                        
+                            <?php $i = 0; ?>
+                            <?php foreach($assignments as $asg) :?>
+                            <?php 
+                                $i++;
+                                $members = GetAssignmentMembers($asg["assignmentID"], $asg["assignmentIsGroup"]);
                             ?>
                             <tr>
-                                <th><?= $asgIterator ?></th>
-                                <td><?= $asgData["assignmentTitle"] ?></td>
-                                <td><?= GetUserFullName($asgData["assignedTo"]) ?></td>
-                                <td><?= $asgData["assignmentDeadline"] ?></td>
+                                <td><?= $i ?></td>
+                                <td><?= $asg["assignmentTitle"]; ?></td>
+                                <?php if($asg["assignmentIsGroup"]) ?>
+                                <td>
+
+                                    <?php if($asg["assignmentIsGroup"]) :?>
+                                    <ul class="list-group list-group-flush list-group-numbered">
+                                        <?php foreach($members as $mem) :?>
+                                        <li class="list-group-item"><?= GetUserFullName($mem["asgMemberAccountID"]) ?>
+                                        </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                    <?php endif; ?>
+
+                                    <?php if(!$asg["assignmentIsGroup"]) :?>
+                                    <ul class="list-group list-group-flush list-group-numbered">
+                                        <li class="list-group-item">
+                                            <?= GetUserFullName($members["asgMemberAccountID"]) ?>
+                                        </li>
+                                    </ul>
+                                    <?php endif; ?>
+                                </td>
+
+                                <td><?= $asg["assignmentDeadline"] ?></td>
+
+                                <?php 
+                                    if($asg["assignmentIsGroup"]) 
+                                        $tmpProcessStr = "width: " . CountTotalAssignmentProgress($asg["assignmentID"]). "%";      
+                                    else 
+                                        $tmpProcessStr = "width: ".CountTotalAssignmentProgress($asg["assignmentID"]). "%";
+                                ?>
 
                                 <td>
                                     <div class="progress">
-                                        <div class="progress-bar bg-success" role="progressbar"
+                                        <div class="progress-bar bg-primary" role="progressbar"
                                             style="<?= $tmpProcessStr; ?>" aria-valuenow="0" aria-valuemin="0"
                                             aria-valuemax="100">
                                         </div>
@@ -237,14 +261,11 @@
                                 </td>
 
                                 <td>
-
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                         <?php 
-                                        $asgRowID = $asgData["assignmentID"]; 
-                                        $asgRowGroupID = $asgData["groupID"];
+                                        $asgRowID = $asg["assignmentID"]; 
+                                        $asgRowGroupID = $asg["groupID"];
                                         ?>
-
-
                                         <?php if(IsAsgAssignedToID($accountID, $asgRowID) || IsGroupOwner($accountID,
                                         $asgRowGroupID)): ?>
                                         <a href="../assignment/detailassignment.php?groupid=<?=$asgRowGroupID."
@@ -252,8 +273,8 @@
                                             <button class="btn btn-primary" type="button"><i class="bi bi-eye-fill"></i>
                                             </button>
                                         </a>
-
                                         <?php endif; ?>
+
 
                                         <?php if(IsGroupOwner($accountID, $groupid)): ?>
                                         <form action="" method="post"><button class="btn btn-danger" type="submit"
@@ -263,10 +284,8 @@
 
                                     </div>
                                 </td>
-
                             </tr>
                             <?php endforeach; ?>
-
                         </tbody>
                     </table>
                 </div>

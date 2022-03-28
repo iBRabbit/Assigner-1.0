@@ -92,3 +92,31 @@ SELECT * FROM invites WHERE inviteGroupID = 1 AND accountID = 0;
 SELECT * FROM positions WHERE positionID = 24;
 
 ALTER TABLE assignments ADD assignmentGroup INT(12) DEFAULT 0;
+
+CREATE TABLE asg_member (
+    asgMemberID INT(12) NOT NULL,
+    assignmentID INT(12) NOT NULL,
+    asgMemberAccountID INT (12) NOT NULL,
+    asgMemberProgress INT(12),
+    
+
+    CONSTRAINT PK_AsgMember PRIMARY KEY (asgMemberID),
+    CONSTRAINT FK_AsgMember FOREIGN KEY (assignmentID) REFERENCES assignments(assignmentID)
+)
+
+ALTER TABLE asg_member 
+
+SELECT * FROM assignments asg
+JOIN asg_member am
+ON am.assignmentID = asg.assignmentID
+WHERE asg.assignmentID = 56
+
+    SELECT DISTINCT
+    *
+    FROM assignments asg
+    JOIN asg_member am
+    ON am.assignmentID = asg.assignmentID
+    JOIN groups g 
+    ON g.groupID = asg.groupID
+    WHERE asg.groupID = 1
+    ORDER BY am.asgMemberProgress ASC, assignmentDeadline ASC

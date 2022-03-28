@@ -167,34 +167,74 @@ function GetUserPositionInGroup($userid, $groupid){
 // -- Assignments Functions -- //
 function GetAssignmentListByGroupID($gid) {
     $assignments = Query(    
-        "SELECT
+        "SELECT DISTINCT
         *
         FROM assignments asg
         JOIN groups g 
         ON g.groupID = asg.groupID
         WHERE asg.groupID = '$gid'
-        ORDER BY assignmentStatus ASC, assignmentDeadline ASC" 
+        ORDER BY assignmentDeadline ASC" 
     );
     
     return $assignments;
 }
-function GetStatusNameByID($statusID){
-    if($statusID == 0) return 0;
-    if($statusID == 1) return 25;
-    if($statusID == 2) return 50;
-    if($statusID == 3) return 75;
-    if($statusID == 4) return 100;
 
+function GetStatusValueByID($statusID){
+    if($statusID == 1) return 0;
+    if($statusID == 2) return 25;
+    if($statusID == 3) return 50;
+    if($statusID == 4) return 75;
+    if($statusID == 5) return 100;
     return NULL;
 }
 
 function IsAsgAssignedToID($userid, $asgid){
     global $connectionID;
     
-    $result = mysqli_query($connectionID, "SELECT * FROM assignments WHERE assignmentID = $asgid");
+    $result = mysqli_query($connectionID, "SELECT * FROM assignments asg
+    JOIN asg_member am
+    ON am.assignmentID = asg.assignmentID
+    WHERE asg.assignmentID = $asgid");
     $row = mysqli_fetch_assoc($result);
 
-    return ($row["assignedTo"] == $userid) ? true : false;
+    return ($row["asgMemberAccountID"] == $userid) ? true : false;
+}
+
+function GetAllAssignmentsFromID($uid) {
+    global $connectionID;
+
+    $result = Query("
+    SELECT * FROM assignments asg
+    JOIN asg_member am
+    ON am.assignmentID = asg.assignmentID
+    WHERE am.asgMemberAccountID = $uid
+    ORDER BY asg.assignmentStatus ASC, asg.assignmentDeadline ASC
+    ");
+
+    return $result;
+}
+
+function GetAssignmentMembers($asgid, $isGroup) {
+
+    $result = Query("SELECT * FROM assignments asg
+    JOIN asg_member am
+    ON am.assignmentID = asg.assignmentID
+    WHERE asg.assignmentID = $asgid");
+
+    return ($isGroup) ? $result : $result[0];
+}
+
+function CountTotalAssignmentProgress($asgid) {
+    $members = GetAssignmentMembers($asgid, true);
+    
+    $totalProgress = 5 * count($members);
+    $currentProgress = 0;
+
+    foreach($members as $mem)
+        $currentProgress += $mem["asgMemberProgress"];
+
+    
+    return round(($currentProgress / $totalProgress ) * 100);
 }
 
 // -- Assignments Functions -- //

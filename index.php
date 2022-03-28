@@ -12,13 +12,7 @@
     
     $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
     
-    $assignments = Query(    
-    "SELECT *
-    FROM assignments
-    WHERE assignedTo = $accountID
-    ORDER BY assignmentStatus ASC, assignmentDeadline ASC
-    ");
-    
+    $assignments = GetAllAssignmentsFromID($accountID);
     $asgIterator = 0;
 ?>
 
@@ -208,7 +202,7 @@
                         <tbody>
                             <?php foreach($assignments as $asgData) :?>
                             <?php $asgIterator++;                                                                  
-                                $tmpProcessStr = "width: " . GetStatusNameByID($asgData["assignmentStatus"]). "%";                           
+                                $tmpProcessStr = "width: " . GetStatusValueByID($asgData["asgMemberProgress"]) . "%";                           
                             ?>
                             <tr>
                                 <?php 

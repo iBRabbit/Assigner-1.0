@@ -151,6 +151,17 @@ function GetAllGroupPositions($gid) {
     return $result;
 }
 
+function GetUserPositionInGroup($userid, $groupid){
+    global $connectionID;
+
+    $positions = Query("SELECT * from accounts_groups ag
+    JOIN positions p
+    ON p.positionID = ag.positionID
+    WHERE ag.groupID = $groupid AND ag.accountID = $userid");
+    
+    return $positions[0]["positionName"];
+}
+
 // -- Group Functions -- //
 
 // -- Assignments Functions -- //

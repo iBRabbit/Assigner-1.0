@@ -90,3 +90,5 @@ select * from notifications
 SELECT * FROM invites WHERE inviteGroupID = 1 AND accountID = 0;
 
 SELECT * FROM positions WHERE positionID = 24;
+
+ALTER TABLE assignments ADD assignmentGroup INT(12) DEFAULT 0;

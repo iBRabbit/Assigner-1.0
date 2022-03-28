@@ -9,7 +9,6 @@
     ValidateGroupLink($accountID, $groupid, "../index.php", true);
     $members = GetMemberListByGroupID($groupid);
     $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
-    
 ?>
 
 
@@ -128,16 +127,15 @@
                     $asgTitle = mysqli_real_escape_string($connectionID, $_POST["asg-title"]);
                     $asgDetails = mysqli_real_escape_string($connectionID, $_POST["asg-details"]);
                     $asgDeadline = $_POST["asg-deadline"];
-                    $asgAssignedTo = $_POST["asg-assignedto"];
+                    
                     $today = date("Y-m-d");
-                        
-                    if(empty($asgTitle) || empty($asgDeadline) || $asgAssignedTo == "Select Group Member") {
+
+                    if(empty($asgTitle) || empty($asgDeadline) || !isset($_POST["row-check"])) {
                         echo 
                         '<div class="alert alert-danger" role="alert" id="success-message">
                         Failed to add an assignment. You have to fill the required form.
                         </div>';  
                     } 
-                
 
                     else if($asgDeadline < $today)
                         echo 
@@ -147,8 +145,11 @@
                         
                     
                     else {
-                        mysqli_query($connectionID, "INSERT INTO `assignments` (`assignmentID`, `groupID`, `assignmentTitle`, `assignmentDescription`, `assignmentCreated`, `assignmentDeadline`, `assignedTo`, `assignmentStatus`) VALUES (NULL, $groupid, '$asgTitle', '$asgDetails', '$today', '$asgDeadline', '$asgAssignedTo', '0');");
-                    
+
+                        foreach($_POST["row-check"] as $user) 
+                            mysqli_query($connectionID, "INSERT INTO `assignments` (`assignmentID`, `groupID`, `assignmentTitle`, `assignmentDescription`, `assignmentCreated`, `assignmentDeadline`, `assignedTo`, `assignmentStatus`, `assignmentGroup`) VALUES (NULL, $groupid, '$asgTitle', '$asgDetails', '$today', '$asgDeadline', '$user', '0', '1');");
+                         
+
                         echo 
                         '<div class="alert alert-success" role="alert" id="success-message">
                         Successfully added an assignment!
@@ -160,7 +161,6 @@
 
         <form action="" method="post">
             <div class="row">
-
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-clipboard-check"></i></span>
                     <input type="text" class="form-control" placeholder="Assignment's Title (*)" name="asg-title">
@@ -181,54 +181,40 @@
                 </div>
             </div>
 
-            <div class="form d-flex flex-row">
-                <div class="flex-left">
-
-                </div>
-
-
-                <div class="flex-right">
-
-                </div>
-            </div>
-
             <h5>Members to be assigned</h5>
             <table class="table table-sm">
                 <thead>
                     <tr>
-                        <th scope="col">Check</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Handle</th>
+                        <th>
+                            <div>
+                                <input class="form-check-input" type="checkbox" id="check-all" value="" aria-label="..."
+                                    onclick=checkAllGroupMembersAsg();>
+                            </div></button>
+                        </th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Position</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <?php foreach($members as $member):  ?>
                     <tr>
                         <th scope="row">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <input class="form-check-input" type="checkbox" value="<?= $member["accountID"]; ?>"
+                                    id="row-check" name="<?="row-check[" . $member["accountID"] . "]"?>">
                             </div>
                         </th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
+                        <td><?= "@" . $member["username"]; ?></td>
+                        <td><?= GetUserFullName($member["accountID"]) ?></td>
+                        <td><?= GetUserPositionInGroup($member["accountID"], $groupid) ?></td>
                     </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td colspan="2">Larry the Bird</td>
-                        <td>@twitter</td>
-                    </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
 
 
-            <button type=" submit" class="btn btn-success" name="add-asg-button">Add Assignment</button>
+            <button button type=" submit" class="btn btn-success" name="add-asg-button">Add Assignment</button>
 
         </form>
 
@@ -247,12 +233,14 @@
         <p class="font-weight-bold text-center fs-5">Created by : Tesla Team</p>
     </footer>
 
-
+    <script src="../script.js"></script>
     <!-- End of Footer -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
+
+
 
 </body>
 

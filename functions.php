@@ -208,7 +208,7 @@ function GetAllAssignmentsFromID($uid) {
     JOIN asg_member am
     ON am.assignmentID = asg.assignmentID
     WHERE am.asgMemberAccountID = $uid
-    ORDER BY asg.assignmentStatus ASC, asg.assignmentDeadline ASC
+    ORDER BY am.asgMemberProgress ASC, asg.assignmentDeadline ASC
     ");
 
     return $result;

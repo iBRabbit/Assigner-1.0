@@ -148,7 +148,6 @@
 
                         foreach($_POST["row-check"] as $user) 
                             mysqli_query($connectionID, "INSERT INTO `assignments` (`assignmentID`, `groupID`, `assignmentTitle`, `assignmentDescription`, `assignmentCreated`, `assignmentDeadline`, `assignedTo`, `assignmentStatus`, `assignmentGroup`) VALUES (NULL, $groupid, '$asgTitle', '$asgDetails', '$today', '$asgDeadline', '$user', '0', '1');");
-                         
 
                         echo 
                         '<div class="alert alert-success" role="alert" id="success-message">

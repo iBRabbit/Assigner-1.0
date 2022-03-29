@@ -147,6 +147,9 @@
                         
                     
                     else {
+
+                        
+
                         mysqli_query($connectionID, "INSERT INTO `assignments` (`assignmentID`, `groupID`, `assignmentTitle`, `assignmentDescription`, `assignmentCreated`, `assignmentDeadline`, `assignedTo`, `assignmentStatus`, `assignmentGroup`) VALUES (NULL, $groupid, '$asgTitle', '$asgDetails', '$today', '$asgDeadline', '$asgAssignedTo', '0', '0');");
                     
                         echo 

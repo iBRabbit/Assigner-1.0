@@ -19,9 +19,10 @@
     $memberList = GetMemberListByGroupID($groupid);
     
     if(isset($_POST["delete-asg-btn"])){
+
         $asgID = $_POST["delete-asg-btn"];
-        RemoveAssignment($asgID);
-        Refresh();  
+        mysqli_query($connectionID, "DELETE FROM assignments WHERE assignmentID = $asgID");
+        Refresh();
     }
     
     $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);      
@@ -274,8 +275,9 @@
                                         </a>
                                         <?php endif; ?>
 
+
                                         <?php if(IsGroupOwner($accountID, $groupid)): ?>
-                                        <form action="group.php?groupid=<?= $groupid?>" method="post"><button class="btn btn-danger" type="submit"
+                                        <form action="" method="post"><button class="btn btn-danger" type="submit"
                                                 name="delete-asg-btn" value="<?=$asgRowID?>"><i
                                                     class="bi bi-trash3-fill"></i></button></form>
                                         <?php endif; ?>

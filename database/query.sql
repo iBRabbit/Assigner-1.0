@@ -111,24 +111,12 @@ JOIN asg_member am
 ON am.assignmentID = asg.assignmentID
 WHERE asg.assignmentID = 56
 
-SELECT DISTINCT
-*
-FROM assignments asg
-JOIN asg_member am
-ON am.assignmentID = asg.assignmentID
-JOIN groups g 
-ON g.groupID = asg.groupID
-WHERE asg.groupID = 1
-ORDER BY am.asgMemberProgress ASC, assignmentDeadline ASC
-
-INSERT INTO assignments VALUES ('', '1', 'Multiple Assignment', 'desription', NOW(), NOW(), '0');
-
-                
-SELECT AUTO_INCREMENT as `AI`
-FROM information_schema.TABLES
-WHERE TABLE_SCHEMA = 'seproject'
-AND TABLE_NAME = 'assignments'
-
-
-
-describe asg_member
+    SELECT DISTINCT
+    *
+    FROM assignments asg
+    JOIN asg_member am
+    ON am.assignmentID = asg.assignmentID
+    JOIN groups g 
+    ON g.groupID = asg.groupID
+    WHERE asg.groupID = 1
+    ORDER BY am.asgMemberProgress ASC, assignmentDeadline ASC

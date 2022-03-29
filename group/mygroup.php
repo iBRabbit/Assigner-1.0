@@ -164,7 +164,11 @@ $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
 
                                 <td><?= $posName[0]["positionName"] ?></td>
                                 <td>
-
+                                    <!-- <form action="group.php" method="post">
+                                        <input type="hidden" name="input-groupid" value="<?= $groupid?>"></input>
+                                        <button type="submit" class="btn btn-primary" value><i
+                                                class="bi bi-arrow-right-square"></i></button>
+                                    </form> -->
 
                                     <a href='group.php?groupid=<?= $groupid?>'>
                                         <button type="submit" class="btn btn-primary" value><i

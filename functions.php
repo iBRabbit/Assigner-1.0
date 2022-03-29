@@ -165,35 +165,6 @@ function GetUserPositionInGroup($userid, $groupid){
 // -- Group Functions -- //
 
 // -- Assignments Functions -- //
-
-function AddAssignment($members, $groupid, $title, $description, $createdOn, $deadline, $isgroup = false) {
-
-    global $connectionID;
-    $myquery = Query("SELECT AUTO_INCREMENT as `AI`
-    FROM information_schema.TABLES
-    WHERE TABLE_SCHEMA = 'seproject'
-    AND TABLE_NAME = 'assignments'");
-    $asgid = $myquery[0]["AI"];
-
-    mysqli_query($connectionID, "INSERT INTO assignments VALUES ('', '$groupid', '$title', '$description', '$createdOn', '$deadline', '$isgroup');");
-
-    if(!$isgroup) 
-        return mysqli_query($connectionID, "INSERT INTO asg_member VALUES ('', '$asgid', '$members', '0')");
-    
-    
-    foreach($members as $mem) 
-        mysqli_query($connectionID, "INSERT INTO asg_member VALUES ('', '$asgid', '$mem', '0')");
-}
-
-function RemoveAssignment($asgid) {
-
-    global $connectionID;
-
-    mysqli_query($connectionID, "DELETE FROM asg_member WHERE assignmentID = $asgid");
-
-    mysqli_query($connectionID, "DELETE FROM assignments WHERE assignmentID = $asgid");
-}
-
 function GetAssignmentListByGroupID($gid) {
     $assignments = Query(    
         "SELECT DISTINCT
@@ -255,15 +226,15 @@ function GetAssignmentMembers($asgid, $isGroup) {
 
 function CountTotalAssignmentProgress($asgid) {
     $members = GetAssignmentMembers($asgid, true);
-
-    $totalProgress = 100 * count($members);
+    
+    $totalProgress = 5 * count($members);
     $currentProgress = 0;
 
     foreach($members as $mem)
         $currentProgress += $mem["asgMemberProgress"];
-        
-    $result = (int) round(($currentProgress / $totalProgress) * 100);
-    return $result;
+
+    
+    return round(($currentProgress / $totalProgress ) * 100);
 }
 
 // -- Assignments Functions -- //
@@ -366,4 +337,5 @@ function ValidateRequiredForm($formdata){
 function Refresh(){
     header("Refresh:0");
 }
+// -- Helper / Validator -- //
 // -- Helper / Validator -- //

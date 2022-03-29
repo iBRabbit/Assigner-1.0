@@ -1,7 +1,6 @@
 <?php
 
 require_once "../functions.php";
-require_once "../constants.php";
 
 StartLoginSession();
 $username = $_SESSION["username"];
@@ -165,6 +164,8 @@ $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
 
                                 <td><?= $posName[0]["positionName"] ?></td>
                                 <td>
+
+
                                     <a href='group.php?groupid=<?= $groupid?>'>
                                         <button type="submit" class="btn btn-primary" value><i
                                                 class="bi bi-arrow-right-square"></i>

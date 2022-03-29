@@ -14,6 +14,10 @@
     
     $assignments = GetAllAssignmentsFromID($accountID);
     $asgIterator = 0;
+
+    $halamanAktif = 5;
+    
+    
 ?>
 
 
@@ -185,6 +189,19 @@
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                    <nav aria-label="Page navigation example">
+                      <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                          <a class="page-link" href="#">Previous</a>
+                        </li>
+                        <li class="page-item active" aria-current="page">1</li>
+                        <li class="page-item">2</li>
+                        <li class="page-item">3</li>
+                        <li class="page-item">
+                          <a class="page-link" href="#">Next</a>
+                        </li>
+                      </ul>
+                    </nav>
                 </div>
                 <div class="col">
                     <h4 class="fw-bolder">Upcoming Assignments</h4>
@@ -259,6 +276,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
+
+    <script src="script.js"></script>
 
 </body>
 

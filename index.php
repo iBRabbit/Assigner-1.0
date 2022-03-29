@@ -202,7 +202,7 @@
                         <tbody>
                             <?php foreach($assignments as $asgData) :?>
                             <?php $asgIterator++;                                                                  
-                                $tmpProcessStr = "width: " . GetStatusValueByID($asgData["asgMemberProgress"]) . "%";                           
+                            $tmpProcessStr = "width: " . CountTotalAssignmentProgress($asgData["assignmentID"]). "%";        
                             ?>
                             <tr>
                                 <?php 

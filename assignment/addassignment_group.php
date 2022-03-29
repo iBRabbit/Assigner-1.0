@@ -128,6 +128,7 @@
                     $asgDetails = mysqli_real_escape_string($connectionID, $_POST["asg-details"]);
                     $asgDeadline = $_POST["asg-deadline"];
                     
+                    
                     $today = date("Y-m-d");
 
                     if(empty($asgTitle) || empty($asgDeadline) || !isset($_POST["row-check"])) {
@@ -146,13 +147,20 @@
                     
                     else {
 
-                        foreach($_POST["row-check"] as $user) 
-                            mysqli_query($connectionID, "INSERT INTO `assignments` (`assignmentID`, `groupID`, `assignmentTitle`, `assignmentDescription`, `assignmentCreated`, `assignmentDeadline`, `assignedTo`, `assignmentStatus`, `assignmentGroup`) VALUES (NULL, $groupid, '$asgTitle', '$asgDetails', '$today', '$asgDeadline', '$user', '0', '1');");
+                        $members_checked = $_POST["row-check"];
+
+                        AddAssignment($members_checked, $groupid, $asgTitle, $asgDetails, $today, $asgDeadline, true);
+                        // foreach($_POST["row-check"] as $user) 
+                        //     mysqli_query($connectionID, "INSERT INTO `assignments` (`assignmentID`, `groupID`, `assignmentTitle`, `assignmentDescription`, `assignmentCreated`, `assignmentDeadline`, `assignedTo`, `assignmentStatus`, `assignmentGroup`) VALUES (NULL, $groupid, '$asgTitle', '$asgDetails', '$today', '$asgDeadline', '$user', '0', '1');");
+
+                        // Refresh();
 
                         echo 
                         '<div class="alert alert-success" role="alert" id="success-message">
                         Successfully added an assignment!
                         </div>';  
+
+                        
                     }
                 }
             ?>

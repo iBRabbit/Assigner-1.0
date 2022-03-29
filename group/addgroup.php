@@ -1,7 +1,8 @@
 <?php
 
     require_once "../functions.php";
-
+    require_once "../constants.php";
+    
     StartLoginSession();
     $username = $_SESSION["username"];
     $userdata = GetUserData($username);
@@ -114,7 +115,7 @@
                 
                 $result = mysqli_query($connectionID, "SELECT AUTO_INCREMENT as `AI`
                 FROM information_schema.TABLES
-                WHERE TABLE_SCHEMA = \"seproject\"
+                WHERE TABLE_SCHEMA = DB_NAME
                 AND TABLE_NAME = \"groups\"");
                 
 
@@ -128,7 +129,7 @@
                 
                     $result = mysqli_query($connectionID, "SELECT AUTO_INCREMENT as `AI`
                     FROM information_schema.TABLES
-                    WHERE TABLE_SCHEMA = \"seproject\"
+                    WHERE TABLE_SCHEMA = \"DB_NAME\"
                     AND TABLE_NAME = \"positions\"");
                     
                     $autoIncrementPosVal = mysqli_fetch_assoc($result);

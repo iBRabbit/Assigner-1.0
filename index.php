@@ -15,8 +15,12 @@
     $assignments = GetAllAssignmentsFromID($accountID);
     $asgIterator = 0;
 
-    $halamanAktif = 5;
-    
+    $jumlahDataPerHalaman = 2;
+    $jumlahHalaman = ceil($jumlahHalaman/count($groups));
+    $halamanAktif = 1;
+    $awalData = $jumlahDataPerHalaman * $halamanAktif - $jumlahDataPerHalaman;
+    $groups = Query("SELECT * FROM groups g JOIN accounts_groups ag ON g.groupID = ag.groupID
+    WHERE ag.accountID = $accountID LIMIT $awalData, $jumlahDataPerHalaman;");
     
 ?>
 
@@ -191,15 +195,11 @@
                     </table>
                     <nav aria-label="Page navigation example">
                       <ul class="pagination justify-content-center">
-                        <li class="page-item">
-                          <a class="page-link" href="#">Previous</a>
-                        </li>
-                        <li class="page-item active" aria-current="page">1</li>
-                        <li class="page-item">2</li>
-                        <li class="page-item">3</li>
-                        <li class="page-item">
-                          <a class="page-link" href="#">Next</a>
-                        </li>
+                        <li class="page-item"><div class="page-link">Previous</div></li>
+                        <li class="page-item active" aria-current="page"><div class="page-link">1</div></li>
+                        <li class="page-item"><div class="page-link">2</div></li>
+                        <li class="page-item"><div class="page-link">3</div></li>
+                        <li class="page-item"><div class="page-link">Next</div></li>
                       </ul>
                     </nav>
                 </div>

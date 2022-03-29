@@ -148,10 +148,8 @@
                     
                     else {
 
-                        
+                        AddAssignment($asgAssignedTo, $groupid, $asgTitle, $asgDetails, $today, $asgDeadline);
 
-                        mysqli_query($connectionID, "INSERT INTO `assignments` (`assignmentID`, `groupID`, `assignmentTitle`, `assignmentDescription`, `assignmentCreated`, `assignmentDeadline`, `assignedTo`, `assignmentStatus`, `assignmentGroup`) VALUES (NULL, $groupid, '$asgTitle', '$asgDetails', '$today', '$asgDeadline', '$asgAssignedTo', '0', '0');");
-                    
                         echo 
                         '<div class="alert alert-success" role="alert" id="success-message">
                         Successfully added an assignment!

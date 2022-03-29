@@ -15,8 +15,7 @@
 
     if(isset($_POST["update-progress-btn"])) {
         $progress = $_POST["update-progress"];
-        mysqli_query($connectionID, "UPDATE assignments SET assignmentStatus = $progress WHERE assignmentID = $asgid");
-        header("Refresh:0");
+        mysqli_query($connectionID, "UPDATE asg_member SET asgMemberProgress = $progress WHERE asgMemberAccountID = $accountID AND assignmentID = $asgid");
     }
 
 ?>
@@ -94,7 +93,6 @@
                         <a class="nav-link" href="#"> Assignments</a>
                     </li>
 
-
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -126,15 +124,12 @@
     <!-- Contents -->
     <div class="container">
 
-        <div class="row">
-            <h4 class="mt-4 mb-4">Assignment's Detail</h4>
-        </div>
+        <div class="row ">
 
-        <div class="row">
-
-            <div class="card">
+            <div class="card mt-4 mb-4">
                 <div class="card-body">
                     <dl class="row">
+                        <h4 class="mt-4 mb-4">Assignment's Detail</h4>
                         <dt class="col-sm-3">Title</dt>
                         <dd class="col-sm-9"><?= $asgdata["assignmentTitle"] ?></dd>
 
@@ -150,8 +145,10 @@
                         <dt class="col-sm-3">Deadline</dt>
                         <dd class="col-sm-9"><?= date_format(date_create($asgdata["assignmentDeadline"]),"D, d M Y"); ?>
                         </dd>
-                        <?php $tmpProcessStr = "width: " . GetStatusNameByID($asgdata["assignmentStatus"]). "%"; ?>
-                        <dt class="col-sm-3">Current Progress</dt>
+
+                        <?php $tmpProcessStr = "width: " . CountTotalAssignmentProgress($asgid). "%"; ?>
+
+                        <dt class="col-sm-3">Total Progress</dt>
                         <dd class="col-sm-9">
                             <div class="progress">
                                 <div class="progress-bar bg-primary" role="progressbar" style="<?= $tmpProcessStr; ?>"
@@ -160,19 +157,53 @@
                             </div>
                         </dd>
 
-                        <?php if(IsAsgAssignedToID($accountID, $asgid)) :?>
-                        <dt class="col-sm-3">Update Progress</dt>
-                        <dd class="col-sm-9">
+                        <?php if(!$asgdata["assignmentIsGroup"]): ?>
+                            <?php if(IsAsgAssignedToID($accountID, $asgid)) :?>
+                            <dt class="col-sm-3">Update Progress</dt>
+                            <dd class="col-sm-9">
+                                <form action="detailassignment.php?groupid=<?=$groupid . "&asgid=" . $asgid?>"
+                                    method="post">
+                                    <label for="customRange1" class="form-label">Progress</label>
+                                    <input type="range" class="form-range" id="customRange1" name="update-progress">
+                                    <button type=" submit" class="btn btn-success"
+                                        name="update-progress-btn">Update</button>
+                                </form>
+                            </dd>
+                            <?php endif; ?>
+                        <?php endif; ?>
+
+                        <?php if($asgdata["assignmentIsGroup"]): ?>
+                        <?php $asg_members = GetAssignmentMembers($asgid, true); ?>
+
+                        <h4 class="mb-4 mt-4">Members Progress</h4>
+                        <?php foreach($asg_members as $am): ?>
+                        <?php $tmpProcessStr_Member = "width: ". $am["asgMemberProgress"] . "%"; ?>
+
+                        <dt class="col-sm-3 mb-3 mt-3"><?= GetUserFullName($am["asgMemberAccountID"]) ?></dt>
+                        <dd class="col-sm-9 mt-3 mb-3">
+                            <div class="progress">
+                                <div class="progress-bar bg-primary" role="progressbar"
+                                    style="<?= $tmpProcessStr_Member; ?>" aria-valuenow="0" aria-valuemin="0"
+                                    aria-valuemax="100">
+                                </div>
+                            </div>
+                            <?php if($am["asgMemberAccountID"] == $accountID) : ?>
                             <form action="detailassignment.php?groupid=<?=$groupid . "&asgid=" . $asgid?>"
                                 method="post">
-                                <label for="customRange3" class="form-label">Change your progress here</label>
-                                <input type="range" class="form-range" min="0" max="4" step="1" id="customRange3"
+                                <label for="customRange1" class="form-label mt-2 mb-2">Progress</label>
+                                <input type="range" class="form-range mt-2 mb-2" id="customRange1"
                                     name="update-progress">
-                                <button type=" submit" class="btn btn-success"
+                                <button type=" submit" class="btn btn-success mt-2 mb-2 "
                                     name="update-progress-btn">Update</button>
                             </form>
+                            <?php endif; ?>
                         </dd>
+                        <?php endforeach; ?>
+
+
+
                         <?php endif; ?>
+
 
                     </dl>
                 </div>

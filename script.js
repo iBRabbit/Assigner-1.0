@@ -11,10 +11,3 @@ function checkAllGroupMembersAsg () {
         for (let i = 0; i < rowCheckRadioGroupAsg.length; i++) rowCheckRadioGroupAsg[i].removeAttribute("checked");
     }
 }
-
-const prev = document.querySelectorAll('.page-item')[0]
-const a = document.querySelectorAll('.active')[1]
-console.log(a)
-if(){
-    prev.classList.add('disabled')
-}

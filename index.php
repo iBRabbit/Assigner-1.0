@@ -15,9 +15,9 @@
     $assignments = GetAllAssignmentsFromID($accountID);
     $asgIterator = 0;
 
-    $jumlahDataPerHalaman = 2;
-    $jumlahHalaman = ceil($jumlahHalaman/count($groups));
-    $halamanAktif = 1;
+    $jumlahDataPerHalaman = 1;
+    $jumlahHalaman = ceil(count($groups)/$jumlahDataPerHalaman);
+    $halamanAktif = (isset($_GET["page"])) ? $_GET["page"] : 1;
     $awalData = $jumlahDataPerHalaman * $halamanAktif - $jumlahDataPerHalaman;
     $groups = Query("SELECT * FROM groups g JOIN accounts_groups ag ON g.groupID = ag.groupID
     WHERE ag.accountID = $accountID LIMIT $awalData, $jumlahDataPerHalaman;");
@@ -195,12 +195,29 @@
                     </table>
                     <nav aria-label="Page navigation example">
                       <ul class="pagination justify-content-center">
-                        <li class="page-item"><div class="page-link">Previous</div></li>
-                        <li class="page-item active" aria-current="page"><div class="page-link">1</div></li>
-                        <li class="page-item"><div class="page-link">2</div></li>
-                        <li class="page-item"><div class="page-link">3</div></li>
-                        <li class="page-item"><div class="page-link">Next</div></li>
-                      </ul>
+                        <?php if($halamanAktif == 1):
+                            $pageAkhir = $halamanAktif+2; $pageAwal=$halamanAktif?>
+                            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                        <?php elseif($halamanAktif == $jumlahHalaman): 
+                            $pageAwal=$halamanAktif-2; $pageAkhir = $halamanAktif?>
+                            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                        <?php else: 
+                            $pageAkhir = $halamanAktif+1; $pageAwal = $halamanAktif-1;?>
+                            <li class="page-item"><a class="page-link" href="?page=<?= $halamanAktif-1;?>">Previous</a></li>
+                        <?php endif; ?>
+                        <?php for($i=$pageAwal; $i<=$pageAkhir ;$i++): ?>
+                            <?php if($i == $halamanAktif):?>
+                                <li class="page-item active" aria-current="page"><a class="page-link" href="?page=<?= $i;?>"><?= $i;?></a></li>
+                            <?php else:?>
+                                <li class="page-item"><a class="page-link" href="?page=<?= $i;?>"><?=$i?></a></li>
+                            <?php endif;?>
+                        <?php endfor; ?>
+                        <?php if($halamanAktif == $jumlahHalaman):?>
+                            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                        <?php else:?>
+                            <li class="page-item"><a class="page-link" href="?page=<?= $halamanAktif+1?>">Next</a></li>
+                        <?php endif; ?>
+                        </ul>
                     </nav>
                 </div>
                 <div class="col">

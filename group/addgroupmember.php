@@ -138,12 +138,11 @@
                         $groupname = GetGroupNameByID($groupid);
                         $inviter = GetUserFullName($accountID);
                         $posid = $_POST["member-pos"];
-               
                         
                         mysqli_query($connectionID, "INSERT INTO invites VALUES ('', '$accountID', '$userid', '$groupid')");
                         
-                        mysqli_query($connectionID, "INSERT INTO notifications VALUES ('', '$userid', 'Group Invite', '1', '0', 'You have received a group invite to group $groupname by $inviter', 'groupid=$groupid&posid=$posid')");
-                        
+                        AddNotification($userid, 1, "Group Invite", "You have received a group invite to group $groupname by $inviter", "groupid=$groupid&posid=$posid");
+
                         echo '
                         <div class="alert alert-success" role="alert">
                         Successfully invited a member.

@@ -37,7 +37,6 @@
 
 <body>
 
-
     <!-- Navbar -->
     <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
@@ -112,11 +111,14 @@
         <?php 
             if(isset($_POST["add-button"])){
                 
+                $db_name = DB_NAME;
+
                 $result = mysqli_query($connectionID, "SELECT AUTO_INCREMENT as `AI`
                 FROM information_schema.TABLES
-                WHERE TABLE_SCHEMA = \"seproject\"
+                WHERE TABLE_SCHEMA = \"$db_name\"
                 AND TABLE_NAME = \"groups\"");
                 
+                var_dump($result);
 
                 if(strlen($_POST["group-name"]) < 5){
                     echo '
@@ -128,9 +130,11 @@
                 
                     $result = mysqli_query($connectionID, "SELECT AUTO_INCREMENT as `AI`
                     FROM information_schema.TABLES
-                    WHERE TABLE_SCHEMA = \"seproject\"
+                    WHERE TABLE_SCHEMA = \"$db_name\"
                     AND TABLE_NAME = \"positions\"");
                     
+
+
                     $autoIncrementPosVal = mysqli_fetch_assoc($result);
 
                     $myQuery = 
@@ -146,7 +150,7 @@
 
                     $myQuery = 
                     "INSERT INTO `accounts_groups` (`accountID`, `groupID`, `positionID`) VALUES ('".$userdata["accountID"] . "' , '" .$autoIncrementGroupVal["AI"] .  "' , " . $autoIncrementPosVal["AI"] .");";
-                    var_dump($myQuery);
+                    
                     mysqli_query($connectionID, $myQuery);
                 
                     echo 

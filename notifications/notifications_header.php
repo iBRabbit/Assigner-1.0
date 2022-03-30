@@ -142,29 +142,26 @@
                     <?php foreach($notifications as $notif) :?>
 
                     <a href="#" class="list-group-item list-group-item-action >" aria-current="true">
-                        <?php if($notif["notificationType"] == 1) :?>
+                        
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1"><?= $notif["notificationTitle"] ?></h5>
                             <small>3 days ago</small>
                         </div>
                         <p class="mb-1"><?= $notif["notificationMessage"] ?></p>
-                        <?php if($notif["notificationOpened"] == 0) :?>
-                        <?php 
-                            // var_dump($notif["notificationValue"]);
-                            parse_str($notif["notificationValue"], $arr);
-                            $groupid = $arr["groupid"];
-                            $posid = $arr["posid"];
-                            
-                        
-                        ?>
-                        <form action="notifications_header.php" method="post">
-                            <button type="submit" class="btn btn-success" name="accept-invite-btn"
-                                value="<?= "groupid=".$groupid . "&posid=" . $posid ."&notifid=" . $notif["notificationID"]?>">Accept</button>
-                            <button type="submit" class="btn btn-outline-danger"
-                                name="decline-invite-btn">Decline</button>
-                        </form>
-
-                        <?php endif; ?>
+                        <?php if($notif["notificationType"] == 1) :?>
+                            <?php if($notif["notificationOpened"] == 0) :?>
+                                <?php 
+                                    parse_str($notif["notificationValue"], $arr);
+                                    $groupid = $arr["groupid"];
+                                    $posid = $arr["posid"];                        
+                                ?>
+                                <form action="notifications_header.php" method="post">
+                                    <button type="submit" class="btn btn-success" name="accept-invite-btn"
+                                        value="<?= "groupid=".$groupid . "&posid=" . $posid ."&notifid=" . $notif["notificationID"]?>">Accept</button>
+                                    <button type="submit" class="btn btn-outline-danger"
+                                        name="decline-invite-btn">Decline</button>
+                                </form>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </a>
                     <?php endforeach; ?>
@@ -186,13 +183,13 @@
 
                     <?php foreach($notifications as $notif) :?>
                     <a href="#" class="list-group-item list-group-item-action >" aria-current="true">
-                        <?php if($notif["notificationType"] == 1) :?>
+                        
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1"><?= $notif["notificationTitle"] ?></h5>
                             <small>3 days ago</small>
                         </div>
                         <p class="mb-1"><?= $notif["notificationMessage"] ?></p>
-                        <?php endif; ?>
+                        
                     </a>
                     <?php endforeach; ?>
                 </div>
@@ -200,6 +197,8 @@
         </div>
 
     </div>
+
+    <?php ClearNotificationsFromID($accountID); ?>
 
     <!-- End of contents -->
     <svg xmlns=" http://www.w3.org/2000/svg" viewBox="0 0 1440 320">

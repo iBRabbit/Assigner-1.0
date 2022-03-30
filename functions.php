@@ -1,6 +1,8 @@
 <?php 
 
-$connectionID = mysqli_connect("localhost","root","","seproject");
+require "constants.php";
+
+$connectionID = mysqli_connect(DB_HOSTNAME, DB_USERNAME , DB_PASSWORD, DB_NAME);
 
 if ($connectionID -> connect_errno) {
     echo "Failed to connect to MySQL: " . $connectionID -> connect_error;
@@ -174,15 +176,21 @@ function AddAssignment($members, $groupid, $title, $description, $createdOn, $de
     WHERE TABLE_SCHEMA = 'seproject'
     AND TABLE_NAME = 'assignments'");
     $asgid = $myquery[0]["AI"];
+    $groupname = GetGroupNameByID($groupid);
 
-    mysqli_query($connectionID, "INSERT INTO assignments VALUES ('', '$groupid', '$title', '$description', '$createdOn', '$deadline', '$isgroup');");
+    mysqli_query($connectionID, "INSERT INTO assignments VALUES ('', '$groupid', '$title', '$description', '$createdOn', '$deadline', '$isgroup');");    
+    
 
-    if(!$isgroup) 
+    if(!$isgroup) {
+        AddNotification($members, ASSIGNMENT_NOTIF, "New Assignment", "You have one new assignment to do at $groupname");
         return mysqli_query($connectionID, "INSERT INTO asg_member VALUES ('', '$asgid', '$members', '0')");
-    
-    
-    foreach($members as $mem) 
+    }
+
+    foreach($members as $mem) {
         mysqli_query($connectionID, "INSERT INTO asg_member VALUES ('', '$asgid', '$mem', '0')");
+        AddNotification($mem, ASSIGNMENT_NOTIF, "New Assignment", "You have one new assignment to do at $groupname");
+    }
+        
 }
 
 function RemoveAssignment($asgid) {
@@ -281,6 +289,21 @@ function IsAlreadyInvitedToGroup($userid, $groupid) {
 // -- invite Functions -- //
 
 // -- Notifications Functions -- //
+
+function AddNotification($uid, $type, $title, $message, $value = NULL) {
+    global $connectionID;
+
+    mysqli_query($connectionID, "INSERT INTO notifications VALUES ('', '$uid', '$title', '$type', '0', '$message', '$value')");
+                        
+    return;
+}
+
+function ClearNotificationsFromID($uid) {
+    global $connectionID;
+    $groupInvType = GROUPINVITE_NOTIF;
+    mysqli_query($connectionID, "UPDATE notifications SET notificationOpened = 1 WHERE accountID = $uid AND notificationType != $groupInvType");
+}
+
 function GetAllNotifsByUID($uid, $showpartial = 0, $openedonly = 0) {
     
     if(!$showpartial) 

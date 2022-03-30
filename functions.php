@@ -8,6 +8,8 @@ if ($connectionID -> connect_errno) {
     echo "Failed to connect to MySQL: " . $connectionID -> connect_error;
     exit();
 } 
+
+
 // -- SQL Functions -- //
 function StartLoginSession(){
     session_start();

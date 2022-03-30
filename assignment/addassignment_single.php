@@ -169,7 +169,7 @@
 
                 <div class="input-group mb-3">
                     <span class="input-group-text">Description</span>
-                    <textarea class="form-control" aria-label="With textarea" name="asg-details"></textarea>
+                    <textarea class="form-control" aria-label="With textarea" name="asg-details" style="white-space: pre-line"></textarea>
                 </div>
 
             </div>

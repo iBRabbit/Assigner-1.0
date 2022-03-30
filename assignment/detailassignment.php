@@ -134,7 +134,7 @@
                         <dd class="col-sm-9"><?= $asgdata["assignmentTitle"] ?></dd>
 
                         <dt class="col-sm-3">Description</dt>
-                        <dd class="col-sm-9">
+                        <dd class="col-sm-9" style="white-space: pre-line">
                             <samp><?= $asgdata["assignmentDescription"] ?></samp>
                         </dd>
 

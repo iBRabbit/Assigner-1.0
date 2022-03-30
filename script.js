@@ -15,6 +15,6 @@ function checkAllGroupMembersAsg () {
 const prev = document.querySelectorAll('.page-item')[0]
 const a = document.querySelectorAll('.active')[1]
 console.log(a)
-// if(){
+if(){
     prev.classList.add('disabled')
-// }
+}

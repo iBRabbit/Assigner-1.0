@@ -392,3 +392,10 @@ function Refresh(){
     header("Refresh:0");
 }
 // -- Helper / Validator -- //
+
+function ActiveLocation($str){
+    $curr = explode('/',$_SERVER['REQUEST_URI'])[2];
+    if($str == $curr){
+        return "active";
+    }
+}

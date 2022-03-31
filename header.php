@@ -25,17 +25,13 @@
                     </a>
 
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="<?= BASE_URL . "index.php" ?>">Home</a>
+                        <a class="nav-link <?= ActiveLocation("index.php");?>" aria-current="page" href="<?= BASE_URL . "index.php" ?>">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href = "<?= BASE_URL . "group/mygroup.php" ?>" >Groups</a>
+                        <a class="nav-link <?= ActiveLocation("group");?>" href = "<?= BASE_URL . "group/mygroup.php" ?>" >Groups</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> Inbox</a>
-                    </li>
-
-                    <li class="nav-item">
-
+                        <a class="nav-link <?= ActiveLocation("inbox");?>" href="#"> Inbox</a>
                     </li>
 
                     <li class="nav-item dropdown">

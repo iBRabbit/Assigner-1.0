@@ -76,10 +76,7 @@
                         $groupName = $_POST["group-name"];
                         $groupDesc = $_POST["group-description"];
                         mysqli_query($connectionID,"UPDATE groups SET groupName='$groupName', groupDetail='$groupDesc' WHERE groupID = $groupid");
-                        echo 
-                        '<div class="alert alert-success" role="alert" id="success-message">
-                        Successfully created a group!
-                        </div>';               
+                        Refresh();              
                     }
                 }
             ?>
@@ -120,10 +117,7 @@
                         mysqli_query($connectionID,"UPDATE positions SET positionValue=positionValue+1 WHERE groupID = $groupid AND positionValue >= $posValue;");
                         $posName = $_POST["add-position-name"];
                         mysqli_query($connectionID,"INSERT INTO positions VALUES ('','$groupid','$posName','$posValue');");
-                        echo 
-                        '<div class="alert alert-success" role="alert" id="success-message">
-                        Success Add Position
-                        </div>';
+                        Refresh();
                     }
                 }
             ?>

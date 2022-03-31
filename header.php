@@ -1,5 +1,5 @@
- <!-- Navbar -->
- <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark ">
+<!-- Navbar -->
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark ">
         <div class="container">
             <span class="navbar-brand mb-0 h1">Assigner</span>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"

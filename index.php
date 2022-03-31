@@ -194,13 +194,13 @@
                         </tbody>
                     </table>
                     <nav aria-label="Page navigation example">
-                      <ul class="pagination justify-content-center">
+                        <ul class="pagination justify-content-center">
                         <?php if($halamanAktif == 1):
                             $pageAkhir = $halamanAktif+2; $pageAwal=$halamanAktif?>
                             <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
                         <?php elseif($halamanAktif == $jumlahHalaman): 
                             $pageAwal=$halamanAktif-2; $pageAkhir = $halamanAktif?>
-                            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                            <li class="page-item"><a class="page-link" href="?page=<?= $halamanAktif-1;?>">Previous</a></li>
                         <?php else: 
                             $pageAkhir = $halamanAktif+1; $pageAwal = $halamanAktif-1;?>
                             <li class="page-item"><a class="page-link" href="?page=<?= $halamanAktif-1;?>">Previous</a></li>

@@ -87,7 +87,7 @@
                             </p>
 
                             <?php if(IsGroupOwner($accountID, $groupid)) : ?>
-                            <a href="#" class="btn btn-primary"><i class="bi bi-pencil-square"></i> │ Edit
+                            <a href="editgroup.php?groupid=<?= $groupid?>" class="btn btn-primary"><i class="bi bi-pencil-square"></i> │ Edit
                                 Group</a>
                             <?php endif; ?>
 

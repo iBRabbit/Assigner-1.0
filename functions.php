@@ -151,7 +151,7 @@ function GetGroupOwnerID($groupid){
 
 function GetAllGroupPositions($gid) {
     global $connectionID;
-    $result = mysqli_query($connectionID, "SELECT * FROM positions WHERE groupID = $gid");
+    $result = Query("SELECT * FROM positions WHERE groupID = $gid ORDER BY positionValue");
     return $result;
 }
 

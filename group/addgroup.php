@@ -57,8 +57,6 @@
                 WHERE TABLE_SCHEMA = \"$db_name\"
                 AND TABLE_NAME = \"groups\"");
                 
-                var_dump($result);
-
                 if(strlen($_POST["group-name"]) < 5){
                     echo '
                     <div class="alert alert-danger" role="alert">

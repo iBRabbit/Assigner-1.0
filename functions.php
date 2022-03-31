@@ -173,9 +173,12 @@ function GetUserPositionInGroup($userid, $groupid){
 function AddAssignment($members, $groupid, $title, $description, $createdOn, $deadline, $isgroup = false) {
 
     global $connectionID;
+
+    $db_name = DB_NAME;
+
     $myquery = Query("SELECT AUTO_INCREMENT as `AI`
     FROM information_schema.TABLES
-    WHERE TABLE_SCHEMA = 'seproject'
+    WHERE TABLE_SCHEMA = $db_name
     AND TABLE_NAME = 'assignments'");
     $asgid = $myquery[0]["AI"];
     $groupname = GetGroupNameByID($groupid);

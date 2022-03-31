@@ -166,6 +166,15 @@ function GetUserPositionInGroup($userid, $groupid){
     return $positions[0]["positionName"];
 }
 
+function RemoveGroup($groupid) {
+    global $connectionID;
+
+    mysqli_query($connectionID, "DELETE FROM accounts_groups WHERE groupID = $groupid");
+    mysqli_query($connectionID, "DELETE FROM positions WHERE groupID = $groupid");
+    mysqli_query($connectionID, "DELETE FROM assignments WHERE groupID = $groupid");
+    mysqli_query($connectionID, "DELETE FROM groups WHERE groupID = $groupid");
+}
+
 // -- Group Functions -- //
 
 // -- Assignments Functions -- //
@@ -201,9 +210,7 @@ function AddAssignment($members, $groupid, $title, $description, $createdOn, $de
 function RemoveAssignment($asgid) {
 
     global $connectionID;
-
     mysqli_query($connectionID, "DELETE FROM asg_member WHERE assignmentID = $asgid");
-
     mysqli_query($connectionID, "DELETE FROM assignments WHERE assignmentID = $asgid");
 }
 

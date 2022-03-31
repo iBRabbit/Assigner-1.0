@@ -21,7 +21,9 @@
     $awalData = $jumlahDataPerHalaman * $halamanAktif - $jumlahDataPerHalaman;
     $groups = Query("SELECT * FROM groups g JOIN accounts_groups ag ON g.groupID = ag.groupID
     WHERE ag.accountID = $accountID LIMIT $awalData, $jumlahDataPerHalaman;");
-    
+
+
+
 ?>
 
 

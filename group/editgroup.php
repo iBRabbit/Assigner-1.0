@@ -7,6 +7,7 @@
     $userdata = GetUserData($username);
     $groupid = $_GET["groupid"];
     $accountID = $userdata["accountID"];
+
     $members = GetMemberListByGroupID($groupid);
     $allPosition = GetAllGroupPositions($groupid);
     $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
@@ -62,11 +63,6 @@
         <div class="row">
             <?php 
                 if(isset($_POST["add-button"])){
-                    $db_name = DB_NAME;
-                    $result = mysqli_query($connectionID, "SELECT AUTO_INCREMENT as `AI`
-                    FROM information_schema.TABLES
-                    WHERE TABLE_SCHEMA = \"$db_name\"
-                    AND TABLE_NAME = \"groups\"");
                     if(strlen($_POST["group-name"]) < 5){
                         echo '
                         <div class="alert alert-danger" role="alert">
@@ -79,6 +75,7 @@
                         Refresh();              
                     }
                 }
+
             ?>
         </div>
 
@@ -98,7 +95,7 @@
                 <button type=" submit" class="btn btn-success" name="add-button">Edit Group</button>
             </form>
         </div>
-        
+
         <div class="row">
             <h4 class="mt-3 mb-3">Members to be assigned</h4>
         </div>
@@ -145,12 +142,49 @@
                             <?php endforeach; ?>
                         </select>
                         <label for="floatingSelectGrid">Add Position After (*)</label>
-                        </div>
                     </div>
                 </div>
-                <button button type=" submit" class="btn btn-success" name="add-pos-button">Add Position </button>
+        </div>
+        <button button type=" submit" class="btn btn-success mb" name="add-pos-button">Add Position </button>
+        </form>
+
+
+
+
+        <h4 class="mt-4 mb-4"> Danger Zone</h4>
+
+        <?php 
+            if(isset($_POST["delete-group-btn"])) {
+                $groupid = $_POST["group-id"];
+                if(GetGroupNameByID($groupid) != $_POST["confirm-delete"]) 
+                    echo '
+                    <div class="alert alert-danger" role="alert">
+                    Confirmation keyword is wrong.
+                    </div>';
+                else  {
+                    RemoveGroup($groupid);
+                    header("Location: ../index.php");
+                }
+            }
+        ?>
+
+        <div class="border border-danger rounded-3">
+
+            <form action="" method="post">
+                <h6 class="p-3">Delete Group</h6>
+
+                <div class="input-group mb-3 ps-3 pe-3">
+                    <span class="input-group-text">Confirm Delete</span>
+                    <input type="hidden" name="group-id" value=<?= $groupid?>>
+                    <input class="form-control " aria-label="With textarea" ame="group-description"
+                        name="confirm-delete" value="" placeholder="Please type this group name to delete."></input>
+                </div>
+
+                <button button type=" submit" class="btn btn-danger mb-3 ms-3 me-3" name="delete-group-btn">Delete
+                    Group</button>
             </form>
         </div>
+
     </div>
 
     <!-- End of contents -->

@@ -14,6 +14,14 @@
     
     $assignments = GetAllAssignmentsFromID($accountID);
     $asgIterator = 0;
+
+    $jumlahDataPerHalaman = 5;
+    $jumlahHalaman = ceil(count($groups)/$jumlahDataPerHalaman);
+    $halamanAktif = (isset($_GET["page"])) ? $_GET["page"] : 1;
+    $awalData = $jumlahDataPerHalaman * $halamanAktif - $jumlahDataPerHalaman;
+    $groups = Query("SELECT * FROM groups g JOIN accounts_groups ag ON g.groupID = ag.groupID
+    WHERE ag.accountID = $accountID LIMIT $awalData, $jumlahDataPerHalaman;");
+    
 ?>
 
 
@@ -120,6 +128,32 @@
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                        <?php if($halamanAktif == 1):
+                            $pageAkhir = $halamanAktif+2; $pageAwal=$halamanAktif?>
+                            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                        <?php elseif($halamanAktif == $jumlahHalaman): 
+                            $pageAwal=$halamanAktif-2; $pageAkhir = $halamanAktif?>
+                            <li class="page-item"><a class="page-link" href="?page=<?= $halamanAktif-1;?>">Previous</a></li>
+                        <?php else: 
+                            $pageAkhir = $halamanAktif+1; $pageAwal = $halamanAktif-1;?>
+                            <li class="page-item"><a class="page-link" href="?page=<?= $halamanAktif-1;?>">Previous</a></li>
+                        <?php endif; ?>
+                        <?php for($i=$pageAwal; $i<=$pageAkhir ;$i++): ?>
+                            <?php if($i == $halamanAktif):?>
+                                <li class="page-item active" aria-current="page"><a class="page-link" href="?page=<?= $i;?>"><?= $i;?></a></li>
+                            <?php else:?>
+                                <li class="page-item"><a class="page-link" href="?page=<?= $i;?>"><?=$i?></a></li>
+                            <?php endif;?>
+                        <?php endfor; ?>
+                        <?php if($halamanAktif == $jumlahHalaman):?>
+                            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                        <?php else:?>
+                            <li class="page-item"><a class="page-link" href="?page=<?= $halamanAktif+1?>">Next</a></li>
+                        <?php endif; ?>
+                        </ul>
+                    </nav>
                 </div>
                 <div class="col">
                     <h4 class="fw-bolder">Upcoming Assignments</h4>
@@ -194,6 +228,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
+
+    <script src="script.js"></script>
 
 </body>
 

@@ -14,6 +14,7 @@ define("GROUPINVITE_NOTIF", 1);
 define("ASSIGNMENT_NOTIF", 2);
 
 define("BASE_URL", "http://localhost/SEProject/");
+// define("BASE_URL", "http://assigner.rf.gd/");
 
 ?>
 

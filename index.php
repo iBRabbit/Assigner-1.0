@@ -8,13 +8,12 @@
     $accountID = $userdata["accountID"];
     
     $groups = GetGroupDataByUID($accountID);
-    $groupIterator = 0;
     
     $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
     
     $assignments = GetAllAssignmentsFromID($accountID);
     $asgIterator = 0;
-
+    
     $jumlahDataPerHalaman = 5;
     $jumlahHalaman = ceil(count($groups)/$jumlahDataPerHalaman);
     $halamanAktif = (isset($_GET["page"])) ? $_GET["page"] : 1;
@@ -22,6 +21,7 @@
     $groups = Query("SELECT * FROM groups g JOIN accounts_groups ag ON g.groupID = ag.groupID
     WHERE ag.accountID = $accountID LIMIT $awalData, $jumlahDataPerHalaman;");
     
+    $groupIterator = $halamanAktif-1;
 ?>
 
 

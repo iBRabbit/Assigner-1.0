@@ -81,7 +81,6 @@ function GetGroupDataByUID($uid){
     ON g.groupID = ag.groupID
     WHERE ag.accountID = $uid
     ");
-
     return $groups;
     
 }

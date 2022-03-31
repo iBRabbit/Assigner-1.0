@@ -124,7 +124,7 @@
             <form action="" method="post">
                 <div class="col-md">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="floatingInputGrid" placeholder="Add Position Name"
+                        <input type="text" class="form-control mb-3 mt-3" id="floatingInputGrid" placeholder="Add Position Name"
                             name="add-position-name" required>
                         <label for="floatingInputGrid">Add Position Name (*)</label>
                     </div>
@@ -144,13 +144,11 @@
                         <label for="floatingSelectGrid">Add Position After (*)</label>
                     </div>
                 </div>
+            </form>
         </div>
         <button button type=" submit" class="btn btn-success mb" name="add-pos-button">Add Position </button>
-        </form>
-
-
-
-
+       
+    
         <h4 class="mt-4 mb-4"> Danger Zone</h4>
 
         <?php 

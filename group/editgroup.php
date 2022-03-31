@@ -75,7 +75,7 @@
                     } else {
                         $groupName = $_POST["group-name"];
                         $groupDesc = $_POST["group-description"];
-                        mysqli_query($connectionID,"UPDATE groups SET groupName=$groupName, groupDetail=$groupDesc WHERE groupID = $groupid");
+                        mysqli_query($connectionID,"UPDATE groups SET groupName='$groupName', groupDetail='$groupDesc' WHERE groupID = $groupid");
                         echo 
                         '<div class="alert alert-success" role="alert" id="success-message">
                         Successfully created a group!

@@ -15,7 +15,7 @@
     $assignments = GetAllAssignmentsFromID($accountID);
     $asgIterator = 0;
 
-    $jumlahDataPerHalaman = 1;
+    $jumlahDataPerHalaman = 5;
     $jumlahHalaman = ceil(count($groups)/$jumlahDataPerHalaman);
     $halamanAktif = (isset($_GET["page"])) ? $_GET["page"] : 1;
     $awalData = $jumlahDataPerHalaman * $halamanAktif - $jumlahDataPerHalaman;

@@ -24,7 +24,20 @@
         Refresh();  
     }
     
-    $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);      
+    $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);  
+    
+    $jumlahDataPerHalaman = 1;
+    $jumlahHalamanAsg = ceil(count($assignments)/$jumlahDataPerHalaman);
+    $halamanAktifAsg = (isset($_GET["pageAsg"])) ? $_GET["pageAsg"] : 1;
+    $awalDataAsg = $jumlahDataPerHalaman * $halamanAktifAsg - $jumlahDataPerHalaman;
+    $assignments = Query("SELECT * FROM assignments asg JOIN asg_member am ON am.assignmentID = asg.assignmentID
+    WHERE am.asgMemberAccountID = $accountID ORDER BY am.asgMemberProgress ASC, asg.assignmentDeadline ASC LIMIT $awalDataAsg, $jumlahDataPerHalaman;");
+
+    $jumlahHalamanMember = ceil(count($memberList)/$jumlahDataPerHalaman);
+    $halamanAktifMember = (isset($_GET["pageMember"])) ? $_GET["pageMember"] : 1;
+    $awalDataMember = $jumlahDataPerHalaman * $halamanAktifMember - $jumlahDataPerHalaman;
+    $memberList = Query("SELECT * FROM accounts_groups ag JOIN accounts ac ON ac.accountID = ag.accountID JOIN positions pos ON pos.positionID = ag.positionID
+    WHERE ag.groupID = $groupid LIMIT $awalDataMember, $jumlahDataPerHalaman;");
 ?>
 
 
@@ -157,7 +170,7 @@
                                 $members = GetAssignmentMembers($asg["assignmentID"], $asg["assignmentIsGroup"]);
                             ?>
                             <tr>
-                                <td><?= $i ?></td>
+                                <td><?= $i+$awalDataAsg ?></td>
                                 <td><?= $asg["assignmentTitle"]; ?></td>
                                 <?php if($asg["assignmentIsGroup"]) ?>
                                 <td>
@@ -225,6 +238,34 @@
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                        <?php if($jumlahHalamanAsg == 0):;
+                        else: ?>
+                            <?php if($halamanAktifAsg == 1):
+                                $pageAkhir = $halamanAktifAsg+2; $pageAwal=$halamanAktifAsg?>
+                                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                            <?php else:
+                                if($halamanAktifAsg == $jumlahHalamanAsg){ $pageAwal=$halamanAktifAsg-2; $pageAkhir = $halamanAktifAsg;}
+                                else{ $pageAwal = $halamanAktifAsg-1; $pageAkhir = $halamanAktifAsg+1;}?>
+                                <li class="page-item"><a class="page-link" href="?pageAsg=<?= $halamanAktifAsg-1;?>&pageMember=<?= $halamanAktifMember; ?>&groupid=<?= $groupid;?>">Previous</a></li>
+                            <?php endif; ?>
+                            <?php if($jumlahHalamanAsg == 1 || $jumlahHalamanAsg == 2){$pageAwal = 1;$pageAkhir = $jumlahHalamanAsg;}?>
+                            <?php for($i=$pageAwal; $i<=$pageAkhir ;$i++): ?>
+                                <?php if($i == $halamanAktifAsg):?>
+                                    <li class="page-item active" aria-current="page"><a class="page-link" href="?pageAsg=<?= $i;?>&pageMember=<?= $halamanAktifMember; ?>&groupid=<?= $groupid;?>"><?= $i;?></a></li>
+                                <?php else:?>
+                                    <li class="page-item"><a class="page-link" href="?pageAsg=<?= $i;?>&pageMember=<?= $halamanAktifMember; ?>&groupid=<?= $groupid;?>"><?=$i?></a></li>
+                                <?php endif;?>
+                            <?php endfor; ?>
+                            <?php if($halamanAktifAsg == $jumlahHalamanAsg):?>
+                                <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                            <?php else:?>
+                                <li class="page-item"><a class="page-link" href="?pageAsg=<?= $halamanAktifAsg+1?>&pageMember=<?= $halamanAktifMember; ?>&groupid=<?= $groupid;?>">Next</a></li>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        </ul>
+                    </nav>
                 </div>
                 <div class=" col">
                     <table class="table align-middle">
@@ -264,7 +305,7 @@
                             <?php $i=1?>
                             <?php foreach($memberList as $member):?>
                             <tr>
-                                <th scope="row"><?= $i;?></th>
+                                <th scope="row"><?= $i+$awalDataMember;?></th>
                                 <td><?= $member["firstname"] . " " . $member["lastname"];?>
                                 </td>
                                 <td>@<?= $member["username"];?></td>
@@ -286,6 +327,34 @@
                             <?php endforeach;?>
                         </tbody>
                     </table>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                        <?php if($jumlahHalamanMember == 0):;
+                        else: ?>
+                            <?php if($halamanAktifMember == 1):
+                                $pageAkhir = $halamanAktifMember+2; $pageAwal=$halamanAktifMember?>
+                                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                            <?php else:
+                                if($halamanAktifMember == $jumlahHalamanMember){ $pageAwal=$halamanAktifMember-2; $pageAkhir = $halamanAktifMember;}
+                                else{ $pageAwal = $halamanAktifMember-1; $pageAkhir = $halamanAktifMember+1;}?>
+                                <li class="page-item"><a class="page-link" href="?pageAsg=<?= $halamanAktifAsg; ?>&pageMember=<?= $halamanAktifMember-1;?>&groupid=<?= $groupid;?>">Previous</a></li>
+                            <?php endif; ?>
+                            <?php if($jumlahHalamanMember == 1 || $jumlahHalamanMember == 2){$pageAwal = 1;$pageAkhir = $jumlahHalamanMember;}?>
+                            <?php for($i=$pageAwal; $i<=$pageAkhir ;$i++): ?>
+                                <?php if($i == $halamanAktifMember):?>
+                                    <li class="page-item active" aria-current="page"><a class="page-link" href="?pageAsg=<?= $halamanAktifAsg; ?>&pageMember=<?= $i;?>&groupid=<?= $groupid;?>"><?= $i;?></a></li>
+                                <?php else:?>
+                                    <li class="page-item"><a class="page-link" href="?pageAsg=<?= $halamanAktifAsg; ?>&pageMember=<?= $i;?>&groupid=<?= $groupid;?>"><?=$i?></a></li>
+                                <?php endif;?>
+                            <?php endfor; ?>
+                            <?php if($halamanAktifMember == $jumlahHalamanMember):?>
+                                <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                            <?php else:?>
+                                <li class="page-item"><a class="page-link" href="?pageAsg=<?= $halamanAktifAsg; ?>&pageMember=<?= $halamanAktifMember+1?>&groupid=<?= $groupid;?>">Next</a></li>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        </ul>
+                    </nav>
                 </div>
             </div>
 

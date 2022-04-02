@@ -15,7 +15,7 @@ $groups = Query(
 
 $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
     
-$jumlahDataPerHalaman = 1;
+$jumlahDataPerHalaman = 5;
 $jumlahHalamanGroup = ceil(count($groups)/$jumlahDataPerHalaman);
 $halamanAktifGroup = (isset($_GET["pageGroup"])) ? $_GET["pageGroup"] : 1;
 $awalDataGroup = $jumlahDataPerHalaman * $halamanAktifGroup - $jumlahDataPerHalaman;

@@ -6,7 +6,7 @@ StartLoginSession();
 $username = $_SESSION["username"];
 $userdata = GetUserData($username);
 $accountID = $userdata["accountID"];
-$rows = Query(
+$groups = Query(
     "SELECT g.groupName, g.groupID
     FROM groups g
     JOIN accounts_groups ag
@@ -15,6 +15,12 @@ $rows = Query(
 
 $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
     
+$jumlahDataPerHalaman = 1;
+$jumlahHalamanGroup = ceil(count($groups)/$jumlahDataPerHalaman);
+$halamanAktifGroup = (isset($_GET["pageGroup"])) ? $_GET["pageGroup"] : 1;
+$awalDataGroup = $jumlahDataPerHalaman * $halamanAktifGroup - $jumlahDataPerHalaman;
+$groups = Query("SELECT * FROM groups g JOIN accounts_groups ag ON g.groupID = ag.groupID
+WHERE ag.accountID = $accountID LIMIT $awalDataGroup, $jumlahDataPerHalaman;");
 ?>
 
 
@@ -76,10 +82,10 @@ $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
                         </thead>
                         <tbody>
                             <?php $iterator = 0; ?>
-                            <?php foreach ($rows as $row) : ?>
+                            <?php foreach ($groups as $row) : ?>
                             <?php $iterator++; ?>
                             <tr>
-                                <th scope="row"> <?= $iterator ?> </th>
+                                <th scope="row"> <?= $iterator+$awalDataGroup ?> </th>
                                 <td><?= $row["groupName"] ?></td>
                                 <?php 
                                     $groupid = $row["groupID"];
@@ -113,6 +119,34 @@ $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                        <?php if($jumlahHalamanGroup == 0):;
+                        else: ?>
+                            <?php if($halamanAktifGroup == 1):
+                                $pageAkhir = $halamanAktifGroup+2; $pageAwal=$halamanAktifGroup?>
+                                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                            <?php else:
+                                if($halamanAktifGroup == $jumlahHalamanGroup){ $pageAwal=$halamanAktifGroup-2; $pageAkhir = $halamanAktifGroup;}
+                                else{ $pageAwal = $halamanAktifGroup-1; $pageAkhir = $halamanAktifGroup+1;}?>
+                                <li class="page-item"><a class="page-link" href="?pageGroup=<?= $halamanAktifGroup-1;?>">Previous</a></li>
+                            <?php endif; ?>
+                            <?php if($jumlahHalamanGroup == 1 || $jumlahHalamanGroup == 2){$pageAwal = 1;$pageAkhir = $jumlahHalamanGroup;}?>
+                            <?php for($i=$pageAwal; $i<=$pageAkhir ;$i++): ?>
+                                <?php if($i == $halamanAktifGroup):?>
+                                    <li class="page-item active" aria-current="page"><a class="page-link" href="?pageGroup=<?= $i;?>"><?= $i;?></a></li>
+                                <?php else:?>
+                                    <li class="page-item"><a class="page-link" href="?pageGroup=<?= $i;?>"><?=$i?></a></li>
+                                <?php endif;?>
+                            <?php endfor; ?>
+                            <?php if($halamanAktifGroup == $jumlahHalamanGroup):?>
+                                <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                            <?php else:?>
+                                <li class="page-item"><a class="page-link" href="?pageGroup=<?= $halamanAktifGroup+1?>">Next</a></li>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>

@@ -15,7 +15,7 @@
     $assignments = GetAllAssignmentsFromID($accountID);
     $asgIterator = 0;
 
-    $jumlahDataPerHalaman = 5;
+    $jumlahDataPerHalaman = 1;
     $jumlahHalaman = ceil(count($groups)/$jumlahDataPerHalaman);
     $halamanAktif = (isset($_GET["page"])) ? $_GET["page"] : 1;
     $awalData = $jumlahDataPerHalaman * $halamanAktif - $jumlahDataPerHalaman;
@@ -113,7 +113,7 @@
 
                             <tr>
                                 <?php $groupid = $groupData["groupID"]; ?>
-                                <th scope="row"><?= $groupIterator ?></th>
+                                <th scope="row"><?= $groupIterator+$awalData ?></th>
                                 <td scope="row"><?= $groupData["groupName"]; ?></td>
                                 <td scope="row"><?= $groupMembers?></td>
                                 <td scope="row"><?= $positions[0]["positionName"] ?></td>
@@ -132,27 +132,29 @@
                     </table>
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center">
-                        <?php if($halamanAktif == 1):
-                            $pageAkhir = $halamanAktif+2; $pageAwal=$halamanAktif?>
-                            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                        <?php elseif($halamanAktif == $jumlahHalaman): 
-                            $pageAwal=$halamanAktif-2; $pageAkhir = $halamanAktif?>
-                            <li class="page-item"><a class="page-link" href="?page=<?= $halamanAktif-1;?>">Previous</a></li>
-                        <?php else: 
-                            $pageAkhir = $halamanAktif+1; $pageAwal = $halamanAktif-1;?>
-                            <li class="page-item"><a class="page-link" href="?page=<?= $halamanAktif-1;?>">Previous</a></li>
-                        <?php endif; ?>
-                        <?php for($i=$pageAwal; $i<=$pageAkhir ;$i++): ?>
-                            <?php if($i == $halamanAktif):?>
-                                <li class="page-item active" aria-current="page"><a class="page-link" href="?page=<?= $i;?>"><?= $i;?></a></li>
+                        <?php if($jumlahHalaman == 0):;
+                        else: ?>
+                            <?php if($halamanAktif == 1):
+                                $pageAkhir = $halamanAktif+2; $pageAwal=$halamanAktif?>
+                                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                            <?php else:
+                                if($halamanAktif == $jumlahHalaman){ $pageAwal=$halamanAktif-2; $pageAkhir = $halamanAktif;}
+                                else{ $pageAwal = $halamanAktif-1; $pageAkhir = $halamanAktif+1;}?>
+                                <li class="page-item"><a class="page-link" href="?page=<?= $halamanAktif-1;?>">Previous</a></li>
+                            <?php endif; ?>
+                            <?php if($jumlahHalaman == 1 || $jumlahHalaman == 2){$pageAkhir = $jumlahHalaman;}?>
+                            <?php for($i=$pageAwal; $i<=$pageAkhir ;$i++): ?>
+                                <?php if($i == $halamanAktif):?>
+                                    <li class="page-item active" aria-current="page"><a class="page-link" href="?page=<?= $i;?>"><?= $i;?></a></li>
+                                <?php else:?>
+                                    <li class="page-item"><a class="page-link" href="?page=<?= $i;?>"><?=$i?></a></li>
+                                <?php endif;?>
+                            <?php endfor; ?>
+                            <?php if($halamanAktif == $jumlahHalaman):?>
+                                <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
                             <?php else:?>
-                                <li class="page-item"><a class="page-link" href="?page=<?= $i;?>"><?=$i?></a></li>
-                            <?php endif;?>
-                        <?php endfor; ?>
-                        <?php if($halamanAktif == $jumlahHalaman):?>
-                            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-                        <?php else:?>
-                            <li class="page-item"><a class="page-link" href="?page=<?= $halamanAktif+1?>">Next</a></li>
+                                <li class="page-item"><a class="page-link" href="?page=<?= $halamanAktif+1?>">Next</a></li>
+                            <?php endif; ?>
                         <?php endif; ?>
                         </ul>
                     </nav>

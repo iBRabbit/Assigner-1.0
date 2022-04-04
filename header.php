@@ -41,7 +41,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
 
-                            <li><a class="dropdown-item" href="#">My Profile</a></li>
+                            <li><a class="dropdown-item" href= "<?= BASE_URL . "profile/myprofile.php" ?>">My Profile</a></li>
                             <li>
                                 <a class="dropdown-item " href="#">
                                     <form action="<?= BASE_URL . "logout.php"?>" class="margin-right:5rem" ethod=" post">

@@ -186,14 +186,13 @@ function AddAssignment($members, $groupid, $title, $description, $createdOn, $de
 
     $myquery = Query("SELECT AUTO_INCREMENT as `AI`
     FROM information_schema.TABLES
-    WHERE TABLE_SCHEMA = $db_name
+    WHERE TABLE_SCHEMA = \"$db_name\"
     AND TABLE_NAME = 'assignments'");
     $asgid = $myquery[0]["AI"];
     $groupname = GetGroupNameByID($groupid);
 
     mysqli_query($connectionID, "INSERT INTO assignments VALUES ('', '$groupid', '$title', '$description', '$createdOn', '$deadline', '$isgroup');");    
     
-
     if(!$isgroup) {
         AddNotification($members, ASSIGNMENT_NOTIF, "New Assignment", "You have one new assignment to do at $groupname");
         return mysqli_query($connectionID, "INSERT INTO asg_member VALUES ('', '$asgid', '$members', '0')");

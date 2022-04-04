@@ -69,8 +69,7 @@
                     FROM information_schema.TABLES
                     WHERE TABLE_SCHEMA = \"$db_name\"
                     AND TABLE_NAME = \"positions\"");
-
-
+                    
                     $autoIncrementPosVal = mysqli_fetch_assoc($result);
 
                     $myQuery = 

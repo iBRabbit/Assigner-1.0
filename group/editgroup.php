@@ -72,7 +72,7 @@
                         $groupName = $_POST["group-name"];
                         $groupDesc = $_POST["group-description"];
                         mysqli_query($connectionID,"UPDATE groups SET groupName='$groupName', groupDetail='$groupDesc' WHERE groupID = $groupid");
-                        Refresh();              
+                        header("Location : ../../index.php");
                     }
                 }
 

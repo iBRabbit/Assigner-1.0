@@ -118,6 +118,34 @@
                     </a>
                     <?php endforeach; ?>
                 </div>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                    <?php if($jumlahHalamanNew == 0):;
+                    else: ?>
+                        <?php if($halamanAktifNew == 1):
+                            $pageAkhir = $halamanAktifNew+2; $pageAwal=$halamanAktifNew?>
+                            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                        <?php else:
+                            if($halamanAktifNew == $jumlahHalamanNew){ $pageAwal=$halamanAktifNew-2; $pageAkhir = $halamanAktifNew;}
+                            else{ $pageAwal = $halamanAktifNew-1; $pageAkhir = $halamanAktifNew+1;}?>
+                            <li class="page-item"><a class="page-link" href="?pageNew=<?= $halamanAktifNew-1;?>&pagePass=<?= $halamanAktifPass;?>">Previous</a></li>
+                        <?php endif; ?>
+                        <?php if($jumlahHalamanNew == 1 || $jumlahHalamanNew == 2){$pageAwal = 1;$pageAkhir = $jumlahHalamanNew;}?>
+                        <?php for($i=$pageAwal; $i<=$pageAkhir ;$i++): ?>
+                            <?php if($i == $halamanAktifNew):?>
+                                <li class="page-item active" aria-current="page"><a class="page-link" href="?pageNew=<?= $i;?>&pagePass=<?= $halamanAktifPass;?>"><?= $i;?></a></li>
+                            <?php else:?>
+                                <li class="page-item"><a class="page-link" href="?pageNew=<?= $i;?>&pagePass=<?= $halamanAktifPass;?>"><?=$i?></a></li>
+                            <?php endif;?>
+                        <?php endfor; ?>
+                        <?php if($halamanAktifNew == $jumlahHalamanNew):?>
+                            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                        <?php else:?>
+                            <li class="page-item"><a class="page-link" href="?pageNew=<?= $halamanAktifNew+1?>&pagePass=<?= $halamanAktifPass;?>">Next</a></li>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                    </ul>
+                </nav>
             </div>
         </div>
 
@@ -141,6 +169,34 @@
                     </a>
                     <?php endforeach; ?>
                 </div>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                    <?php if($jumlahHalamanPass == 0):;
+                    else: ?>
+                        <?php if($halamanAktifPass == 1):
+                            $pageAkhir = $halamanAktifPass+2; $pageAwal=$halamanAktifPass?>
+                            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                        <?php else:
+                            if($halamanAktifPass == $jumlahHalamanPass){ $pageAwal=$halamanAktifPass-2; $pageAkhir = $halamanAktifPass;}
+                            else{ $pageAwal = $halamanAktifPass-1; $pageAkhir = $halamanAktifPass+1;}?>
+                            <li class="page-item"><a class="page-link" href="?pageNew=<?= $halamanAktifNew;?>&pagePass=<?= $halamanAktifPass-1;?>">Previous</a></li>
+                        <?php endif; ?>
+                        <?php if($jumlahHalamanPass == 1 || $jumlahHalamanPass == 2){$pageAwal = 1;$pageAkhir = $jumlahHalamanPass;}?>
+                        <?php for($i=$pageAwal; $i<=$pageAkhir ;$i++): ?>
+                            <?php if($i == $halamanAktifPass):?>
+                                <li class="page-item active" aria-current="page"><a class="page-link" href="?pageNew=<?= $halamanAktifNew;?>&pagePass=<?= $i;?>"><?= $i;?></a></li>
+                            <?php else:?>
+                                <li class="page-item"><a class="page-link" href="?pageNew=<?= $halamanAktifNew;?>&pagePass=<?= $i;?>"><?=$i?></a></li>
+                            <?php endif;?>
+                        <?php endfor; ?>
+                        <?php if($halamanAktifPass == $jumlahHalamanPass):?>
+                            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                        <?php else:?>
+                            <li class="page-item"><a class="page-link" href="?pageNew=<?= $halamanAktifNew;?>&pagePass=<?= $halamanAktifPass+1?>">Next</a></li>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                    </ul>
+                </nav>
             </div>
         </div>
 

@@ -26,7 +26,7 @@
     
     $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);  
     
-    $jumlahDataPerHalaman = 1;
+    $jumlahDataPerHalaman = 5;
     $jumlahHalamanAsg = ceil(count($assignments)/$jumlahDataPerHalaman);
     $halamanAktifAsg = (isset($_GET["pageAsg"])) ? $_GET["pageAsg"] : 1;
     $awalDataAsg = $jumlahDataPerHalaman * $halamanAktifAsg - $jumlahDataPerHalaman;

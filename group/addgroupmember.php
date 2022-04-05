@@ -12,6 +12,8 @@
     $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
     
     $positions = GetAllGroupPositions($groupid);
+    unset($positions[0]);
+    var_dump($positions);
 
 ?>
 

@@ -74,7 +74,7 @@
                             mysqli_query($connectionID, "DELETE FROM invites WHERE accountID = $accountID AND inviteGroupID = $groupid");
                             
                             mysqli_query($connectionID, "UPDATE notifications SET notificationOpened = 1 WHERE notificationID = $notifid");
-                            Refresh();
+                            // Refresh();
                     }
                             
                     

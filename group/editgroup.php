@@ -18,8 +18,18 @@
         "SELECT *
         FROM groups
         WHERE groupID = '$groupid'");
-        $rows = $rows[0];
+    $rows = $rows[0];
     
+    if(isset($_POST["add-button"])){
+        if(strlen($_POST["group-name"]) >= 5) {
+            $groupName = $_POST["group-name"];
+            $groupDesc = $_POST["group-description"];
+            mysqli_query($connectionID,"UPDATE groups SET groupName='$groupName', groupDetail='$groupDesc' WHERE groupID = $groupid");
+            header("Location: ../index.php");
+            exit;
+        }
+    }
+
     if(isset($_POST["delete-group-btn"])){
         if(GetGroupNameByID($groupid) == $_POST["confirm-delete"]){
             RemoveGroup($groupid);
@@ -74,11 +84,6 @@
                         <div class="alert alert-danger" role="alert">
                         Your group name is less than 5 characters.
                         </div>';
-                    } else {
-                        $groupName = $_POST["group-name"];
-                        $groupDesc = $_POST["group-description"];
-                        mysqli_query($connectionID,"UPDATE groups SET groupName='$groupName', groupDetail='$groupDesc' WHERE groupID = $groupid");
-                        header("Location : ../../index.php");
                     }
                 }
 
@@ -98,7 +103,7 @@
                     <input class="form-control" aria-label="With textarea" ame="group-description"
                         name="group-description" value="<?= $rows["groupDetail"] ?>"></input>
                 </div>
-                <button type=" submit" class="btn btn-success" name="add-button">Edit Group</button>
+                <button type="submit" class="btn btn-success" name="add-button">Edit Group</button>
             </form>
         </div>
 
@@ -152,7 +157,7 @@
                 </div>
             </form>
         </div>
-        <button button type=" submit" class="btn btn-success mb" name="add-pos-button">Add Position </button>
+        <button button type="submit" class="btn btn-success mb" name="add-pos-button">Add Position </button>
         
     
         <h4 class="mt-4 mb-4"> Danger Zone</h4>

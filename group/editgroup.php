@@ -20,7 +20,13 @@
         WHERE groupID = '$groupid'");
         $rows = $rows[0];
     
-    
+    if(isset($_POST["delete-group-btn"])){
+        if(GetGroupNameByID($groupid) == $_POST["confirm-delete"]){
+            RemoveGroup($groupid);
+            header("Location: ../index.php");
+            exit;
+        }
+    }
 ?>
 
 <!doctype html>
@@ -147,7 +153,7 @@
             </form>
         </div>
         <button button type=" submit" class="btn btn-success mb" name="add-pos-button">Add Position </button>
-       
+        
     
         <h4 class="mt-4 mb-4"> Danger Zone</h4>
 
@@ -159,10 +165,6 @@
                     <div class="alert alert-danger" role="alert">
                     Confirmation keyword is wrong.
                     </div>';
-                else  {
-                    RemoveGroup($groupid);
-                    header("Location: ../index.php");
-                }
             }
         ?>
 
@@ -178,7 +180,7 @@
                         name="confirm-delete" value="" placeholder="Please type this group name to delete."></input>
                 </div>
 
-                <button button type=" submit" class="btn btn-danger mb-3 ms-3 me-3" name="delete-group-btn">Delete
+                <button button type="submit" class="btn btn-danger mb-3 ms-3 me-3" name="delete-group-btn">Delete
                     Group</button>
             </form>
         </div>

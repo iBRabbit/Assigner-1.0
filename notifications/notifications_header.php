@@ -9,6 +9,21 @@
 
     $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
 
+    $jumlahDataPerHalaman = 5;
+    $newNotif = GetAllNotifsByUID($accountID, true);
+    $jumlahHalamanNew = ceil(count($newNotif)/$jumlahDataPerHalaman);
+    $halamanAktifNew = (isset($_GET["pageNew"])) ? $_GET["pageNew"] : 1;
+    $awalDataNew = $jumlahDataPerHalaman * $halamanAktifNew - $jumlahDataPerHalaman;
+    $newNotif = Query("SELECT * FROM notifications 
+    WHERE accountID = $accountID AND notificationOpened = 0 LIMIT $awalDataNew, $jumlahDataPerHalaman;");
+
+    $passNotif = GetAllNotifsByUID($accountID, true, true);
+    $jumlahHalamanPass = ceil(count($passNotif)/$jumlahDataPerHalaman);
+    $halamanAktifPass = (isset($_GET["pagePass"])) ? $_GET["pagePass"] : 1;
+    $awalDataPass = $jumlahDataPerHalaman * $halamanAktifPass - $jumlahDataPerHalaman;
+    $passNotif = Query("SELECT * FROM notifications
+    WHERE accountID = $accountID AND notificationOpened = 1 LIMIT $awalDataPass, $jumlahDataPerHalaman;");
+
 ?>
 
 
@@ -76,11 +91,7 @@
             <div class="col">
                 <div class="list-group">
 
-                    <?php 
-                        $notifications = GetAllNotifsByUID($accountID, true);
-                    ?>
-
-                    <?php foreach($notifications as $notif) :?>
+                    <?php foreach($newNotif as $notif) :?>
 
                     <a href="#" class="list-group-item list-group-item-action >" aria-current="true">
                         
@@ -118,11 +129,7 @@
             <div class="col">
                 <div class="list-group">
 
-                    <?php 
-                        $notifications = GetAllNotifsByUID($accountID, true, true);
-                    ?>
-
-                    <?php foreach($notifications as $notif) :?>
+                    <?php foreach($passNotif as $notif) :?>
                     <a href="#" class="list-group-item list-group-item-action >" aria-current="true">
                         
                         <div class="d-flex w-100 justify-content-between">

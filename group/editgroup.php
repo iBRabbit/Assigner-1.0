@@ -30,6 +30,16 @@
         }
     }
 
+    if(isset($_POST["add-pos-button"])){
+        if($_POST["add-position"] != -1) {
+            $posValue = $_POST["add-position"]+1;
+            mysqli_query($connectionID,"UPDATE positions SET positionValue=positionValue+1 WHERE groupID = $groupid AND positionValue >= $posValue;");
+            $posName = $_POST["add-position-name"];
+            mysqli_query($connectionID,"INSERT INTO positions VALUES ('','$groupid','$posName','$posValue');");
+            Refresh();
+        }
+    }
+
     if(isset($_POST["delete-group-btn"])){
         if(GetGroupNameByID($groupid) == $_POST["confirm-delete"]){
             RemoveGroup($groupid);
@@ -120,13 +130,6 @@
                         Please pick position after
                         </div>';
                     }
-                    else {
-                        $posValue = $_POST["add-position"]+1;
-                        mysqli_query($connectionID,"UPDATE positions SET positionValue=positionValue+1 WHERE groupID = $groupid AND positionValue >= $posValue;");
-                        $posName = $_POST["add-position-name"];
-                        mysqli_query($connectionID,"INSERT INTO positions VALUES ('','$groupid','$posName','$posValue');");
-                        Refresh();
-                    }
                 }
             ?>
         </div>
@@ -140,7 +143,7 @@
                         <label for="floatingInputGrid">Add Position Name (*)</label>
                     </div>
                 </div>
-                <div class="col-md">
+                <div class="col-md mb-3">
                     <div class="form-floating">
                         <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example"
                             name="add-position">
@@ -155,9 +158,9 @@
                         <label for="floatingSelectGrid">Add Position After (*)</label>
                     </div>
                 </div>
+                <button button type="submit" class="btn btn-success mb" name="add-pos-button">Add Position </button>
             </form>
         </div>
-        <button button type="submit" class="btn btn-success mb" name="add-pos-button">Add Position </button>
         
     
         <h4 class="mt-4 mb-4"> Danger Zone</h4>

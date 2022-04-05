@@ -9,6 +9,10 @@
 
     $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
 
+    if(isset($_POST["accept-invite-btn"])) {
+        Refresh();
+    }
+
     $jumlahDataPerHalaman = 5;
     $newNotif = GetAllNotifsByUID($accountID, true);
     $jumlahHalamanNew = ceil(count($newNotif)/$jumlahDataPerHalaman);
@@ -65,19 +69,15 @@
                 <?php  
                     if(isset($_POST["accept-invite-btn"])) {
                         parse_str($_POST["accept-invite-btn"], $arr);
-                            $groupid = $arr["groupid"];
-                            $posid = $arr["posid"];
-                            $notifid = $arr["notifid"];
-                            
-                            mysqli_query($connectionID, "INSERT INTO accounts_groups VALUES ('$accountID', '$groupid', '$posid')");
-
-                            mysqli_query($connectionID, "DELETE FROM invites WHERE accountID = $accountID AND inviteGroupID = $groupid");
-                            
-                            mysqli_query($connectionID, "UPDATE notifications SET notificationOpened = 1 WHERE notificationID = $notifid");
-                            // Refresh();
+                        $groupid = $arr["groupid"];
+                        $posid = $arr["posid"];
+                        $notifid = $arr["notifid"];
+                        
+                        mysqli_query($connectionID, "INSERT INTO accounts_groups VALUES ('$accountID', '$groupid', '$posid')");
+                        mysqli_query($connectionID, "DELETE FROM invites WHERE accountID = $accountID AND inviteGroupID = $groupid");
+                        
+                        mysqli_query($connectionID, "UPDATE notifications SET notificationOpened = 1 WHERE notificationID = $notifid");
                     }
-                            
-                    
                 ?>
 
                 <div class="row">

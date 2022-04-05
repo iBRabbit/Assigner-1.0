@@ -23,6 +23,12 @@
         RemoveAssignment($asgID);
         Refresh();  
     }
+
+    if(isset($_POST["delete-member-btn"])){
+        $memberID = $_POST["delete-member-btn"];
+        mysqli_query($connectionID, "DELETE FROM accounts_groups WHERE positionID = $memberID");
+        Refresh();
+    }
     
     $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);  
     
@@ -225,7 +231,6 @@
                                             </button>
                                         </a>
                                         <?php endif; ?>
-
                                         <?php if(IsGroupOwner($accountID, $groupid)): ?>
                                         <form action="group.php?groupid=<?= $groupid?>" method="post"><button class="btn btn-danger" type="submit"
                                                 name="delete-asg-btn" value="<?=$asgRowID?>"><i
@@ -312,14 +317,16 @@
                                 <td><?= $member["positionName"];?></td>
                                 <td>
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                        <button class="btn btn-primary" type="button"><i
-                                                class="bi bi-eye-fill"></i></button>
-
-                                        <?php if(IsGroupOwner($accountID, $groupid)) :?>
-                                        <button class="btn btn-danger" type="button"><i class="bi
-                                                bi-trash3-fill"></i></button>
+                                        <a href="../profile/myprofile.php?groupid=<?=$groupid?>&memberid=<?=$member["accountID"];?>">
+                                            <button class="btn btn-primary" type="button" name="member-detail-btn"><i
+                                            class="bi bi-eye-fill"></i></button>
+                                        </a>
+                                        <?php if(IsGroupOwner($accountID, $groupid)): ?>
+                                            <form action="group.php?groupid=<?= $groupid?>" method="post">
+                                                    <button class="btn btn-danger" type="submit" name="delete-member-btn" value="<?=$member["positionID"];?>"><i class="bi
+                                                    bi-trash3-fill"></i></button>
+                                            </form>
                                         <?php endif; ?>
-
                                     </div>
                                 </td>
                             </tr>

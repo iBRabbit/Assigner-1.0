@@ -9,7 +9,7 @@
 
     $unopenedNotifsSize = GetUnopenedNotifsSize($accountID);
 
-    if(isset($_POST["accept-invite-btn"])) {
+    if(isset($_POST["accept-invite-btn"]) || isset($_POST["decline-invite-btn"])) {
         Refresh();
     }
 
@@ -78,6 +78,13 @@
                         
                         mysqli_query($connectionID, "UPDATE notifications SET notificationOpened = 1 WHERE notificationID = $notifid");
                     }
+                    if(isset($_POST["decline-invite-btn"])){
+                        parse_str($_POST["decline-invite-btn"], $arr);
+                        $groupid = $arr["groupid"];
+                        $notifid = $arr["notifid"];
+                        mysqli_query($connectionID, "DELETE FROM invites WHERE accountID = $accountID AND inviteGroupID = $groupid");
+                        mysqli_query($connectionID, "UPDATE notifications SET notificationOpened = 1 WHERE notificationID = $notifid");
+                    }
                 ?>
 
                 <div class="row">
@@ -111,7 +118,7 @@
                                     <button type="submit" class="btn btn-success" name="accept-invite-btn"
                                         value="<?= "groupid=".$groupid . "&posid=" . $posid ."&notifid=" . $notif["notificationID"]?>">Accept</button>
                                     <button type="submit" class="btn btn-outline-danger"
-                                        name="decline-invite-btn">Decline</button>
+                                        name="decline-invite-btn" value="groupid=<?= $groupid;?>&notifid=<?=$notif["notificationID"]?>">Decline</button>
                                 </form>
                             <?php endif; ?>
                         <?php endif; ?>

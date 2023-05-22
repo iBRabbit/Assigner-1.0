@@ -12,7 +12,7 @@ Assigner adalah aplikasi web yang memungkinan pengguna untuk membuat kelompok da
 5. Messaging
 
 ## Cara Menginstall
-1. Ketik git clone https://github.com/iBRabbit/Assigner-1.0 di folder htdocs anda
+1. Ketik ```git clone https://github.com/iBRabbit/Assigner-1.0``` di folder htdocs anda
 2. Jangan lupa untuk mengubah nama folder anda menjadi "assigner" (agar sesuai dengan BASE_URL di constants.php)
 3. Aplikasi siap berjalan di localhost/assigner/index.php
 

@@ -1,3 +1,0 @@
-1. Delete Group agak Ngebug (cek aja) [clear]
-2. Pagination Notif [clear]
-3. Remove Member & My Profile [1/2 clear]

@@ -1,8 +1,11 @@
-# SEProject
-
 ## Assigner 
 
 Assigner adalah aplikasi web yang memungkinan pengguna untuk membuat kelompok dan berbagi tugas dalam satu aplikasi. Assigner berguna untuk mempermudah pengguna dalam pembagian tugas serta mengingatkan tugas yang akan datang.
+
+## Technologies
+1. Programming Language: PHP Native (Version 8)
+2. Database: MySQL
+3. UI: Bootstrap 5
 
 ## Features
 1. Membuat kelompok tanpa batasan
